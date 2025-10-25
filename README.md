@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.2.0  
-**Last Updated:** October 25, 2025  
+**Version:** 1.3.0  
+**Last Updated:** October 26, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.3.0 (October 26, 2025)
+- **work-day-files**: Added file listing and summarization for work-day folders
 
 ### v1.2.0 (October 25, 2025)
 - **work-day**: Added Google Drive folder management for work documents with date-based structure
@@ -59,6 +62,9 @@ Converts dates to standardized YYYY-MM format, extracting just the year and mont
 ### 🗂️ **work-day**
 Manages Google Drive folder structure for work documents, automatically creating month (YYYY-MM Work) and day (YYYY-MM-DD) folders. Ensures consistent organization for daily work files.
 
+### 📄 **work-day-files**
+Lists and summarizes files in work-day folders with 40-word summaries. Navigates the YYYY-MM Work/YYYY-MM-DD folder structure to retrieve and summarize documents, spreadsheets, and other files for a given work day.
+
 ## Folder Structure
 
 ```
@@ -82,6 +88,8 @@ Manages Google Drive folder structure for work documents, automatically creating
 │   │   └── convert_month.py
 │   └── skill.md           # Skill implementation
 ├── work-day/              # Work day folder management skill
+│   └── skill.md           # Skill implementation
+├── work-day-files/        # Work day file listing and summarization
 │   └── skill.md           # Skill implementation
 └── README.md               # This file
 ```
