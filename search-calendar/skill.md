@@ -1,6 +1,24 @@
 ---
 name: search-calendar
-description: Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
+description: >-
+  Search Google Calendar with natural language. Find events by date, title, attendees, or email domains.
+  
+  Parameters:
+  - date (string): 'tomorrow', 'next Monday', 'Oct 25'
+  - time_range: {start: ISO datetime, end: ISO datetime}
+  - subject (string): Search in event titles
+  - attendees (string[]): Filter by attendee names
+  - emails (string[]): Filter by email/domains
+  
+  Returns: [{
+    event_id: string,
+    title: string,
+    start_time: ISO datetime,
+    end_time: ISO datetime,
+    attendees: {name: string, email: string, response_status: string}[],
+    location?: string,
+    description?: string
+  }]
 ---
 
 # Search Calendar Skill

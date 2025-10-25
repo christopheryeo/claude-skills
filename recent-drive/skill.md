@@ -1,6 +1,6 @@
 ---
 name: drive-recent
-description: Lists the most recent files created or modified in Google Drive. Defaults to last 24 hours, or accepts custom timeframe. Returns files with modification dates, summaries, and clickable links sorted by recency.
+description: Discovers and lists recently modified or created files in Google Drive with professional metadata and summaries. Returns a structured table including file names, types (Docs, Sheets, PDFs, etc.), modification timestamps, 30-word summaries, owners, and direct Drive links. Defaults to the last 24 hours but accepts custom timeframes (e.g., "last 3 hours" or "last week"). Sorts by most recent activity and highlights key changes like new folders, shared file updates, and SNMG18 Meeting Minutes modifications. Use for tracking file changes, finding recent work, or monitoring Drive activity.
 ---
 
 # Drive Recent

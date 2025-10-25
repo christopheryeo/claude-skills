@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.0.0  
-**Last Updated:** October 21, 2025  
+**Version:** 1.2.0  
+**Last Updated:** October 25, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,13 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.2.0 (October 25, 2025)
+- **work-day**: Added Google Drive folder management for work documents with date-based structure
+- **reverse-month**: Added month conversion and standardization (YYYY-MM format)
+
+### v1.1.0 (October 23, 2025)
+- **reverse-date**: Added date conversion and natural language date parsing
 
 ### v1.0.0 (October 21, 2025)
 - Initial release with 5 core skills
@@ -43,6 +50,15 @@ Retrieve and summarize current international and Singapore news stories with hea
 ### 🌅 **morning-recon-brief**
 Executive morning intelligence brief that combines unread emails, today's calendar, Drive updates, tasks, and news into a comprehensive decision-ready report. Triggered by "Run my Morning Brief".
 
+### 📆 **reverse-date**
+Converts between natural language date descriptions and standard date formats. Supports relative dates (e.g., "two days ago"), date formatting, and date difference calculations.
+
+### 📅 **reverse-month**
+Converts dates to standardized YYYY-MM format, extracting just the year and month components. Ideal for monthly reporting, aggregations, and calendar operations.
+
+### 🗂️ **work-day**
+Manages Google Drive folder structure for work documents, automatically creating month (YYYY-MM Work) and day (YYYY-MM-DD) folders. Ensures consistent organization for daily work files.
+
 ## Folder Structure
 
 ```
@@ -56,6 +72,16 @@ Executive morning intelligence brief that combines unread emails, today's calend
 ├── news-snapshot/          # News briefing skill
 │   └── skill.md           # Skill implementation
 ├── morning-recon-brief/    # Comprehensive morning brief skill
+│   └── skill.md           # Skill implementation
+├── reverse-date/          # Date conversion and parsing skill
+│   ├── scripts/           # Python scripts for date handling
+│   │   └── convert_date.py
+│   └── skill.md           # Skill implementation
+├── reverse-month/         # Month conversion and parsing skill
+│   ├── scripts/           # Python scripts for month handling
+│   │   └── convert_month.py
+│   └── skill.md           # Skill implementation
+├── work-day/              # Work day folder management skill
 │   └── skill.md           # Skill implementation
 └── README.md               # This file
 ```
