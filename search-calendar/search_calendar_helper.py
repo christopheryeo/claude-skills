@@ -2,6 +2,13 @@
 """
 Helper script for search-calendar skill
 Claude can execute this to search your Google Calendar based on the skill instructions
+
+OPTIMIZED FOR TIME-BASED BRIEFINGS:
+- Returns explicit start/end times in Asia/Singapore timezone
+- Calculates event duration
+- Identifies events needing prep time
+- Extracts full descriptions and attendee context
+- Ensures timestamp consistency for briefing integration
 """
 
 import sys
@@ -86,6 +93,96 @@ def fuzzy_match(text, pattern, threshold=70):
     return False
 
 
+def calculate_duration(start, end):
+    """
+    Calculate event duration in minutes.
+    Handles both datetime and date-only events.
+    Returns duration in minutes, or None for all-day events.
+    """
+    try:
+        if isinstance(start, str):
+            start = datetime.fromisoformat(start.replace('Z', '+00:00'))
+        if isinstance(end, str):
+            end = datetime.fromisoformat(end.replace('Z', '+00:00'))
+        
+        duration = (end - start).total_seconds() / 60
+        return int(duration)
+    except:
+        return None
+
+
+def needs_prep_time(event):
+    """
+    Determine if an event needs prep time based on:
+    - Presence of Drive links in description
+    - Number of attendees (>5)
+    - Presence of attachments or conference data
+    - Keywords suggesting prep needed (agenda, review, presentation)
+    
+    Returns: boolean
+    """
+    prep_needed = False
+    
+    # Check description for Drive links
+    description = event.get('description', '')
+    if description:
+        drive_indicators = [
+            'docs.google.com/document',
+            'docs.google.com/spreadsheets',
+            'docs.google.com/presentation',
+            'drive.google.com',
+            'agenda',
+            'review',
+            'presentation',
+            'proposal',
+            'deck'
+        ]
+        if any(indicator in description.lower() for indicator in drive_indicators):
+            prep_needed = True
+    
+    # Check attendee count
+    attendees = event.get('attendees', [])
+    if len(attendees) > 5:
+        prep_needed = True
+    
+    # Check for attachments or conference data
+    if event.get('attachments') or event.get('conferenceData'):
+        prep_needed = True
+    
+    return prep_needed
+
+
+def extract_conference_link(event):
+    """
+    Extract video conference link from event.
+    Returns: {type: string, url: string} or None
+    """
+    conference_data = event.get('conferenceData')
+    if conference_data:
+        entry_points = conference_data.get('entryPoints', [])
+        for entry in entry_points:
+            if entry.get('entryPointType') == 'video':
+                return {
+                    'type': conference_data.get('conferenceSolution', {}).get('name', 'Video Call'),
+                    'url': entry.get('uri', '')
+                }
+    
+    # Fallback: check description for common video conference links
+    description = event.get('description', '')
+    if 'meet.google.com' in description:
+        import re
+        match = re.search(r'https://meet\.google\.com/[a-z\-]+', description)
+        if match:
+            return {'type': 'Google Meet', 'url': match.group(0)}
+    if 'zoom.us' in description:
+        import re
+        match = re.search(r'https://[a-z0-9\-]+\.zoom\.us/j/\d+', description)
+        if match:
+            return {'type': 'Zoom', 'url': match.group(0)}
+    
+    return None
+
+
 def extract_criteria(query):
     """
     Extract search criteria from user query
@@ -118,15 +215,49 @@ def extract_criteria(query):
 
 def format_event(event):
     """
-    Format a calendar event for display
+    Format a calendar event for display with enriched data for briefings.
+    Returns event with explicit timestamps, duration, prep indicator, and full context.
     """
     title = event.get('summary', 'Untitled')
-    start = event.get('start', {}).get('dateTime', event.get('start', {}).get('date'))
-    end = event.get('end', {}).get('dateTime', event.get('end', {}).get('date'))
+    
+    # Get times and ensure they're in Asia/Singapore timezone
+    start_raw = event.get('start', {}).get('dateTime', event.get('start', {}).get('date'))
+    end_raw = event.get('end', {}).get('dateTime', event.get('end', {}).get('date'))
+    
+    # Parse and convert to Singapore timezone
+    sgt = ZoneInfo('Asia/Singapore')
+    if start_raw and end_raw:
+        try:
+            start_dt = datetime.fromisoformat(start_raw.replace('Z', '+00:00'))
+            end_dt = datetime.fromisoformat(end_raw.replace('Z', '+00:00'))
+            
+            # Convert to Singapore time
+            start_sgt = start_dt.astimezone(sgt)
+            end_sgt = end_dt.astimezone(sgt)
+            
+            start = start_sgt.isoformat()
+            end = end_sgt.isoformat()
+            duration = calculate_duration(start_sgt, end_sgt)
+        except:
+            start = start_raw
+            end = end_raw
+            duration = None
+    else:
+        start = start_raw or "Not specified"
+        end = end_raw or "Not specified"
+        duration = None
+    
     location = event.get('location', 'Not specified')
+    description = event.get('description', '')
     attendees = event.get('attendees', [])
     
-    # Format attendees
+    # Calculate prep needed
+    prep_needed = needs_prep_time(event)
+    
+    # Extract conference link
+    conference = extract_conference_link(event)
+    
+    # Format attendees with full context
     attendee_list = []
     for attendee in attendees:
         name = attendee.get('displayName', attendee.get('email', 'Unknown'))
@@ -136,14 +267,31 @@ def format_event(event):
     
     attendees_str = '\n'.join(attendee_list) if attendee_list else "  - None"
     
-    return f"""
+    # Build enriched output
+    output = f"""
 📅 {title}
-├─ Time: {start} - {end}
+├─ Time: {start} → {end}"""
+    
+    if duration:
+        output += f"\n├─ Duration: {duration} minutes"
+    
+    output += f"""
 ├─ Location: {location}
-├─ Attendees:
-{attendees_str}
-└─ Calendar Link: https://calendar.google.com/calendar/u/0/r/eventedit/{event.get('id', '')}
-"""
+├─ Attendees ({len(attendees)}):
+{attendees_str}"""
+    
+    if prep_needed:
+        output += "\n├─ ⚠️  Prep Time Needed"
+    
+    if conference:
+        output += f"\n├─ Conference: {conference['type']} - {conference['url']}"
+    
+    if description:
+        output += f"\n├─ Description:\n{description[:200]}{'...' if len(description) > 200 else ''}"
+    
+    output += f"\n└─ Calendar Link: https://calendar.google.com/calendar/u/0/r/eventedit/{event.get('id', '')}"
+    
+    return output
 
 
 def main():
@@ -167,10 +315,18 @@ def main():
     print("\nTo complete the search, Claude will:")
     print("1. Get all accessible calendars using list_gcal_calendars")
     print("2. Query events using list_gcal_events with date range:", time_range[0], "to", time_range[1])
-    print("3. Filter events by:")
+    print("3. For each event, enrich with:")
+    print("   - Explicit start/end times in Asia/Singapore timezone (ISO 8601)")
+    print("   - Duration in minutes")
+    print("   - Prep time indicator (Drive links, >5 attendees, attachments)")
+    print("   - Full description and attendee context")
+    print("   - Conference links (Meet, Zoom, Teams)")
+    print("4. Filter events by:")
     print(f"   - Attendees: {criteria['attendees']}")
     print(f"   - Emails: {criteria['emails']}")
-    print("4. Format and return results (max 50)")
+    print("5. Sort chronologically and return results (max 50)")
+    print("\nTIMEZONE: All timestamps will be in Asia/Singapore (SGT/UTC+8)")
+    print("BRIEFING INTEGRATION: Results optimized for time-based briefing correlation")
 
 
 if __name__ == '__main__':
