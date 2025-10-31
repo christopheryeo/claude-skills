@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.3.0  
-**Last Updated:** October 26, 2025  
+**Version:** 1.4.0  
+**Last Updated:** October 31, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.4.0 (October 31, 2025)
+- **presentation-outline**: Added skill to transform Google Docs into structured presentation outlines
 
 ### v1.3.0 (October 26, 2025)
 - **work-day-files**: Added file listing and summarization for work-day folders
@@ -65,6 +68,9 @@ Manages Google Drive folder structure for work documents, automatically creating
 ### 📄 **work-day-files**
 Lists and summarizes files in work-day folders with 40-word summaries. Navigates the YYYY-MM Work/YYYY-MM-DD folder structure to retrieve and summarize documents, spreadsheets, and other files for a given work day.
 
+### 📝 **presentation-outline**
+Transforms Google Docs into structured presentation outlines with titles, subtitles, and bullet points. Generates up to 10 slides with clear organization and logical flow, ideal for quickly creating presentation drafts from existing documentation.
+
 ## Folder Structure
 
 ```
@@ -91,7 +97,10 @@ Lists and summarizes files in work-day folders with 40-word summaries. Navigates
 │   └── skill.md           # Skill implementation
 ├── work-day-files/        # Work day file listing and summarization
 │   └── skill.md           # Skill implementation
-└── README.md               # This file
+├── presentation-outline/  # Presentation outline generation
+│   ├── guidelines/        # Presentation guidelines
+│   └── skill.md          # Skill implementation
+└── README.md             # This file
 ```
 
 Each subfolder contains a `skill.md` file that implements the Claude skill with its complete instructions and workflow.

@@ -1,0 +1,111 @@
+S/No,Component,Resource,Man-Days,Description,Module,Detailed Deliverables,Man-day costs,Total Costs
+1,Search and retrieval,,2,"AI-powered semantic search for contextual and accurate results, integrated with natural language processing.",SmartChat,"""AI-powered semantic search engine; Natural language processing (NLP) for intuitive queries; Advanced filtering options based on metadata; Configurable search results display for different user roles.""",,
+,Senior Application Developer,Arun,0.5,,,,$186.14 ,$93.07 
+,Application Developer,Gopi,0.5,,,,$91.14 ,$45.57 
+,Senior Application Developer,Mani,0.5,,,,$186.14 ,$93.07 
+,Application Developer,Deepak,0.5,,,,$91.14 ,$45.57 
+,,,,,,Sub-Total,,$277.27 
+2,System Administration Functions,,2,"Manages users, roles, permissions, system configurations, and activity monitoring.",AI Platform,"""Admin interface for user and role management; Permission assignment tools; Audit logs for admin actions; System configuration management dashboards.""",,
+,Senior Application Developer,Arun,0.5,,,,$186.14 ,$93.07 
+,Application Developer,Gopi,0.5,,,,$91.14 ,$45.57 
+,Senior Application Developer,Mani,0.5,,,,$186.14 ,$93.07 
+,Application Developer,Deepak,0.5,,,,$91.14 ,$45.57 
+,,,,,,Sub-Total,,$277.27 
+3,Reporting,,4,"Prebuilt and customizable templates for generating reports, along with visual dashboards for insights.","AI Platform, Grapfana","""Prebuilt templates for records activity and compliance reporting; Customizable reporting engine; Visual dashboard with interactive elements for usage metrics and trends; Exportable reports in multiple formats (PDF, Excel).""",,
+,Senior Application Developer,Arun,1,,,,$186.14 ,$186.14 
+,Application Developer,Gopi,1,,,,$91.14 ,$91.14 
+,Senior Application Developer,Mani,1,,,,$186.14 ,$186.14 
+,Application Developer,Deepak,1,,,,$91.14 ,$91.14 
+,,,,,,Sub-Total,,$554.55 
+4,Workflows,,8,"Automates lifecycle management processes, including retention, disposition, and transfer approvals.","AI Platform, n8n","""Workflow engine for lifecycle processes; Workflow templates for common record actions; Approval mechanisms with notifications; Real-time tracking of workflow progress.""",,
+,Senior Application Developer,Arun,1,,,,$186.14 ,$186.14 
+,Application Developer,Gopi,1,,,,$91.14 ,$91.14 
+,Senior Application Developer,Mani,2,,,,$186.14 ,$372.27 
+,Application Developer,Deepak,2,,,,$91.14 ,$182.27 
+,Project Lead,Jeg,2,,,,$359.95 ,$719.89 
+,,,,,,Sub-Total,,"$1,551.71 "
+5,File Management,,4,"Manages document ingestion, storage, and retrieval to support conversational AI functionalities.",SmartChat,"""Document upload and processing tools; Integration with SmartChat for record retrieval; Tools to track document versioning and history.""",,
+,Senior Application Developer,Arun,1,,,,$186.14 ,$186.14 
+,Application Developer,Gopi,1,,,,$91.14 ,$91.14 
+,Senior Application Developer,Mani,1,,,,$186.14 ,$186.14 
+,Application Developer,Deepak,1,,,,$91.14 ,$91.14 
+,,,,,,Sub-Total,,$554.55 
+6,Vector Database,,0,Stores embeddings for semantic and contextual searches with high-speed retrieval capabilities.,SmartChat,"""Storage infrastructure for vector embeddings; High-speed query processing engine; Integration with SmartChat semantic search functionalities.""",,
+,Senior Application Developer,Arun,0,,,,$186.14 ,$0.00 
+,Application Developer,Gopi,0,,,,$91.14 ,$0.00 
+,Senior Application Developer,Mani,0,,,,$186.14 ,$0.00 
+,Application Developer,Deepak,0,,,,$91.14 ,$0.00 
+,,,,,,Sub-Total,,$0.00 
+7,SmartChat Frontend,,8,"Interactive interface for querying, retrieving, and interacting with records through natural language.",SmartChat,"""Web-based user interface for SmartChat; Features for querying records using NLP; Support for multi-language queries; Role-based access control for frontend functionality.""",,
+,Senior Application Developer,Arun,3,,,,$186.14 ,$558.41 
+,Application Developer,Gopi,3,,,,$91.14 ,$273.41 
+,Senior Application Developer,Mani,1,,,,$186.14 ,$186.14 
+,Application Developer,Deepak,1,,,,$91.14 ,$91.14 
+,,,,,,Sub-Total,,"$1,109.09 "
+8,Customisation,,0,Processes large documents into chunks and creates embeddings for AI-powered search.,SmartChat,"""Backend processing engine for document chunking; Embedding generation for AI models; Integration with SmartChat and vector database for real-time retrieval.""",,
+,A*Star,Zhehui,0,,,,$0.00 ,$0.00 
+,Application Developer,Gopi,0,,,,$91.14 ,$0.00 
+,Senior Application Developer,Mani,0,,,,$186.14 ,$0.00 
+,Application Developer,Deepak,0,,,,$91.14 ,$0.00 
+,,,,,,Sub-Total,,$0.00 
+9,API Gateway,,0,Manages communication between system components and provides secure endpoints for third-party integration.,AI Platform,"""Secure API management tools; Gateway for integration with third-party tools; Load balancing and monitoring features.""",,
+,Senior Application Developer,Mani,0,,,,$186.14 ,$0.00 
+,Application Developer,Deepak,0,,,,$91.14 ,$0.00 
+,Infrastructure Engineer,Ramesh,0,,,,$186.14 ,$0.00 
+,,,,,,Sub-Total,,$0.00 
+10,Analytics Dashboard,,6,"Offers visualizations of metrics and user behavior, enabling custom dashboards for specific needs.","AI Platform, Grafana","""Customizable visual dashboards; Interactive graphs and charts for user activity; Export options for analytics data.""",,
+,Senior Application Developer,Arun,2,,,,$186.14 ,$372.27 
+,Application Developer,Gopi,2,,,,$91.14 ,$182.27 
+,Senior Application Developer,Mani,1,,,,$186.14 ,$186.14 
+,Application Developer,Deepak,1,,,,$91.14 ,$91.14 
+,Project Lead,Jeg,1,,,,$359.95 ,$359.95 
+,,,,,,Sub-Total,,"$1,191.76 "
+11,Application Layer,,6,"Provides infrastructure for dashboards, portals, data processing, system configurations, and workflow execution.",AI Platform,"""Dashboards and portals for end users and admins; Backend services for executing workflows and processing data; Modular architecture for scalability.""",,
+,Senior Application Developer,Arun,2,,,,$186.14 ,$372.27 
+,Application Developer,Gopi,2,,,,$91.14 ,$182.27 
+,Senior Application Developer,Mani,1,,,,$186.14 ,$186.14 
+,Application Developer,Deepak,1,,,,$91.14 ,$91.14 
+,,,,,,Sub-Total,,$831.82 
+12,Database,,2,"Centralized storage for metadata, logs, and configurations, ensuring high availability and fault tolerance.",AI Platform,"""Centralized database system; High-availability architecture; Backup and recovery tools for business continuity.""",,
+,Senior Application Developer,Arun,1,,,,$186.14 ,$186.14 
+,Application Developer,Gopi,1,,,,$91.14 ,$91.14 
+,Senior Application Developer,Mani,0,,,,$186.14 ,$0.00 
+,Application Developer,Deepak,0,,,,$91.14 ,$0.00 
+,,,,,,Sub-Total,,$277.27 
+13,Kubernetes Cluster,,4,"Orchestrates deployment of containerized applications, enabling scalability and fault tolerance.",Ensures GCC compatibility and resource optimization.,"""Kubernetes orchestration platform; Auto-scaling and load balancing tools; Monitoring tools for cluster performance."" Installation and configuration services to be provided by M1",,
+,Infrastructure Engineer,Karunaka,2,,,,$113.14 ,$226.27 
+,Infrastructure Engineer,Mani,2,,,,$186.14 ,$372.27 
+,,,,,,Sub-Total,,$598.55 
+14,Large Language Model (LLM),,4,"Provides AI-driven semantic search, document retrieval, and natural language understanding, hosted in its own virtual machine (VM).",AI Platform,"""NLP-based AI model; Hosted VM infrastructure for high-performance processing; Real-time support for semantic search and recommendations.""",,
+,Senior Application Developer,Mani,2,,,,$385.19 ,$770.37 
+,Senior Scientist,Jian Hui,2,,,,$223.28 ,$446.55 
+,,,,,,Sub-Total,,"$1,216.93 "
+15,AI Platform Database,,6,"Stores AI model data, embeddings, and other datasets, hosted in its own virtual machine (VM) to ensure data isolation and security.",AI Platform,"""Dedicated storage for AI model data and embeddings; Isolated VM for security and performance; High-speed access for AI-driven functionalities.""",,
+,Senior Application Developer,Mani,2,,,,$385.19 ,$770.37 
+,Infrastructure Engineer,Karunaka,2,,,,$113.14 ,$226.27 
+,Infrastructure Engineer,Arun,2,,,,$186.14 ,$372.27 
+,,,,,,Sub-Total,,"$1,368.92 "
+16,Professional Service: Requirements Gathering,,2,Gathers user requirements,Professional Service,"""Conduct stakeholder workshops; Deliver finalized technical and functional specifications; Submit a detailed requirements document for approval.""",,
+,Project Lead,Jeg,2,,,,$359.95 ,$719.89 
+,,,,,,Sub-Total,,$719.89 
+17,Professional Service: System Design,,2,"Develop mockups, prototypes, and infrastructure design to align with user needs and system goals.",Professional Service,"""Provide mockups and prototypes for user feedback; Deliver system architecture design documents; Submit infrastructure setup plans for GCC deployment.""",,
+,Project Lead,Jeg,2,,,,$359.95 ,$719.89 
+,,,,,,Sub-Total,,$719.89 
+18,Professional Service: Development and Integration,,3,"Build and integrate SmartFiling, SmartChat, and AI Platform components, including AI model training and backend integration.",Professional Service,"""Deliver fully functional SmartFiling, SmartChat, and AI Platform modules; Train AI models for semantic search; Perform system integration testing.""",,
+,Project Manager,Cedrick,2,,,,$341.38 ,$682.75 
+,Project Lead,Jeg,1,,,,$359.95 ,$359.95 
+,,,,,,Sub-Total,,"$1,042.70 "
+19,Professional Service: Testing and Deployment,,7,"Perform beta testing, user feedback iterations, and deploy the system in the GCC infrastructure.",Professional Service,"""Conduct beta testing and collect user feedback; Implement system improvements based on testing; Deploy the system in GCC production and submit a deployment report.""",,
+,Project Manager,Cedrick,2,,,,$341.38 ,$682.75 
+,Senior Application Developer,Arun,1,,,,$186.14 ,$186.14 
+,Application Developer,Gopi,1,,,,$91.14 ,$91.14 
+,Senior Application Developer,Mani,1,,,,$186.14 ,$186.14 
+,Application Developer,Deepak,1,,,,$91.14 ,$91.14 
+,Project Lead,Jeg,1,,,,$359.95 ,$359.95 
+,,,,,,Sub-Total,,"$1,597.24 "
+20,Professional Service: Training and Maintenance,,6,Conduct user training sessions and provide ongoing support and updates post-deployment.,Professional Service,"""Conduct end-user and administrator training sessions; Provide detailed user manuals and FAQs; Offer post-deployment support and updates for bug fixes and improvements.""",,
+,Project Manager,Cedrick,2,,,,$341.38 ,$682.75 
+,Senior Application Developer,Arun,1,,,,$186.14 ,$186.14 
+,Senior Application Developer,Mani,1,,,,$186.14 ,$186.14 
+,Project Lead,Jeg,2,,,,$359.95 ,$719.89 
+,,,,,,Sub-Total,,"$1,774.92 "
