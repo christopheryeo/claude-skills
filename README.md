@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.5.0  
+**Version:** 1.6.0  
 **Last Updated:** October 31, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.6.0 (October 31, 2025)
+- **product-white-paper**: Added skill for generating enterprise-grade product white papers
 
 ### v1.5.0 (October 31, 2025)
 - **presentation-jobs**: Added Steve Jobs-style presentation creation with 3-Second Rule methodology
@@ -77,6 +80,9 @@ Transforms Google Docs into structured presentation outlines with titles, subtit
 ### 🎯 **presentation-jobs**
 Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity.
 
+### 📄 **product-white-paper**
+Generate comprehensive Enterprise AI Product White Papers using existing documentation as source material. Creates authoritative, research-backed documents that educate buyers and present solutions to complex business problems, with a focus on strategic value and ROI for enterprise audiences.
+
 ## Folder Structure
 
 ```
@@ -107,6 +113,9 @@ Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Appl
 │   ├── guidelines/        # Presentation guidelines
 │   └── skill.md          # Skill implementation
 ├── presentation-jobs/     # Steve Jobs-style presentations
+│   └── skill.md          # Skill implementation
+├── product-white-paper/   # Enterprise white paper generation
+│   ├── references/       # White paper templates and guidelines
 │   └── skill.md          # Skill implementation
 └── README.md             # This file
 ```
