@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.6.0  
+**Version:** 1.7.0  
 **Last Updated:** October 31, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.7.0 (October 31, 2025)
+- **recent-files**: Enhanced Google Drive file discovery with activity insights and chronological work narrative
 
 ### v1.6.0 (October 31, 2025)
 - **product-white-paper**: Added skill for generating enterprise-grade product white papers
@@ -83,6 +86,9 @@ Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Appl
 ### 📄 **product-white-paper**
 Generate comprehensive Enterprise AI Product White Papers using existing documentation as source material. Creates authoritative, research-backed documents that educate buyers and present solutions to complex business problems, with a focus on strategic value and ROI for enterprise audiences.
 
+### 🔍 **recent-files**
+Track and analyze recent Google Drive activity with detailed metadata and insights. Features include chronological work narratives, activity patterns, project focus areas, and client-specific tracking. Ideal for reviewing work history, tracking project progress, and maintaining awareness of team activities.
+
 ## Folder Structure
 
 ```
@@ -116,6 +122,8 @@ Generate comprehensive Enterprise AI Product White Papers using existing documen
 │   └── skill.md          # Skill implementation
 ├── product-white-paper/   # Enterprise white paper generation
 │   ├── references/       # White paper templates and guidelines
+│   └── skill.md          # Skill implementation
+├── recent-files/         # Drive activity tracking and insights
 │   └── skill.md          # Skill implementation
 └── README.md             # This file
 ```
