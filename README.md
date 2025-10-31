@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.4.0  
+**Version:** 1.5.0  
 **Last Updated:** October 31, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.5.0 (October 31, 2025)
+- **presentation-jobs**: Added Steve Jobs-style presentation creation with 3-Second Rule methodology
 
 ### v1.4.0 (October 31, 2025)
 - **presentation-outline**: Added skill to transform Google Docs into structured presentation outlines
@@ -71,6 +74,9 @@ Lists and summarizes files in work-day folders with 40-word summaries. Navigates
 ### 📝 **presentation-outline**
 Transforms Google Docs into structured presentation outlines with titles, subtitles, and bullet points. Generates up to 10 slides with clear organization and logical flow, ideal for quickly creating presentation drafts from existing documentation.
 
+### 🎯 **presentation-jobs**
+Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity.
+
 ## Folder Structure
 
 ```
@@ -99,6 +105,8 @@ Transforms Google Docs into structured presentation outlines with titles, subtit
 │   └── skill.md           # Skill implementation
 ├── presentation-outline/  # Presentation outline generation
 │   ├── guidelines/        # Presentation guidelines
+│   └── skill.md          # Skill implementation
+├── presentation-jobs/     # Steve Jobs-style presentations
 │   └── skill.md          # Skill implementation
 └── README.md             # This file
 ```
