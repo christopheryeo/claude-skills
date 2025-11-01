@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.7.0  
-**Last Updated:** October 31, 2025  
+**Version:** 1.8.0  
+**Last Updated:** November 1, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.8.0 (November 1, 2025)
+- **recent-emails**: Enhanced Gmail email retrieval with advanced filtering, newsletter detection, and comprehensive activity analysis
 
 ### v1.7.0 (October 31, 2025)
 - **recent-files**: Enhanced Google Drive file discovery with activity insights and chronological work narrative
@@ -34,7 +37,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ### v1.0.0 (October 21, 2025)
 - Initial release with 5 core skills
-- **emails-recent**: Gmail email retrieval functionality
+- **recent-emails**: Gmail email retrieval functionality
 - **search-calendar**: Google Calendar search with fuzzy matching
 - **recent-drive**: Google Drive file discovery
 - **news-snapshot**: International and Singapore news briefing
@@ -50,8 +53,8 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 
 ## Available Skills
 
-### 📧 **emails-recent**
-Lists the most recent emails received, sent, or drafted in Gmail. Defaults to last 24 hours, or accepts custom timeframe. Returns emails with timestamps, senders/recipients, subject lines, summaries, and clickable links sorted by recency.
+### 📧 **recent-emails**
+Advanced Gmail email retrieval with support for received, sent, drafted, and starred emails. Features include newsletter filtering, chronological work narrative, and comprehensive activity analysis. Returns emails with timestamps, senders/recipients, subject lines, summaries, and direct Gmail links.
 
 ### 📅 **search-calendar**
 Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
@@ -93,7 +96,7 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 
 ```
 /
-├── emails-recent/          # Gmail email retrieval skill
+├── recent-emails/          # Gmail email retrieval skill
 │   └── skill.md           # Skill implementation
 ├── search-calendar/        # Google Calendar search skill
 │   └── skill.md           # Skill implementation
