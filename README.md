@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.10.0  
-**Last Updated:** November 1, 2025  
+**Version:** 1.11.0  
+**Last Updated:** November 2, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,11 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.11.0 (November 2, 2025)
+- **New Skill**: Added `starred-email` for focused Gmail starred email management
+- **Documentation**: Enhanced skill creation instructions with Codex-specific guidance
+- **Templates**: Added comprehensive script templates with error handling
 
 ### v1.10.0 (November 1, 2025)
 - **Documentation**: Enhanced skill creation instructions with cross-references
@@ -72,6 +77,9 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 - [Existing Skills Reference](./references/claude-skills)
 
 ## Available Skills
+
+### ⭐ **starred-email**
+Focused Gmail assistant that lists and summarizes your starred emails with actionable insights. Retrieves actual Gmail data, prioritizes recent starred messages, and highlights action items with direct Gmail links. Includes filtering by timeframe, keywords, and participants.
 
 ### 📧 **recent-emails**
 Advanced Gmail email retrieval with support for received, sent, drafted, and starred emails. Features include newsletter filtering, chronological work narrative, and comprehensive activity analysis. Returns emails with timestamps, senders/recipients, subject lines, summaries, and direct Gmail links.
@@ -186,6 +194,7 @@ description: Brief description of what the skill does
 ### Development Resources
 - [Skill Creation Instructions](./references/instructions.md) - Step-by-step guide for AI-assisted skill development
 - [Skill Templates](./templates/) - Starter templates for common skill types
+- [Codex Integration Guide](./references/instructions.md#step-10-implementation-workflow-for-codex) - Optimizing skills for OpenAI Codex
 
 ### Best Practices
 - Keep SKILL.md under 500 lines
