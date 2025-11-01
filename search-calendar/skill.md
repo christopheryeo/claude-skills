@@ -83,24 +83,17 @@ Combine multiple search dimensions to narrow results:
 
 When searching calendars, Claude should:
 
-1. **Execute the search_calendar_helper.py script** located in `/mnt/skills/user/search-calendar/`:
-   ```bash
-   python /mnt/skills/user/search-calendar/search_calendar_helper.py "user query here"
-   ```
-   
-   **DO NOT use Claude's built-in calendar tools (list_gcal_calendars, list_gcal_events, etc.).** 
-   **Always use the search_calendar_helper.py script instead.**
+1. **Parse the user query** to identify:
+   - Time reference (day, date, week)
+   - Subject/keywords
+   - Attendee names or emails
 
-2. **The helper script will**:
-   - Parse the user query to identify:
-     * Time reference (day, date, week)
-     * Subject/keywords
-     * Attendee names or emails
-   - Access Google Calendar via the appropriate integration
-   - Retrieve events for the identified time range
+2. **Use Google Calendar tools** to:
+   - Get list of calendars accessible using `list_gcal_calendars`
+   - Retrieve events for the identified time range using `list_gcal_events`
    - Filter by subject, attendees, and other criteria
 
-3. **The script automatically enriches each event** with:
+3. **Enrich each event** with:
    - Precise start/end times in Asia/Singapore timezone (ISO 8601 format)
    - Duration calculation (end_time - start_time in minutes)
    - Prep time indicator based on:
@@ -110,7 +103,7 @@ When searching calendars, Claude should:
    - Full event description (no truncation)
    - Conferencing details extracted from event data
 
-4. **The script formats results** with:
+4. **Format results** with:
    - Event title and time (with explicit timezone)
    - Duration in minutes
    - Location
@@ -120,7 +113,7 @@ When searching calendars, Claude should:
    - Prep needed flag
    - Conference link (if present)
 
-5. **The script applies filtering logic**:
+5. **Apply filtering logic**:
    - Exclude cancelled events
    - Include all other event statuses (accepted, tentative, needs action, declined)
    - Limit to 50 most recent results
@@ -135,49 +128,74 @@ Claude should understand:
 - Partial information: "meetings with sentient.io" or just "Eddie" without full context
 - Relative time references: "this week", "next Monday", "last Friday"
 
-## Examples
+### Event Enrichment Logic
 
-**CRITICAL: In all examples below, Claude must execute the search_calendar_helper.py script, NOT use Claude's built-in calendar integration tools.**
+After retrieving events from `list_gcal_events`, Claude must enrich each event:
+
+**1. Duration Calculation:**
+```
+duration_minutes = (end_time - start_time).total_seconds() / 60
+```
+
+**2. Prep Time Detection - Set `prep_needed: true` if:**
+- Description contains: `docs.google.com/document`, `docs.google.com/spreadsheets`, `docs.google.com/presentation`, `drive.google.com`
+- Description contains keywords: `agenda`, `review`, `presentation`, `proposal`, `deck`
+- Attendee count > 5
+- Event has `attachments` or `conferenceData` fields
+
+**3. Conference Link Extraction:**
+- Check `conferenceData.entryPoints` for video conference URLs
+- Fallback: Search description for `meet.google.com`, `zoom.us`, `teams.microsoft.com` links
+- Return: `{type: "Google Meet", url: "https://..."}`
+
+**4. Timezone Conversion:**
+- Convert all event times to Asia/Singapore timezone (UTC+8)
+- Format as ISO 8601: `2025-10-26T14:30:00+08:00`
+
+**Reference:** See `/mnt/skills/user/search-calendar/search_calendar_helper.py` for example implementations of:
+- `calculate_duration(start, end)` 
+- `needs_prep_time(event)`
+- `extract_conference_link(event)`
+
+## Examples
 
 ### Example 1: Today's Events
 **User:** "Show me my calendar for today"
 
 **Claude should:**
-1. Execute: `python /mnt/skills/user/search-calendar/search_calendar_helper.py "show me my calendar for today"`
-2. The script will get current date and retrieve events for today
-3. Display formatted results returned by the script
+1. Get current date
+2. Use `list_gcal_events` to retrieve events for today from all accessible calendars
+3. Enrich each event with duration, prep indicators, timezone conversion
+4. Format and display them
 
 ### Example 2: Events with Specific Person
 **User:** "Find all meetings with Eddie this week"
 
 **Claude should:**
-1. Execute: `python /mnt/skills/user/search-calendar/search_calendar_helper.py "Find all meetings with Eddie this week"`
-2. The script will:
-   - Identify time range: this week (Monday-Sunday)
-   - Query all calendars for events in that range
-   - Filter for events where "Eddie" is an attendee (fuzzy match on attendee names)
-3. Display the matching events with full details returned by the script
+1. Identify time range: this week (Monday-Sunday)
+2. Use `list_gcal_events` to query all calendars for events in that range
+3. Filter for events where "Eddie" is an attendee (fuzzy match on attendee names)
+4. Enrich each event with duration, prep indicators, conference links
+5. Return matching events with full details
 
 ### Example 3: Subject + Attendee + Date
 **User:** "Show me 'SnR:Huddle' meetings with John Hor next week"
 
 **Claude should:**
-1. Execute: `python /mnt/skills/user/search-calendar/search_calendar_helper.py "Show me 'SnR:Huddle' meetings with John Hor next week"`
-2. The script will:
-   - Identify time range: next week
-   - Query calendars for events with "Huddle" or "SnR" in title
-   - Filter for events where "John Hor" is invited
-3. Display the combined results
+1. Identify time range: next week
+2. Use `list_gcal_events` to query calendars for events with "Huddle" or "SnR" in title
+3. Filter for events where "John Hor" is invited
+4. Enrich events with prep indicators, duration, conference links
+5. Return combined results
 
 ### Example 4: Email-based Search
 **User:** "What meetings do I have with people from sentient.io?"
 
 **Claude should:**
-1. Execute: `python /mnt/skills/user/search-calendar/search_calendar_helper.py "What meetings do I have with people from sentient.io?"`
-2. The script will:
-   - Query recent events (default: next 30 days)
-   - Filter for events with attendees having @sentient.io email
-3. Display the matching events
+1. Use `list_gcal_events` to query recent events (default: next 30 days)
+2. Filter for events with attendees having @sentient.io email
+3. Enrich events with all additional context
+4. Return matching events
 
 ## Important Guidelines
 
@@ -253,7 +271,7 @@ Claude should understand:
 ## Integration with Other Tools
 
 This skill works with Claude's existing calendar tools and can be combined with:
-- **Email searches** (find emails about specific meetings) - use `emails-recent` with aligned timestamps
+- **Email searches** (find emails about specific meetings) - use `recent-emails` with aligned timestamps
 - **Document searches** (find prep materials) - use `work-day-files` to locate meeting-related documents
 - **Task management** (create tasks from meeting discussions)
 - **Daily briefings** - provides the timeline anchor for time-based organization
@@ -262,7 +280,7 @@ This skill works with Claude's existing calendar tools and can be combined with:
 
 This skill is optimized to serve as the **timeline anchor** for daily briefings:
 
-1. **Timestamp Alignment**: All events return precise start/end times in Asia/Singapore timezone matching the format used by `emails-recent` and `work-day-files`
+1. **Timestamp Alignment**: All events return precise start/end times in Asia/Singapore timezone matching the format used by `recent-emails` and `work-day-files`
 
 2. **Prep Time Intelligence**: The `prep_needed` flag helps briefings surface:
    - Events requiring document review (Drive links in description)
@@ -270,7 +288,7 @@ This skill is optimized to serve as the **timeline anchor** for daily briefings:
    - Events with attachments or agendas
 
 3. **Contextual Linking**: When building briefings:
-   - Check if recent emails (from `emails-recent`) are from meeting attendees
+   - Check if recent emails (from `recent-emails`) are from meeting attendees
    - Check if recent file modifications (from `work-day-files`) relate to meeting topics
    - Flag "action items" by correlating email subjects with event titles
 
@@ -282,7 +300,7 @@ This skill is optimized to serve as the **timeline anchor** for daily briefings:
 09:00 - Morning standup (from search-calendar) 
         ↳ prep_needed: true (has agenda doc)
         ↳ Related file: "Standup Notes 2025-10-26.docx" modified at 08:30
-10:00 - Review emails-recent for urgent items from standup attendees
+10:00 - Review recent-emails for urgent items from standup attendees
 14:00 - Client meeting (from search-calendar)
         ↳ prep_needed: true (>5 attendees)
         ↳ Related email: "Q4 Proposal" from client@example.com at 13:45
@@ -317,23 +335,32 @@ This skill is optimized to serve as the **timeline anchor** for daily briefings:
 
 When a user asks about their calendar:
 
-1. **Execute the search_calendar_helper.py script** with the user's query:
-   ```bash
-   python /mnt/skills/user/search-calendar/search_calendar_helper.py "user query"
-   ```
+1. **Parse their request** for: **time** (when), **subject** (what), **people** (who)
 
-2. **The script handles everything**:
-   - Parses the query for: **time** (when), **subject** (what), **people** (who)
-   - Fetches events from Google Calendar
-   - Enriches with duration, prep indicators, conference links
-   - Filters intelligently based on all criteria
-   - Returns formatted results with SGT timestamps
+2. **Use calendar tools** to fetch events:
+   - `list_gcal_calendars` to get available calendars
+   - `list_gcal_events` with appropriate date range filters
 
-3. **Display the results** to the user clearly
+3. **Enrich each event** with:
+   - Duration calculation (in minutes)
+   - Prep time indicator (Drive links, >5 attendees, attachments, keywords)
+   - Conference link extraction (Meet, Zoom, Teams)
+   - Ensure timestamps are in Asia/Singapore timezone (SGT/UTC+8)
 
-4. For unclear queries, ask clarifying questions before running the script
+4. **Apply intelligent filtering** based on all criteria provided:
+   - Attendee name matching (fuzzy)
+   - Email domain filtering
+   - Subject/title matching
 
-**IMPORTANT: Do NOT use Claude's built-in calendar tools (list_gcal_calendars, list_gcal_events, fetch_gcal_event, find_free_time). Always use the search_calendar_helper.py script instead.**
+5. **Format results clearly** with:
+   - Event details with explicit SGT timestamps
+   - Duration, prep indicators, conference links
+   - Full attendee context with RSVP status
+   - Calendar event links
+
+6. For unclear queries, ask clarifying questions
+
+**Reference Implementation:** The `search_calendar_helper.py` file contains example code for the enrichment logic (duration calculation, prep time detection, conference link extraction). Claude can reference these functions when implementing the enrichment steps.
 
 The skill is designed to be conversational - Claude should handle natural language calendar queries without requiring specific syntax or complex instructions from the user.
 ```
