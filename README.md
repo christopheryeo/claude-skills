@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.8.0  
+**Version:** 1.9.0  
 **Last Updated:** November 1, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,10 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.9.0 (November 1, 2025)
+- **Documentation**: Added comprehensive guide on building Claude skills
+- **References**: Created detailed how-to guide for skill development
 
 ### v1.8.0 (November 1, 2025)
 - **recent-emails**: Enhanced Gmail email retrieval with advanced filtering, newsletter detection, and comprehensive activity analysis
@@ -50,6 +54,8 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ## What Are Claude Skills?
 
 Claude Skills are structured prompt templates that teach Claude how to perform specific tasks consistently and effectively. Each skill is defined in YAML frontmatter format with a name, description, and detailed instructions.
+
+For a comprehensive guide on building your own Claude skills, see [How to Build Claude Skills](./references/how-to-build-claude-skills.md).
 
 ## Available Skills
 
@@ -155,6 +161,10 @@ description: Brief description of what the skill does
 
 [Detailed instructions and workflow]
 ```
+
+## Reference Materials
+
+- [How to Build Claude Skills](./references/how-to-build-claude-skills.md) - Comprehensive guide to creating custom Claude skills
 
 ## Requirements
 
