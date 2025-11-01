@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.9.0  
+**Version:** 1.10.0  
 **Last Updated:** November 1, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,11 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.10.0 (November 1, 2025)
+- **Documentation**: Enhanced skill creation instructions with cross-references
+- **References**: Added claude-connections and claude-skills references
+- **Templates**: Updated skill creation templates and best practices
 
 ### v1.9.0 (November 1, 2025)
 - **Documentation**: Added comprehensive guide on building Claude skills
@@ -55,7 +60,16 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 Claude Skills are structured prompt templates that teach Claude how to perform specific tasks consistently and effectively. Each skill is defined in YAML frontmatter format with a name, description, and detailed instructions.
 
-For a comprehensive guide on building your own Claude skills, see [How to Build Claude Skills](./references/how-to-build-claude-skills.md).
+### Key Components
+- **SKILL.md**: Core definition and instructions
+- **Scripts**: Executable code for the skill
+- **References**: Documentation and schemas
+- **Assets**: Templates and resources
+
+### Getting Started
+- [How to Build Claude Skills](./references/how-to-build-claude-skills.md)
+- [Available Integrations](./references/claude-connections)
+- [Existing Skills Reference](./references/claude-skills)
 
 ## Available Skills
 
@@ -164,14 +178,56 @@ description: Brief description of what the skill does
 
 ## Reference Materials
 
+### Core Documentation
 - [How to Build Claude Skills](./references/how-to-build-claude-skills.md) - Comprehensive guide to creating custom Claude skills
+- [Claude Connections](./references/claude-connections) - Available integrations and their capabilities
+- [Claude Skills Reference](./references/claude-skills) - Catalog of existing skills and patterns
+
+### Development Resources
+- [Skill Creation Instructions](./references/instructions.md) - Step-by-step guide for AI-assisted skill development
+- [Skill Templates](./templates/) - Starter templates for common skill types
+
+### Best Practices
+- Keep SKILL.md under 500 lines
+- Use progressive disclosure
+- Document success criteria and guard rails
+- Reference existing skills to avoid duplication
+
+## Development Workflow
+
+1. **Plan**
+   - Review existing skills and connections
+   - Define success criteria and guard rails
+   - Design with progressive disclosure in mind
+
+2. **Develop**
+   - Create SKILL.md with clear instructions
+   - Implement required scripts and assets
+   - Document all components
+
+3. **Test**
+   - Verify skill identification with different phrasings
+   - Test edge cases and error conditions
+   - Validate integration points
+
+4. **Deploy**
+   - Package the skill
+   - Document usage examples
+   - Add to the skills catalog
 
 ## Requirements
 
-Some skills require integration with external services:
-- Gmail API access for email-related skills
+### API Integrations
+- Gmail API for email-related skills
 - Google Calendar API for calendar operations
 - Google Drive API for file management
 - News APIs for news retrieval (optional)
+- See [claude-connections](./references/claude-connections) for full list
+
+### Development Environment
+- Python 3.8+
+- Git for version control
+- Text editor or IDE
+- Access to required APIs and services
 
 See individual skill folders for specific setup instructions.
