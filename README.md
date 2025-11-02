@@ -81,6 +81,9 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 ### ⭐ **starred-email**
 Focused Gmail assistant that lists and summarizes your starred emails with actionable insights. Retrieves actual Gmail data, prioritizes recent starred messages, and highlights action items with direct Gmail links. Includes filtering by timeframe, keywords, and participants.
 
+### 🔄 **actioned-emails**
+Unified Gmail recap that combines recently sent emails with starred follow-ups. Surfaces what you shipped out, highlights outstanding actions, deduplicates overlaps, and delivers executive summaries with Gmail deep links.
+
 ### 📧 **recent-emails**
 Advanced Gmail email retrieval with support for received, sent, drafted, and starred emails. Features include newsletter filtering, chronological work narrative, and comprehensive activity analysis. Returns emails with timestamps, senders/recipients, subject lines, summaries, and direct Gmail links.
 
