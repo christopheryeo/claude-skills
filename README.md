@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.13.0  
-**Last Updated:** November 2, 2025  
+**Version:** 1.14.0  
+**Last Updated:** November 3, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,11 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.14.0 (November 3, 2025)
+- **New Skill**: Added `customer-brief` for generating actionable customer briefs from multiple data sources
+- **Enhanced Documentation**: Updated skill structure and usage examples
+- **Repository Structure**: Added new customer-brief skill directory with implementation
 
 ### v1.13.0 (November 2, 2025)
 - **New Skill Ideas**: Added documentation for `proposal-skill`, `evening-summary`, and `weekly-focus-planner`
