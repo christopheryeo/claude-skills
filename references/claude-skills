@@ -1,0 +1,118 @@
+# Complete Claude Skills Overview
+
+## Currently Available Skills in This Conversation
+
+Here are all the specialized skills I have access to right now:
+
+### Document & Presentation Skills
+
+- **docx** - Create, edit, and analyze Word documents with tracked changes, comments, and formatting
+- **pdf** - Extract text/tables, create PDFs, merge/split documents, and handle PDF forms
+- **pptx** - Create and edit PowerPoint presentations with layouts and speaker notes
+- **xlsx** - Create and work with Excel spreadsheets including formulas, formatting, and data analysis
+
+### Productivity & Integration Skills
+
+- **recent-emails** - List recent Gmail emails (sent, received, drafted, or starred)
+- **recent-files** - Discover recently modified Google Drive files with metadata
+- **search-calendar** - Search Google Calendar with natural language queries
+- **work-day** - Manage SNMG18 Working Docs directory structure by date
+- **work-day-files** - List files in work-day folders with summaries
+- **reverse-date** - Convert dates to ISO format (YYYY-MM-DD)
+- **reverse-month** - Convert dates to year-month format (YYYY-MM)
+- **news-snapshot** - Get current news summaries with sources
+
+### Specialized Creation Skills
+
+- **product-white-paper** - Generate enterprise AI product white papers from Google Drive documentation
+- **presentation-jobs** - Create presentations using Steve Jobs's 3-Second Rule methodology
+- **presentation-outline** - Transform Google Docs into structured presentation outlines
+- **sentient-pptx** - Create Sentient.io branded PowerPoint presentations
+- **sentient-brand-guidelines** - Apply Sentient.io branding to marketing materials
+
+### Development & Reference Skills
+
+- **skill-creator** - Guide for creating new custom skills
+- **product-self-knowledge** - Authoritative information about Anthropic products
+- **brand-guidelines** - Apply Anthropic's brand colors and typography (example skill)
+- **algorithmic-art** - Create generative art using p5.js (example skill)
+
+## My General Capabilities
+
+### Writing & Content Creation
+
+- Articles, blog posts, stories, scripts, poetry
+- Business documents, reports, proposals
+- Emails, letters, and professional correspondence
+- Marketing copy and ad content
+- Technical documentation
+
+### Coding & Development
+
+- Programming in Python, JavaScript, Java, C++, and many other languages
+- Debugging and code review
+- Algorithm design and optimization
+- Web development (HTML, CSS, React, etc.)
+- Data analysis and visualization
+
+### Analysis & Research
+
+- Data interpretation and statistical analysis
+- Document summarization and extraction
+- Comparative analysis
+- Research synthesis
+- Critical thinking and reasoning
+
+### Problem Solving
+
+- Math and logic puzzles
+- Strategic planning
+- Process optimization
+- Troubleshooting technical issues
+
+### Creative Work
+
+- Brainstorming and ideation
+- World-building and character development
+- Visual design concepts
+- Music and art discussions
+
+### Learning & Education
+
+- Explaining complex topics
+- Tutoring in various subjects
+- Creating study materials
+- Breaking down difficult concepts
+
+## How to Create Custom Skills
+
+You can extend my capabilities by creating custom skills. Here's what you need to know:
+
+### What Skills Can Do
+
+- Add specialized knowledge or workflows
+- Integrate with external tools
+- Create standardized processes for recurring tasks
+- Apply specific formatting or style guidelines
+- Automate complex multi-step operations
+
+### When to Create a Skill
+
+- You have a repetitive task with specific requirements
+- You need specialized domain knowledge available consistently
+- You want to enforce particular standards or templates
+- You're integrating with a specific tool or API
+
+### How to Get Started
+
+I have a **skill-creator** skill available that can guide you through creating effective skills. Just ask me to help you create a new skill, and I'll walk you through the process!
+
+### Where Skills Live
+
+- Public skills: Available to all users
+- User skills: Custom skills you create for your own use
+- Example skills: Demonstration skills showing what's possible
+
+---
+
+Is there a specific skill you'd like to use, or would you like help creating a custom skill for a particular need?

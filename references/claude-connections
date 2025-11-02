@@ -1,0 +1,122 @@
+# Active Connections and Integrations
+
+## Zapier
+Connects Claude to various third-party apps and services. Your active Zapier integrations include:
+
+### Gmail
+- Add labels, archive emails, create drafts and draft replies
+- Delete emails, find emails, remove labels
+- Reply to emails, send emails
+- Full email management capabilities
+
+### Google Calendar
+- Add attendees to events, create detailed events, quick add events
+- Delete events, find events, find busy periods
+- Update events, retrieve events by ID
+- Search by date, time, attendees, and more
+- Full calendar management
+
+### Google Docs
+- Append text to existing documents
+- Create documents from templates with variable replacement
+- Create documents from text (supports limited HTML)
+- Find documents by name
+- Upload documents from other services
+
+### Google Drive
+- Add file sharing preferences, copy files, create files from text
+- Create folders and shortcuts, delete files
+- Find files and folders, move files
+- Replace files, update file/folder names
+- Upload files, retrieve files by ID
+- Comprehensive file management
+
+### Google Sheets
+- Clear rows, copy worksheets, create multiple rows
+- Create spreadsheets, create columns and rows
+- Delete rows, find worksheets, format rows
+- Get many rows (up to 1,500), lookup rows
+- Update single or multiple rows
+- Full spreadsheet manipulation
+
+### Jira Software Cloud
+- Add attachments, comments, and watchers to issues
+- Create issues, find components and issues
+- Find issues via JQL (Jira Query Language)
+- Find projects and users, link issues
+- Move issues to sprints, update issues
+- Complete project management capabilities
+
+### OneDrive
+- Copy files/folders, create folders and text files
+- Create sharing invitations and links
+- Find drives, files, and folders by ID
+- Search files and folders, upload files
+- Microsoft cloud storage management
+
+### Perplexity
+- Chat completion with AI model
+- Advanced field options for customized responses
+
+### Reflect
+- Append to daily notes
+- Create links and notes
+- Note-taking and knowledge management
+
+### Todoist
+- Add comments to projects and tasks
+- Create projects and tasks
+- Find projects, tasks, and users
+- Get project collaborators, invite users
+- Mark tasks complete, move tasks to sections
+- Update tasks
+- Complete task management
+
+### Trello
+- Add attachments, checklists, labels, and members
+- Archive cards, close boards, complete checklist items
+- Copy and create boards, create cards and lists
+- Create checklist items and comments, create labels
+- Delete checklists, find boards, cards, and members
+- Move cards, remove labels, update cards
+- Full Trello board management
+
+### WhatsApp Notifications
+- Send messages to WhatsApp users
+
+## Figma (Direct Integration)
+- Get design context and code from Figma files
+- Get Code Connect mappings for components
+- Get FigJam boards, metadata, screenshots
+- Get variable definitions
+- Create design system rules
+- Full design-to-code workflow support
+
+## Google Services (Direct Integration)
+
+### Google Drive Search
+- Semantic search across all your Drive files
+- Search by content, metadata, dates, owners
+- Find internal documents, policies, project files
+- Best for proprietary/confidential information
+
+### Google Drive Fetch
+- Direct document content retrieval by ID
+- Read Google Docs content directly
+- More efficient than search for known documents
+
+### Gmail (Direct Integration)
+- Read your Gmail profile
+- Search messages with advanced operators
+- Read specific messages and full threads
+- Access to complete email context
+
+## System Tools
+- **User Location**: Get your current location
+- **User Time**: Get current time and timezone
+- **Calendar Events**: Create, search, update, delete events
+- **Reminders**: Create, search, update, delete reminders
+- **Message Compose**: Draft emails and messages
+- **Map Display**: Show locations on maps
+- **Past Conversations**: Search through conversation history
+- **Web Search & Fetch**: Search the web and retrieve content
