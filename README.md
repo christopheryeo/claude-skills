@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.11.0  
+**Version:** 1.12.0  
 **Last Updated:** November 2, 2025  
 **Maintained by:** Chris Yeo
 
@@ -10,7 +10,8 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Version History
 
-### v1.11.0 (November 2, 2025)
+### v1.12.0 (November 2, 2025)
+- **Enhanced Skill**: Updated `actioned-emails` with improved documentation and clearer instructions
 - **New Skill**: Added `starred-email` for focused Gmail starred email management
 - **Documentation**: Enhanced skill creation instructions with Codex-specific guidance
 - **Templates**: Added comprehensive script templates with error handling
@@ -82,7 +83,7 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 Focused Gmail assistant that lists and summarizes your starred emails with actionable insights. Retrieves actual Gmail data, prioritizes recent starred messages, and highlights action items with direct Gmail links. Includes filtering by timeframe, keywords, and participants.
 
 ### 🔄 **actioned-emails**
-Unified Gmail recap that combines recently sent emails with starred follow-ups. Surfaces what you shipped out, highlights outstanding actions, deduplicates overlaps, and delivers executive summaries with Gmail deep links.
+Unified Gmail recap that combines recently sent emails with starred follow-ups. Blends recently sent and starred Gmail emails into a single executive recap with summaries, metadata, and follow-up prompts. Use when users ask to review "what I sent" or "what I followed up on" recently, combine sent mail and starred mail into one recap, surface pending actions from starred threads alongside recent outbound communication, or provide a short executive summary of recent activity plus what still needs attention.
 
 ### 📧 **recent-emails**
 Advanced Gmail email retrieval with support for received, sent, drafted, and starred emails. Features include newsletter filtering, chronological work narrative, and comprehensive activity analysis. Returns emails with timestamps, senders/recipients, subject lines, summaries, and direct Gmail links.
