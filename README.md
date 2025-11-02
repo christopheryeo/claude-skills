@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.12.0  
+**Version:** 1.13.0  
 **Last Updated:** November 2, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,11 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.13.0 (November 2, 2025)
+- **New Skill Ideas**: Added documentation for `proposal-skill`, `evening-summary`, and `weekly-focus-planner`
+- **Enhanced Documentation**: Updated customer brief specifications and added detailed use cases
+- **Repository Structure**: Added new Ideas directory for future skill development
 
 ### v1.12.0 (November 2, 2025)
 - **Enhanced Skill**: Updated `actioned-emails` with improved documentation and clearer instructions
