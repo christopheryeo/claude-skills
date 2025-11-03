@@ -2,7 +2,7 @@
 name: project-pulse-brief
 description: Curate stakeholder-ready pulse briefs that summarize project portfolio updates, risks, and next steps.
 license: Complete terms in LICENSE.txt
-version: 1.1.1
+version: 1.1.2
 author: OpenAI Codex
 created: 2024-03-09
 keywords: project status, portfolio reporting, executive brief, markdown
@@ -17,15 +17,13 @@ steps, reusable checklists, and a template you can copy into any document or
 collaboration space. No scripts, bots, or external integrations are required.
 
 ## Quick Start
-1. Gather weekly status inputs from project leads (email, docs, or meetings).
-2. Consolidate details using the intake prompts in
-   `references/configuration.md` to ensure every project includes summary,
-   health, blockers, and next steps.
-3. Open `assets/templates/pulse_brief_template.md` and duplicate it in your
+1. Collect weekly status inputs from project leads by reviewing your shared
+   project email thread and the relevant Google Drive folders.
+2. Open `assets/templates/pulse_brief_template.md` and duplicate it in your
    preferred editor or knowledge base.
-4. Populate each section with the curated inputs, referencing
-   `references/configuration.md` for recommended section order and labeling.
-5. Share the completed brief with stakeholders via your usual communication
+3. Summarize the latest highlights, watchlist items, risks, and next steps
+   directly from the email and Drive updates.
+4. Share the completed brief with stakeholders via your usual communication
    channels (email, workspace doc, meeting deck, etc.).
 
 ## What This Skill Provides
@@ -42,10 +40,10 @@ collaboration space. No scripts, bots, or external integrations are required.
 ✗ Direct integrations with chat platforms or email services.
 
 ## Recommended Workflow
-1. Collect updates asynchronously using the intake prompts outlined in
-   `references/configuration.md`.
+1. Skim project email updates and shared Drive docs to capture the latest wins,
+   issues, and upcoming milestones.
 2. During a short review session, triage updates into highlights, watchlist, and
-   risks using the prompts in `references/configuration.md`.
+   risks so the brief stays focused on executive-ready talking points.
 3. Populate the markdown template with the agreed priorities. Use callouts or
    bolding (see template) to emphasize decisions and support requests.
 4. Capture follow-up actions in a shared tracker so the next brief can close the
@@ -74,9 +72,12 @@ collaboration space. No scripts, bots, or external integrations are required.
 - Document open risks with clear owners and mitigation dates.
 
 ## Troubleshooting
-Consult `references/troubleshooting.md` for guidance when data is incomplete,
-conflicting, or submitted late. It includes reminder language and escalation
-paths to keep the reporting cadence on track.
+- Missing information? Send a quick reply-all on the project email thread with a
+  bulleted request for the specific details you need.
+- Conflicting updates? Leave a comment in the source Drive doc or schedule a
+  short huddle to resolve the discrepancy before publishing.
+- Updates running long? Prioritize the bullets that require decisions and move
+  the rest into linked reference docs.
 
 ## Related Skills
 - **morning-recon-brief**: Pair with Project Pulse Brief for a wider view of
@@ -85,6 +86,8 @@ paths to keep the reporting cadence on track.
   brief.
 
 ## Version History
+- **1.1.2** (2024-03-13): Simplified the workflow to rely solely on email and
+  Google Drive inputs—no supplemental guides required.
 - **1.1.1** (2024-03-12): Removed the project update worksheet in favor of
   lightweight intake prompts embedded in the configuration guide.
 - **1.1.0** (2024-03-11): Simplified into a documentation-first workflow without
