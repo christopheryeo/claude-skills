@@ -14,13 +14,20 @@ Orchestrate a stack of existing Claude skills to assemble everything needed to s
 - "Prepare everything I need for work this morning."
 
 ## Dependency Stack
-1. **Morning Recon Brief Skill** – Summarize overnight news, inbox, and Slack pings relevant to the SNMG org.
-2. **Recent Emails Skill** – Surface unread or starred messages requiring follow-up, grouped by priority.
-3. **Starred Email Skill** – Provide context on high-priority threads and suggest next actions.
-4. **Search Calendar Skill** – Pull today's meetings with agendas, prep docs, and participants.
-5. **Recent Files Skill** – Surface documents touched in the last 48 hours to resume in-progress work.
-6. **Work Day Skill** – Verify the Google Drive structure for the current date and create folders if missing.
-7. **Reverse Date & Reverse Month Skills** – Normalize user-specified dates for folder creation and timestamping.
+1. **Morning Recon Brief Skill** – Summarize overnight news, inbox, and Slack pings relevant to the SNMG org. Accept the optional `include_email=false` flag when Recent Emails/Starred Email will be queried separately, so the recon brief can focus on macro context.
+2. **Recent Emails Skill** – Surface unread or starred messages requiring follow-up, grouped by priority. Reuse its JSON payload directly rather than reformatting the same data in a custom parser.
+3. **Starred Email Skill** – Provide context on high-priority threads and suggest next actions. Feed the thread IDs returned here back into Recent Emails when requesting deeper metadata to avoid duplicate API calls.
+4. **Search Calendar Skill** – Pull today's meetings with agendas, prep docs, and participants. Support the `time_min/time_max` filters so the skill only queries the target workday window.
+5. **Recent Files Skill** – Surface documents touched in the last 48 hours to resume in-progress work. Pass the normalized date from Reverse Date to keep the look-back window consistent with calendar queries.
+6. **Work Day Skill** – Verify the Google Drive structure for the current date and create folders if missing. Invoke with the `dry_run=true` preview first so the orchestrator can decide whether to commit folder creation.
+7. **Reverse Date & Reverse Month Skills** – Normalize user-specified dates for folder creation and timestamping. Cache their output for reuse by Work Day, Search Calendar, and Recent Files.
+
+## Efficiency Opportunities Through Existing Skills
+- **Minimize duplicate data fetching**: Run Morning Recon Brief first and inspect its payload for news or inbox highlights that already satisfy the kickoff brief requirements. Only call Recent Emails or Starred Email for deeper dives on threads flagged as urgent.
+- **Pipeline shared identifiers**: Pass message IDs and calendar event IDs returned by upstream skills into downstream ones (e.g., Starred Email → Recent Emails, Search Calendar → Work Day) to avoid new lookup calls when assembling context.
+- **Share normalized date objects**: Store the formatted date from Reverse Date/Month in orchestrator state so multiple skills consume the same value rather than recomputing formatting logic.
+- **Leverage Work Day folder checks**: Defer all Drive structure validation to the existing Work Day skill instead of reproducing folder search/creation logic in this orchestration layer.
+- **Reuse presentation components**: When generating the final kickoff brief, call the response templating utilities from Morning Recon Brief (if exposed) so the summary sections share styling and reduce redundant rendering code.
 
 ## Workflow Overview
 1. **Determine Target Date**: Interpret the requested workday (default to today). Use Reverse Date/Month helpers to normalize formats.
