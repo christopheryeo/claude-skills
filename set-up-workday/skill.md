@@ -2,10 +2,6 @@
 name: set-up-workday
 description: Orchestrates the morning startup stack by chaining existing skills to brief the principal, stage Drive folders, and surface top priorities for the workday.
 license: Proprietary
-version: 1.0.0
-author: SNMG Chief of Staff Team
-created: 2025-11-03
-keywords: morning,workflow,orchestration,briefing
 ---
 
 # Set Up Workday
@@ -45,7 +41,7 @@ Set Up Workday is a meta-orchestration skill that activates the full morning ena
 ✓ Produces an executive-format kickoff brief with clear sections and links.
 
 ## What This Skill Does NOT Do
-✗ Replace the underlying skills’ authentication or permission flows.
+✗ Replace the underlying skills' authentication or permission flows.
 ✗ Invent new data sources beyond the defined dependency list.
 ✗ Auto-schedule focus blocks or push tasks into external project managers (future consideration).
 
@@ -104,7 +100,7 @@ Assistant: Normalizes the provided date, toggles off email checks, scopes downst
   - *This skill differs by*: De-duplicating and highlighting next actions across inbox feeds.
   - *Can be used together with*: Feed thread IDs between these skills for deeper metadata lookups.
 - **work-day**: Ensures Google Drive folder structure is ready.
-  - *This skill differs by*: Triggering Work Day’s checks as part of the morning orchestration.
+  - *This skill differs by*: Triggering Work Day's checks as part of the morning orchestration.
 
 ## Extending This Skill
 To extend Set Up Workday with new capabilities:
