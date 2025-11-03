@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.20.0  
+**Version:** 1.22.0  
 **Last Updated:** November 3, 2025  
 **Maintained by:** Chris Yeo
 
@@ -10,9 +10,18 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Version History
 
-### v1.20.0 (November 3, 2025)
+### v1.22.0 (November 3, 2025)
+- **Repository Cleanup**: Removed `project-pulse-brief` idea file from Ideas folder as it's now fully implemented
+- **Documentation**: Updated README to reflect current repository state
+
+### v1.21.0 (November 3, 2025)
+- **New Skill**: Added `project-pulse-brief` for integrated project tracking and reporting
 - **Repository Cleanup**: Removed `set-up-workday` idea file as it's now fully implemented
-- **Documentation**: Updated README with latest project status and skill information
+- **Documentation**: Added project pulse brief template and guidelines
+- **Repository Structure**: Added new project-pulse-brief directory with assets
+
+### v1.20.0 (November 3, 2025)
+- **Documentation**: Updated README with latest project status
 - **Skill Status**: Marked `set-up-workday` as production-ready
 
 ### v1.19.0 (November 3, 2025)
