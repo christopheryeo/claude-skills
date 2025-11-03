@@ -1,4 +1,4 @@
-# Integrated Project Pulse Brief
+# Project Pulse Brief
 
 ## Concept
 Create a "Project Pulse Brief" skill that assembles a concise status report for a focus project or client by stacking existing data-gathering skills. The brief summarizes the latest conversations, meetings, files, and relevant news so stakeholders can get up to speed quickly.
