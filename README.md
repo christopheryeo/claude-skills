@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.14.0  
+**Version:** 1.15.0  
 **Last Updated:** November 3, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.15.0 (November 3, 2025)
+- **New Skill**: Added `project-pulse-brief` for integrated project tracking and reporting
+- **New Skill**: Added `sentient-proposal-guidelines` for standardized proposal creation
+- **Enhanced Skill**: Updated `customer-brief` with comprehensive documentation and use cases
+- **Repository Cleanup**: Removed redundant customer brief idea file
 
 ### v1.14.0 (November 3, 2025)
 - **New Skill**: Added `customer-brief` for generating actionable customer briefs from multiple data sources
