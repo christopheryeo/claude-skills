@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.19.0  
+**Version:** 1.20.0  
 **Last Updated:** November 3, 2025  
 **Maintained by:** Chris Yeo
 
@@ -10,10 +10,14 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Version History
 
+### v1.20.0 (November 3, 2025)
+- **Repository Cleanup**: Removed `set-up-workday` idea file as it's now fully implemented
+- **Documentation**: Updated README with latest project status and skill information
+- **Skill Status**: Marked `set-up-workday` as production-ready
+
 ### v1.19.0 (November 3, 2025)
 - **Skill Enhancement**: Updated `set-up-workday` with improved YAML frontmatter and documentation
 - **Bug Fixes**: Resolved YAML parsing issues in skill metadata
-- **Documentation**: Enhanced README with latest project status and skill information
 
 ### v1.18.0 (November 3, 2025)
 - **New Skill Implementation**: Added `set-up-workday` skill implementation with full orchestration
