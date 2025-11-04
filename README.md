@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.22.0  
-**Last Updated:** November 3, 2025  
+**Version:** 1.23.0  
+**Last Updated:** November 4, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,10 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.23.0 (November 4, 2025)
+- **New Idea**: Added `meeting-minutes` skill idea for automated meeting documentation
+- **Documentation**: Updated README with latest project status and new skill idea
 
 ### v1.22.0 (November 3, 2025)
 - **Repository Cleanup**: Removed `project-pulse-brief` idea file from Ideas folder as it's now fully implemented
