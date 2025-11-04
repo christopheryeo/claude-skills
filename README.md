@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.23.0  
+**Version:** 1.24.0  
 **Last Updated:** November 4, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,11 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.24.0 (November 4, 2025)
+- **New Skill**: Added `new-quotation` for generating customer quotations using structured templates and pricing inputs
+- **Assets**: Added Sentient Quotation Excel template under `new-quotation/templates/`
+- **Documentation**: Updated README to include new skill and assets
 
 ### v1.23.0 (November 4, 2025)
 - **New Idea**: Added `meeting-minutes` skill idea for automated meeting documentation
@@ -172,6 +177,9 @@ Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Appl
 ### 📄 **product-white-paper**
 Generate comprehensive Enterprise AI Product White Papers using existing documentation as source material. Creates authoritative, research-backed documents that educate buyers and present solutions to complex business problems, with a focus on strategic value and ROI for enterprise audiences.
 
+### 🧾 **new-quotation**
+Generate customer quotations using a structured template and pricing inputs. Includes a Sentient Quotation Excel template and Markdown template for consistent formatting.
+
 ### 🔍 **recent-files**
 Track and analyze recent Google Drive activity with detailed metadata and insights. Features include chronological work narratives, activity patterns, project focus areas, and client-specific tracking. Ideal for reviewing work history, tracking project progress, and maintaining awareness of team activities.
 
@@ -208,6 +216,11 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 │   └── skill.md          # Skill implementation
 ├── product-white-paper/   # Enterprise white paper generation
 │   ├── references/       # White paper templates and guidelines
+│   └── skill.md          # Skill implementation
+├── new-quotation/         # Quotation generation skill
+│   ├── templates/
+│   │   ├── sentient-quotation-template.md
+│   │   └── Sentient Quotation Template.xlsx
 │   └── skill.md          # Skill implementation
 ├── recent-files/         # Drive activity tracking and insights
 │   └── skill.md          # Skill implementation
