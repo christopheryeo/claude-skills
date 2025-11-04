@@ -1,5 +1,5 @@
 ---
-name: new-quotation-skill
+name: new-quotation
 description: Generate a Sentient.io-branded quotation by gathering client inputs, filling the Sentient Quotation template, and delivering the document into the correct Work Day Google Drive folder via the work-day skill.
 ---
 
@@ -80,6 +80,6 @@ Before responding to the user, verify that:
 - If required inputs are missing after reasonable clarification attempts, summarize outstanding items instead of proceeding.
 
 ## Packaging Notes
-- Store this skill definition at `new-quotation-skill/skill.md`.
-- Include the template file within `new-quotation-skill/templates/` when packaging for deployment.
+- Store this skill definition at `new-quotation/skill.md`.
+- Include the template file within `new-quotation/templates/` when packaging for deployment.
 - Update repository README or catalog as needed when promoting this skill to production.
