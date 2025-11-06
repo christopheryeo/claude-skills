@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.26.0  
+**Version:** 1.27.0  
 **Last Updated:** November 6, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.27.0 (November 6, 2025)
+- **New Skill**: Added `new-proposal` for creating professional business proposals
+  - Includes AI-powered proposal generation and customization
+  - Features comprehensive proposal outline template
+  - Supports multiple export formats and version control
 
 ### v1.26.0 (November 6, 2025)
 - **Documentation Update**: Standardized Work-Day skill reference in `set-up-workday`
@@ -194,6 +200,9 @@ Generate comprehensive Enterprise AI Product White Papers using existing documen
 ### 🧾 **new-quotation**
 Generate customer quotations using a structured template and pricing inputs. Includes a Sentient Quotation Excel template and Markdown template for consistent formatting.
 
+### 📑 **new-proposal**
+Create and manage professional business proposals with AI-powered templates. Features include dynamic content generation, customizable sections, and multiple export options. Includes a comprehensive AI Sales Proposal Outline for mid-market enterprises.
+
 ### 🔍 **recent-files**
 Track and analyze recent Google Drive activity with detailed metadata and insights. Features include chronological work narratives, activity patterns, project focus areas, and client-specific tracking. Ideal for reviewing work history, tracking project progress, and maintaining awareness of team activities.
 
@@ -235,6 +244,10 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 │   ├── templates/
 │   │   ├── sentient-quotation-template.md
 │   │   └── Sentient Quotation Template.xlsx
+│   └── skill.md          # Skill implementation
+├── new-proposal/         # Business proposal generation
+│   ├── templates/
+│   │   └── proposal-outline.md  # AI Sales Proposal Outline
 │   └── skill.md          # Skill implementation
 ├── recent-files/         # Drive activity tracking and insights
 │   └── skill.md          # Skill implementation
