@@ -19,7 +19,7 @@ Set Up Workday is a meta-orchestration skill that activates the full morning ena
 2. **Collect situation report** by calling Morning Recon Brief, Recent Emails, and Starred Email, passing include_email flags and message IDs to prevent duplicate pulls.
 3. **Review schedule** via Search Calendar with time_min/time_max bounded to the workday window for agendas, prep documents, and participants.
 4. **Resume context** with Recent Files, scoped to the last 48 hours and aligned to the normalized date to surface in-progress work.
-5. **Prepare workspace** by invoking Work Day in dry run mode first, then committing folder creation if the structure is missing.
+5. **Prepare workspace** by invoking Work-Day skill, then committing folder creation if the structure is missing.
 6. **Synthesize plan** that merges all inputs, deduplicates overlapping items, and highlights top priorities, urgent follow-ups, and quick wins.
 7. **Deliver output** formatted as an executive kickoff brief covering priorities, schedule, follow-ups, workspace links, and reminders.
 
