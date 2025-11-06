@@ -1,4 +1,4 @@
-# Proposal Skill Idea
+# new-proposal Idea
 
 ## Mission
 Enable account teams to rapidly assemble a polished sales proposal that aligns customer-specific pain points from briefs with product capabilities documented in the whitepaper. The skill should ingest the latest customer brief alongside the product whitepaper to generate a structured proposal draft that can be sent directly to the prospect.
