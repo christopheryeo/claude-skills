@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.28.0  
+**Version:** 1.29.0  
 **Last Updated:** November 6, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,13 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.29.0 (November 6, 2025)
+- **Enhanced Skill**: Updated `new-proposal` with streamlined workflow
+  - Simplified input requirements for executive-focused proposals
+  - Standardized on Google Docs output format
+  - Added comprehensive case studies for SmartChat Analytics
+  - Integrated with Workday for automatic document storage
 
 ### v1.28.0 (November 6, 2025)
 - **New Asset**: Added `SmartChat Analytics` product documentation
@@ -207,7 +214,7 @@ Generate comprehensive Enterprise AI Product White Papers using existing documen
 Generate customer quotations using a structured template and pricing inputs. Includes a Sentient Quotation Excel template and Markdown template for consistent formatting.
 
 ### 📑 **new-proposal**
-Create and manage professional business proposals with AI-powered templates. Once the requester names the product, the skill auto-loads the matching whitepaper from its library, applies Sentient.io brand standards, and produces a ready-to-edit draft with minimal follow-up questions.
+Create and manage professional sales proposals with AI-powered templates. Features include dynamic content generation, comprehensive case studies, and automated Google Docs output. Includes a structured AI Sales Proposal Outline for mid-market enterprises, with direct integration to Workday for document management. Sentient.io brand standards, and produces a ready-to-edit draft with minimal follow-up questions.
 
 ### 📊 **SmartChat Analytics**
 Enterprise-grade AI analytics platform enabling natural language data exploration and insights. Features include semantic data understanding, natural language querying, and explainable AI outputs. Comprehensive white paper available in the products directory.
