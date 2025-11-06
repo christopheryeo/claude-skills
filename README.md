@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.27.0  
+**Version:** 1.28.0  
 **Last Updated:** November 6, 2025  
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.28.0 (November 6, 2025)
+- **New Asset**: Added `SmartChat Analytics` product documentation
+  - Comprehensive white paper on enterprise-grade AI analytics
+  - Includes strategic framework and implementation guidelines
+  - Covers ROI analysis and deployment best practices
 
 ### v1.27.0 (November 6, 2025)
 - **New Skill**: Added `new-proposal` for creating professional business proposals
@@ -203,6 +209,9 @@ Generate customer quotations using a structured template and pricing inputs. Inc
 ### 📑 **new-proposal**
 Create and manage professional business proposals with AI-powered templates. Features include dynamic content generation, customizable sections, and multiple export options. Includes a comprehensive AI Sales Proposal Outline for mid-market enterprises.
 
+### 📊 **SmartChat Analytics**
+Enterprise-grade AI analytics platform enabling natural language data exploration and insights. Features include semantic data understanding, natural language querying, and explainable AI outputs. Comprehensive white paper available in the products directory.
+
 ### 🔍 **recent-files**
 Track and analyze recent Google Drive activity with detailed metadata and insights. Features include chronological work narratives, activity patterns, project focus areas, and client-specific tracking. Ideal for reviewing work history, tracking project progress, and maintaining awareness of team activities.
 
@@ -246,6 +255,8 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 │   │   └── Sentient Quotation Template.xlsx
 │   └── skill.md          # Skill implementation
 ├── new-proposal/         # Business proposal generation
+│   ├── products/
+│   │   └── SmartChat-Analytics.md  # Enterprise AI Analytics White Paper
 │   ├── templates/
 │   │   └── proposal-outline.md  # AI Sales Proposal Outline
 │   └── skill.md          # Skill implementation
