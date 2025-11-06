@@ -207,7 +207,7 @@ Generate comprehensive Enterprise AI Product White Papers using existing documen
 Generate customer quotations using a structured template and pricing inputs. Includes a Sentient Quotation Excel template and Markdown template for consistent formatting.
 
 ### 📑 **new-proposal**
-Create and manage professional business proposals with AI-powered templates. Features include dynamic content generation, customizable sections, and multiple export options. Includes a comprehensive AI Sales Proposal Outline for mid-market enterprises.
+Create and manage professional business proposals with AI-powered templates. Once the requester names the product, the skill auto-loads the matching whitepaper from its library, applies Sentient.io brand standards, and produces a ready-to-edit draft with minimal follow-up questions.
 
 ### 📊 **SmartChat Analytics**
 Enterprise-grade AI analytics platform enabling natural language data exploration and insights. Features include semantic data understanding, natural language querying, and explainable AI outputs. Comprehensive white paper available in the products directory.
@@ -255,8 +255,8 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 │   │   └── Sentient Quotation Template.xlsx
 │   └── skill.md          # Skill implementation
 ├── new-proposal/         # Business proposal generation
-│   ├── products/
-│   │   └── SmartChat-Analytics.md  # Enterprise AI Analytics White Paper
+│   ├── proposals/
+│   │   └── SmartChat-Analytics.md  # Enterprise AI Analytics White Paper library
 │   ├── templates/
 │   │   └── proposal-outline.md  # AI Sales Proposal Outline
 │   └── skill.md          # Skill implementation
