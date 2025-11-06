@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.24.0  
-**Last Updated:** November 4, 2025  
+**Version:** 1.25.0  
+**Last Updated:** November 6, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.25.0 (November 6, 2025)
+- **Enhanced Skill**: Updated `set-up-workday` with improved documentation and workflow clarity
+  - Refined workspace preparation step in the workflow
+  - Clarified skill boundaries and prerequisites
+  - Improved integration with Work-Day skill
 
 ### v1.24.0 (November 4, 2025)
 - **New Skill**: Added `new-quotation` for generating customer quotations using structured templates and pricing inputs
@@ -146,6 +152,9 @@ Advanced Gmail email retrieval with support for received, sent, drafted, and sta
 
 ### 📅 **search-calendar**
 Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
+
+### 🔄 **set-up-workday**
+Orchestrates the morning startup stack by chaining existing skills to brief the principal, stage Drive folders, and surface top priorities for the workday. Features end-to-end orchestration of multiple skills with data de-duplication and workspace readiness checks.
 
 ### 📂 **recent-drive**
 Lists the most recent files created or modified in Google Drive. Defaults to last 24 hours, or accepts custom timeframe. Returns files with modification dates, summaries, and clickable links sorted by recency.
