@@ -16,10 +16,11 @@ Enable account teams to rapidly assemble a polished sales proposal that aligns c
 ## Inputs & Data Sources
 1. **Customer Brief Skill Output**: Required to understand account context, pain points, stakeholders, timelines, and desired outcomes.
 2. **Product Whitepaper**: Canonical reference for product capabilities, technical architecture, security posture, roadmap, and differentiators.
-3. **Brand & Tone Guidelines**: Ensure narrative voice and formatting comply with corporate standards.
+3. **Brand & Tone Guidelines**: Ensure narrative voice and formatting comply with corporate standards, explicitly referencing the `sentient-brand-guidelines` skill to stay aligned with official Sentient.io styling.
 4. **Template Library**: Professionally designed proposal templates (standard business proposal, project bid, service agreement, partnership proposal, grant application) that provide consistent structure across deliverables.
 5. **Optional Attachments**: Case studies, pricing tables, implementation playbooks that can be referenced or linked.
 6. **Account & Project Metadata**: Client name, industry, contact details, project scope, pricing guidelines, compliance considerations, and target timeline sourced from CRM and discovery artifacts.
+7. **Workday Storage Context**: Access to the `work-day` skill so the finalized proposal can be written in Google Docs format to the appropriate daily folder in Workday.
 
 ## Output Structure
 1. **Executive Overview**: Brief recap of customer situation, goals, and how the product addresses them.
@@ -39,6 +40,8 @@ Enable account teams to rapidly assemble a polished sales proposal that aligns c
 - Parse the customer brief to extract key entities (stakeholders, initiatives, blockers) and map them to whitepaper sections.
 - Allow configuration of proposal depth (concise summary vs. detailed document) and export format (Markdown, PDF-ready HTML, PDF, DOCX, or shareable link) while keeping `<YYYYMMDD>-<CustomerName>-Proposal-R<Revision>` naming.
 - Maintain a library of reusable proposal snippets tied to specific industries or use cases to accelerate personalization.
+- When applying styling or tone adjustments, pull directives from the `sentient-brand-guidelines` skill so all proposal assets remain consistent with Sentient.io's approved visual identity.
+- After producing the final draft, use the `work-day` skill to save the Google Docs-formatted proposal into the Workday folder corresponding to the current work day.
 - Track citations back to the whitepaper and brief so reviewers can verify source sentences.
 - Support template-based generation so users can initialize drafts from a chosen blueprint, then inject dynamic content from briefs and whitepapers.
 - Offer guided editing commands (e.g., "Update the executive summary to highlight AI integration expertise" or "Include a case study about our recent healthcare project") that modify the draft without breaking structural integrity.
