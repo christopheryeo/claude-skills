@@ -1,9 +1,9 @@
 ---
-name: presentation-jobs
+name: new-presentation
 description: Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Use when creating product launches, pitches, explanations, or any live presentation that requires high audience retention and visual clarity. Automatically integrates with Claude's PPTX skill to generate professional PowerPoint files and always applies the Sentient Brand Guidelines skill to ensure consistent branding.
 ---
 
-# Presentation Jobs - Steve Jobs Methodology
+# New Presentation - Steve Jobs Methodology
 
 Create presentations following Steve Jobs's legendary minimalist approach, centered on the "Billboard Test" (3-Second Rule) for maximum impact and audience retention.
 
