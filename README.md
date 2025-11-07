@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.29.0  
-**Last Updated:** November 6, 2025  
+**Version:** 1.30.0  
+**Last Updated:** November 7, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,13 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.30.0 (November 7, 2025)
+- **Enhanced Skill**: Further refined `new-proposal` workflow
+  - Updated input requirements for executive-focused proposals
+  - Moved SmartChat Analytics documentation to products folder
+  - Streamlined proposal generation process
+  - Improved Workday integration for document management
 
 ### v1.29.0 (November 6, 2025)
 - **Enhanced Skill**: Updated `new-proposal` with streamlined workflow
@@ -214,7 +221,7 @@ Generate comprehensive Enterprise AI Product White Papers using existing documen
 Generate customer quotations using a structured template and pricing inputs. Includes a Sentient Quotation Excel template and Markdown template for consistent formatting.
 
 ### 📑 **new-proposal**
-Create and manage professional sales proposals with AI-powered templates. Features include dynamic content generation, comprehensive case studies, and automated Google Docs output. Includes a structured AI Sales Proposal Outline for mid-market enterprises, with direct integration to Workday for document management. Sentient.io brand standards, and produces a ready-to-edit draft with minimal follow-up questions.
+Create and manage professional sales proposals with AI-powered templates. Features include dynamic content generation, comprehensive case studies, and automated Google Docs output. The skill is optimized for executive audiences with streamlined input requirements and direct Workday integration for document management. Includes a structured AI Sales Proposal Outline for mid-market enterprises, following Sentient.io brand standards.
 
 ### 📊 **SmartChat Analytics**
 Enterprise-grade AI analytics platform enabling natural language data exploration and insights. Features include semantic data understanding, natural language querying, and explainable AI outputs. Comprehensive white paper available in the products directory.
