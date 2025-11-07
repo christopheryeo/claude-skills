@@ -139,7 +139,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 - **recent-files**: Enhanced Google Drive file discovery with activity insights and chronological work narrative
 
 ### v1.6.0 (October 31, 2025)
-- **product-white-paper**: Added skill for generating enterprise-grade product white papers
+- **new-product**: Added skill for generating enterprise-grade product white papers
 
 ### v1.5.0 (October 31, 2025)
 - **presentation-jobs**: Added Steve Jobs-style presentation creation with 3-Second Rule methodology
@@ -228,7 +228,7 @@ Transforms Google Docs into structured presentation outlines with titles, subtit
 ### 🎯 **presentation-jobs**
 Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity.
 
-### 📄 **product-white-paper**
+### 📄 **new-product**
 Generate comprehensive Enterprise AI Product White Papers using existing documentation as source material. Creates authoritative, research-backed documents that educate buyers and present solutions to complex business problems, with a focus on strategic value and ROI for enterprise audiences.
 
 ### 🧾 **new-quotation**
@@ -274,7 +274,7 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 │   └── skill.md          # Skill implementation
 ├── presentation-jobs/     # Steve Jobs-style presentations
 │   └── skill.md          # Skill implementation
-├── product-white-paper/   # Enterprise white paper generation
+├── new-product/           # Enterprise white paper generation
 │   ├── references/       # White paper templates and guidelines
 │   └── skill.md          # Skill implementation
 ├── new-quotation/         # Quotation generation skill
