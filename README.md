@@ -10,6 +10,17 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Version History
 
+### v1.31.1 (November 7, 2025)
+- **Enhanced Skill**: Updated `presentation-jobs` with mandatory Sentient branding
+  - Enforced Sentient Brand Guidelines for all presentations
+  - Updated documentation to reflect consistent branding requirements
+  - Improved integration with Sentient branding standards
+
+### v1.31.0 (November 7, 2025)
+- **Documentation Update**: Added details about sentient-pptx removal
+  - Updated README to reflect project structure changes
+  - Consolidated version history entries
+
 ### v1.30.0 (November 7, 2025)
 - **Removed Skill**: Removed `sentient-pptx` directory and functionality
   - Consolidated presentation capabilities into `presentation-jobs`
