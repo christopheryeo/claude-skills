@@ -1,6 +1,6 @@
 ---
 name: presentation-jobs
-description: Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Use when creating product launches, pitches, explanations, or any live presentation that requires high audience retention and visual clarity. Automatically integrates with Claude's PPTX skill to generate professional PowerPoint files and, when applicable, the Sentient Brand Guidelines skill to ensure consistent branding.
+description: Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Use when creating product launches, pitches, explanations, or any live presentation that requires high audience retention and visual clarity. Automatically integrates with Claude's PPTX skill to generate professional PowerPoint files and always applies the Sentient Brand Guidelines skill to ensure consistent branding.
 ---
 
 # Presentation Jobs - Steve Jobs Methodology
@@ -50,9 +50,9 @@ This file contains the essential principles you must follow:
 - Visual design standards
 - The presenter's role
 
-### Step 2B: Apply Sentient Brand Guidelines (When Required)
+### Step 2B: Apply Sentient Brand Guidelines
 
-If the request specifies Sentient.io branding, **also review the Sentient Brand Guidelines skill** to apply the correct colors, typography, and logo usage:
+For every presentation, **review the Sentient Brand Guidelines skill** to apply the correct colors, typography, and logo usage:
 
 ```
 Read sentient-brand-guideline/skill.md
