@@ -11,7 +11,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ## Version History
 
 ### v1.31.1 (November 7, 2025)
-- **Enhanced Skill**: Updated `presentation-jobs` with mandatory Sentient branding
+- **Enhanced Skill**: Updated `new-presentation` with mandatory Sentient branding
   - Enforced Sentient Brand Guidelines for all presentations
   - Updated documentation to reflect consistent branding requirements
   - Improved integration with Sentient branding standards
@@ -23,7 +23,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ### v1.30.0 (November 7, 2025)
 - **Removed Skill**: Removed `sentient-pptx` directory and functionality
-  - Consolidated presentation capabilities into `presentation-jobs`
+  - Consolidated presentation capabilities into `new-presentation`
   - Streamlined the project structure by removing redundant components
 - **Enhanced Skill**: Further refined `new-proposal` workflow
   - Updated input requirements for executive-focused proposals
@@ -142,7 +142,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 - **new-product**: Added skill for generating enterprise-grade product white papers
 
 ### v1.5.0 (October 31, 2025)
-- **presentation-jobs**: Added Steve Jobs-style presentation creation with 3-Second Rule methodology
+- **new-presentation**: Added Steve Jobs-style presentation creation with 3-Second Rule methodology
 
 ### v1.4.0 (October 31, 2025)
 - **presentation-outline**: Added skill to transform Google Docs into structured presentation outlines
@@ -225,7 +225,7 @@ Lists and summarizes files in work-day folders with 40-word summaries. Navigates
 ### 📝 **presentation-outline**
 Transforms Google Docs into structured presentation outlines with titles, subtitles, and bullet points. Generates up to 10 slides with clear organization and logical flow, ideal for quickly creating presentation drafts from existing documentation.
 
-### 🎯 **presentation-jobs**
+### 🎯 **new-presentation**
 Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity.
 
 ### 📄 **new-product**
@@ -272,7 +272,7 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 ├── presentation-outline/  # Presentation outline generation
 │   ├── guidelines/        # Presentation guidelines
 │   └── skill.md          # Skill implementation
-├── presentation-jobs/     # Steve Jobs-style presentations
+├── new-presentation/      # Steve Jobs-style presentations
 │   └── skill.md          # Skill implementation
 ├── new-product/           # Enterprise white paper generation
 │   ├── references/       # White paper templates and guidelines
