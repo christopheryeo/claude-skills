@@ -11,6 +11,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ## Version History
 
 ### v1.30.0 (November 7, 2025)
+- **Removed Skill**: Removed `sentient-pptx` directory and functionality
+  - Consolidated presentation capabilities into `presentation-jobs`
+  - Streamlined the project structure by removing redundant components
 - **Enhanced Skill**: Further refined `new-proposal` workflow
   - Updated input requirements for executive-focused proposals
   - Moved SmartChat Analytics documentation to products folder
