@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.30.0  
+**Version:** 1.31.1  
 **Last Updated:** November 7, 2025  
 **Maintained by:** Chris Yeo
 
