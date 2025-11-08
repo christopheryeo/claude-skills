@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.32.0
-**Last Updated:** November 8, 2025
+**Version:** 1.33.0  
+**Last Updated:** November 8, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -10,15 +10,22 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Version History
 
-### v1.32.0 (November 8, 2025)
+### v1.33.0 (November 8, 2025)
 - **New Skill**: Added `topic-emails` for retrieving Gmail threads tied to a specific subject
   - Captures topic keywords, timeframe filters, and label exclusions before querying
   - Summarizes spotlight threads plus a complete topic log with Gmail deep links
   - Provides export guidance for creating follow-up CSVs manually
-- **Repository Cleanup**: Removed `Ideas/topic-emails.md` now that the skill is implemented
+- **Repository Cleanup**: 
+  - Removed `Ideas/topic-emails.md` now that the skill is implemented
+  - Renamed `presentation-jobs` to `new-presentation` for consistency
+  - Renamed `product-white-paper` to `new-product` for better clarity
+- **Documentation Updates**:
+  - Enhanced README with new folder structure
+  - Updated skill references to reflect new naming conventions
+>>>>>>> Stashed changes
 
 ### v1.31.1 (November 7, 2025)
-- **Enhanced Skill**: Updated `new-presentation` with mandatory Sentient branding
+- **Enhanced Skill**: Updated `presentation-jobs` with mandatory Sentient branding
   - Enforced Sentient Brand Guidelines for all presentations
   - Updated documentation to reflect consistent branding requirements
   - Improved integration with Sentient branding standards

@@ -1,3 +1,4 @@
+---
 name: new-product
 description: Generate comprehensive Enterprise AI Product White Papers using existing product documentation from Google Drive as source material. Use when users request "create a product white paper", "generate a white paper for [product]", or similar requests for enterprise-grade product documentation for SaaS, hardware, or service offerings.
 ---
