@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.33.0  
-**Last Updated:** November 8, 2025  
+**Version:** 1.33.1  
+**Last Updated:** November 9, 2025  
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.33.1 (November 9, 2025)
+- **New Skill**: Added `topic-files` for managing and summarizing document collections
+  - Supports Google Drive query operations for targeted file retrieval
+  - Includes comprehensive documentation for query operators
+  - Features a structured summary checklist for consistent output
 
 ### v1.33.0 (November 8, 2025)
 - **New Skill**: Added `topic-emails` for retrieving Gmail threads tied to a specific subject
@@ -22,7 +28,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 - **Documentation Updates**:
   - Enhanced README with new folder structure
   - Updated skill references to reflect new naming conventions
->>>>>>> Stashed changes
+
 
 ### v1.31.1 (November 7, 2025)
 - **Enhanced Skill**: Updated `presentation-jobs` with mandatory Sentient branding
@@ -250,6 +256,9 @@ Generate customer quotations using a structured template and pricing inputs. Inc
 
 ### 📑 **new-proposal**
 Create and manage professional sales proposals with AI-powered templates. Features include dynamic content generation, comprehensive case studies, and automated Google Docs output. The skill is optimized for executive audiences with streamlined input requirements and direct Workday integration for document management. Includes a structured AI Sales Proposal Outline for mid-market enterprises, following Sentient.io brand standards.
+
+### 📂 **Topic Files**
+Advanced document management and summarization tool for organizing and analyzing document collections. Features include Google Drive query support, structured summarization, and comprehensive documentation for query operators. Includes a summary checklist for consistent output quality.
 
 ### 📊 **SmartChat Analytics**
 Enterprise-grade AI analytics platform enabling natural language data exploration and insights. Features include semantic data understanding, natural language querying, and explainable AI outputs. Comprehensive white paper available in the products directory.
