@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.34.0
-**Last Updated:** November 10, 2025
+**Version:** 1.34.1
+**Last Updated:** November 11, 2025
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
