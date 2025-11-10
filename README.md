@@ -266,6 +266,20 @@ Create and manage professional sales proposals with AI-powered templates. Featur
 ### 📂 **Topic Files**
 Advanced document management and summarization tool for organizing and analyzing document collections. Features include Google Drive query support, structured summarization, and comprehensive documentation for query operators. Includes a summary checklist for consistent output quality.
 
+### 📧 **list-emails**
+Formats Gmail message metadata into consistent, executive-style tables with numbered rows, summaries, and direct Gmail deep links. Features include:
+- Standardized email listings with timestamps, sender/recipient info, and status indicators
+- Automatic email status tagging with visual indicators (📩 Unread, ✓ Read, 📝 Draft, etc.)
+- Smart summarization of email content (≤35 words per message)
+- Direct Gmail deep links for each message
+- Support for special markers (⭐ starred, ⏰ follow-up, $ financial, 🔒 confidential)
+- Timezone-aware date/time formatting
+- Designed as a reusable micro-skill for embedding in other workflows
+- Consistent output format for easy parsing and integration
+
+### 📄 **list-files**
+Generate organized file listings with consistent formatting, metadata, and Google Drive deep links. Includes file type categorization, size indicators, and last modified timestamps. Ideal for creating structured file inventories and document collections.
+
 ### 📊 **SmartChat Analytics**
 Enterprise-grade AI analytics platform enabling natural language data exploration and insights. Features include semantic data understanding, natural language querying, and explainable AI outputs. Comprehensive white paper available in the products directory.
 
