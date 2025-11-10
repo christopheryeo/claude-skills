@@ -5,6 +5,7 @@ This manifest was prepared after reviewing the following resources to ensure ali
 - **references/instructions.md**: Applied the required manifest structure and deliverables.
 - **references/how-to-build-claude-skills.md**: Followed best practices around clear purpose, success criteria, and guard rails.
 - **recent-emails/skill.md**: Studied Gmail query patterns and output conventions to adapt for a starred-only focus.
+- **list-emails/skill.md**: Ensured consistent formatting handoff to the shared email table micro-skill.
 
 ## Overview
 Provide a dedicated Gmail assistant that lists the user's starred emails with actionable summaries, metadata, and follow-up cues. The skill retrieves actual Gmail data via the Gmail integration tools, prioritizes recent starred messages, and highlights action items tied to starred content.
@@ -125,6 +126,7 @@ Respond with a clear executive summary followed by a structured table and action
 - If Gmail integration fails, explain the issue and request user assistance to retry.
 
 ## Related Skills
+- **list-emails** — Embedded to render the standardized email digest table and follow-up sections.
 - **recent-emails** — For comprehensive inbox activity across folders. Use starred-email when the user needs only starred priorities.
 
 ## Integration Notes

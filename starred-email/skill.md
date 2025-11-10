@@ -48,10 +48,11 @@ Rely exclusively on Gmail integrations to retrieve real data:
 6. **Summarize:** Produce a <=30-word summary capturing why the email was starred or the key action.
 7. **Assess follow-ups:** Derive explicit action items, deadlines, or pending tasks signaled by the starred content.
 8. **Generate links:** Create Gmail links per folder context (e.g., `https://mail.google.com/mail/u/0/#starred/[message_id]`).
-9. **Sort & format:** Order by most recent starred timestamp descending and build the output structure.
+9. **Prepare formatting payload:** Compile the timeframe, timezone, and normalized email metadata (folder, participants, subject, timestamp, summary, status, Gmail link, starred indicator) into a structured list for downstream formatting.
+10. **Format with `list-emails`:** Invoke the `list-emails` micro-skill with the prepared payload to render the Markdown table and any follow-up sections, then integrate that output into the final response.
 
 ## Output Format
-Respond with a clear executive summary followed by a structured table and action insights:
+Respond with a clear executive summary followed by a structured table and action insights. Use the `list-emails` micro-skill to generate the table and derived sections from the curated metadata:
 ```markdown
 # ⭐ STARRED EMAILS DIGEST
 **[Current date, preferred timezone] | Last [timeframe]**
@@ -88,6 +89,7 @@ Respond with a clear executive summary followed by a structured table and action
 - If Gmail integration fails, explain the issue and request user assistance to retry.
 
 ## Related Skills
+- **list-emails** — Shared formatter for consistent Gmail tables. Feed it the starred email metadata assembled above to render the digest layout.
 - **recent-emails** — For comprehensive inbox activity across folders. Use starred-email when the user needs only starred priorities.
 
 ## Integration Notes
