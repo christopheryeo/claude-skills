@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.33.1  
-**Last Updated:** November 9, 2025  
+**Version:** 1.34.0
+**Last Updated:** November 10, 2025
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.34.0 (November 10, 2025)
+- **New Skill**: Added `list-emails` formatting micro-skill for consistent email tables
+  - Standardizes numbered listings, summaries, and Gmail links for reuse across workflows
+  - Provides optional sections for starred, priority, financial, and action item callouts
+  - Designed to be embedded by retrieval-focused skills (e.g., `recent-emails`, `morning-recon-brief`)
 
 ### v1.33.1 (November 9, 2025)
 - **New Skill**: Added `topic-files` for managing and summarizing document collections
@@ -279,6 +285,8 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 ├── news-snapshot/          # News briefing skill
 │   └── skill.md           # Skill implementation
 ├── morning-recon-brief/    # Comprehensive morning brief skill
+│   └── skill.md           # Skill implementation
+├── list-emails/            # Shared email formatting micro-skill
 │   └── skill.md           # Skill implementation
 ├── reverse-date/          # Date conversion and parsing skill
 │   ├── scripts/           # Python scripts for date handling
