@@ -10,11 +10,19 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Version History
 
+### v1.35.0 (November 11, 2025)
+- **Enhanced Integration**: Updated `recent-emails` and `starred-email` skills to integrate with `list-emails`
+  - Unified email presentation layer using `list-emails` for consistent formatting
+  - Added support for folder-specific Gmail deep links (Inbox/Sent/Drafts/Starred)
+  - Enhanced email status indicators and star tracking
+  - Improved action items and priority assessment sections
+
 ### v1.34.0 (November 10, 2025)
 - **New Skill**: Added `list-emails` formatting micro-skill for consistent email tables
   - Standardizes numbered listings, summaries, and Gmail links for reuse across workflows
   - Provides optional sections for starred, priority, financial, and action item callouts
   - Designed to be embedded by retrieval-focused skills (e.g., `recent-emails`, `morning-recon-brief`)
+  - Supports timezone-aware date formatting and multiple status indicators
 
 ### v1.33.1 (November 9, 2025)
 - **New Skill**: Added `topic-files` for managing and summarizing document collections
