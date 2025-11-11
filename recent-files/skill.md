@@ -34,7 +34,19 @@ Search Google Drive for files with the following criteria:
 
 ## Output Format
 
-Structure the file list in a professional, scannable executive format:
+Structure the response in a professional, scannable executive format. Use the **`list-files`** skill to generate the detailed file table so formatting and metadata stay consistent across Drive skills.
+
+1. **Call `list-files`** with the recent-files parameters translated to its inputs:
+   - **scope**: use a Drive search query covering all accessible files filtered by the recent-files timeframe (e.g., `modifiedTime > {start}`) and excluding trashed items.
+   - **limit**: set to the number of rows you want to display (default 20 for recent-files unless the user specifies).
+   - **filters**: include `mimeType != 'application/vnd.google-apps.trashed'`, time range, owners (if requested), and any user-specified constraints.
+   - **summary_length**: choose `short` (≤30 words) to align with the 30-word summary requirement.
+   - **sort_by**: `modifiedTime desc` so the freshest files appear first.
+   - **timezone**: Asia/Singapore unless the user overrides.
+
+2. **Embed the returned `# 📁 DRIVE FILE LISTING` block** under the "Recent Files" section without altering the table columns. This ensures all files include name, type, modified timestamp, summary, owner, and direct link straight from the shared skill.
+
+3. Surround the embedded table with the recent-files framing content:
 ```
 # 📁 DRIVE RECENT FILES
 **[Current date, Singapore time] | Last [X] Hours**
@@ -46,20 +58,10 @@ Structure the file list in a professional, scannable executive format:
 - **Oldest in list**: [File name] ([Time ago])
 
 ## Recent Files
+{Insert the `list-files` table output here}
+```
 
-| **#** | **File Name** | **Type** | **Modified** | **30-word Summary** | **Owner** | **URL** |
-|-------|---------------|----------|--------------|-------------------|-----------|---------|
-| 1 | [Exact file name] | [Google Doc/Sheet/Slide/PDF/Folder/etc.] | [Date & Time, Singapore] | [Content summary or purpose, max 30 words] | [Owner email/name] | [Clickable link] |
-| 2 | [Exact file name] | [Type] | [Date & Time] | [Summary] | [Owner] | [Link] |
-| ... | ... | ... | ... | ... | ... | ... |
-
-For each file, provide:
-- **File Name**: Exact name as it appears in Drive
-- **Type**: Document, Spreadsheet, Presentation, PDF, Image, Video, Folder, or other format
-- **Modified**: Last modification date and time (Singapore timezone, 24-hour format)
-- **30-word Summary**: Brief description of file content, purpose, or key data
-- **Owner**: Email address or name of file owner (if different from user)
-- **URL**: Direct clickable link to the file in Google Drive
+Leverage the metadata returned by `list-files` to populate the summary bullets (e.g., `total_found`, first and last rows). If additional aggregation is needed (counts by type, owner, etc.), derive it directly from the embedded table data so the narrative and table stay aligned.
 
 ## Key Observations
 
@@ -100,12 +102,12 @@ If the search returns too many files (100+), provide:
 1. **Use verified data only** - Query actual Google Drive API/data. Never assume or fabricate file lists.
 2. **Include all URLs** - Always provide clickable direct links to each file.
 3. **Maintain timezone consistency** - Use Singapore timezone (Asia/Singapore) for all dates/times.
-4. **Keep summaries concise** - Maximum 30 words per file summary.
+4. **Keep summaries concise** - Maximum 30 words per file summary (set `summary_length=short` when calling `list-files`).
 5. **Sort by recency** - Most recently modified files appear first.
-6. **Include metadata** - File type, owner, and modification timestamp for every file.
-7. **Professional formatting** - Use tables, consistent date formats, and clear hierarchy.
+6. **Include metadata** - File type, owner, and modification timestamp for every file. `list-files` already populates these columns; flag any gaps in the observations section.
+7. **Professional formatting** - Use tables, consistent date formats, and clear hierarchy by embedding the `list-files` output block verbatim.
 8. **Respect permissions** - Only include files the user has access to view.
-9. **Handle large result sets** - If 100+ files returned, truncate to top 20 and note total.
+9. **Handle large result sets** - If 100+ files returned, configure `list-files` to surface the top 20 rows and note the total matches.
 10. **Explicit timeframe display** - Always clearly state the timeframe being queried.
 11. **Bullet format for observations** - Use bullet points with bold headers (• **Header**: description)
 12. **Chronological narrative** - For "My Activity" bullet, provide a time-ordered story of user's work
