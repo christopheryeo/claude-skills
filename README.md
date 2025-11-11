@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.34.1
-**Last Updated:** November 11, 2025
+**Version:** 1.35.2
+**Last Updated:** November 12, 2025
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,20 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.35.2 (November 12, 2025)
+- **Enhanced Integration**: Updated `recent-files` skill to integrate with `list-files` micro-skill
+  - Unified file presentation layer using `list-files` for consistent formatting
+  - Improved metadata handling and summary generation
+  - Added support for custom timeframes and file type filtering
+  - Enhanced documentation for query construction and time formats
+
+### v1.35.1 (November 12, 2025)
+- **Enhanced Performance**: Optimized `recent-emails` skill for better token efficiency
+  - Implemented strategic Gmail tool usage to minimize token consumption
+  - Added selective message fetching with `read_gmail_message` for basic details
+  - Reserved `read_gmail_thread` for unread, starred, or priority emails only
+  - Improved documentation for query construction and time formats
 
 ### v1.35.0 (November 11, 2025)
 - **Enhanced Integration**: Updated `recent-emails` and `starred-email` skills to integrate with `list-emails`
