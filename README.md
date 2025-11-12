@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.35.2
+**Version:** 1.35.3
 **Last Updated:** November 12, 2025
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,13 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.35.3 (November 12, 2025)
+- **Enhanced Integration**: Updated `topic-files` skill to integrate with `list-files` micro-skill
+  - Streamlined file presentation using the standardized `list-files` table format
+  - Improved query construction and result handling
+  - Enhanced documentation for search operators and filtering
+  - Added support for activity-based file discovery
 
 ### v1.35.2 (November 12, 2025)
 - **Enhanced Integration**: Updated `recent-files` skill to integrate with `list-files` micro-skill
