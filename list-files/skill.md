@@ -1,6 +1,6 @@
 ---
 name: list-files
-description: Produces a structured, numbered Drive file catalog with summaries, folder paths, metadata, and direct links so other skills can embed polished file tables in their outputs.
+description: Produces a structured, numbered Drive file catalog with summaries, folder context, metadata, and direct links (embedded in file names) so other skills can embed polished file tables in their outputs.
 ---
 
 # Drive File Catalog
@@ -62,6 +62,7 @@ Never fabricate metadata or summaries; base them only on returned Drive data.
    - Ensure links are direct `webViewLink` URLs.
    - Deduplicate files and note if shortcuts resolve to the same target.
    - Respect the requested ordering and numbering.
+   - Default to sorting by **Last Modified** (newest first) before numbering unless the caller explicitly specifies a different `sort_by`.
 
 ## Output Format
 
@@ -72,10 +73,10 @@ Respond in Markdown using the following structure so other skills can drop the s
 **Scope:** {scope description} | **Total Matches:** {total_found} | **Rows Displayed:** {displayed} | **Sorted By:** {sort_by}
 
 ## File Table
-| # | File | Type | Last Modified | Folder Path | Summary | Owner(s) | Link |
-|---|------|------|---------------|-------------|---------|----------|------|
-| 1 | [Filename](URL) | Doc | 12 Nov 2025, 14:32 SGT | /Shared drives/Team/Folder | ≤summary_length words describing contents and purpose. | owner@company.com | https://drive.google.com/... |
-| ... | ... | ... | ... | ... | ... | ... | ... |
+| # | File | Type | Last Modified | Summary | Owner(s) |
+|---|------|------|---------------|---------|----------|
+| 1 | [Filename](URL) | Doc | 12 Nov 2025, 14:32 SGT | ≤summary_length words describing contents, purpose, and key folder context. | owner@company.com |
+| ... | ... | ... | ... | ... | ... |
 
 ## Filters Applied
 - **Timeframe:** {e.g., Last 7 days}
@@ -90,10 +91,11 @@ Respond in Markdown using the following structure so other skills can drop the s
 
 ### Formatting Rules
 
-- Always provide both the Markdown hyperlink in the **File** column **and** the raw link in the **Link** column.
-- Folder paths must start at the highest accessible level (`/My Drive/...` or `/Shared drives/{Drive Name}/...`).
+- Provide the Markdown hyperlink in the **File** column using the file's direct `webViewLink` URL.
+- Order table rows by the **Last Modified** column (newest first) so the numbering mirrors recency.
+- Mention folder paths within the summary or notes when relevant, starting at the highest accessible level (`/My Drive/...` or `/Shared drives/{Drive Name}/...`).
 - Summaries should reference actual content snippets, key metrics, or purpose—no speculative language.
-- If a file lacks a parent folder (root items), show `/My Drive` as the path.
+- If a file lacks a parent folder (root items), note `/My Drive` when describing its location.
 - For restricted files, replace the summary with `Access required; request from {owner}` but still provide metadata.
 - Keep all columns populated; use `—` only when the Drive API omits a field.
 
