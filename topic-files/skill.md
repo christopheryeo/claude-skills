@@ -110,9 +110,7 @@ Deliver a concise, executive-ready briefing:
 2. ...
 
 ## Files by Type
-| Type | Title | Owner(s) | Last Modified | Key Relevance Note | Link |
-|------|-------|----------|---------------|--------------------|------|
-| Doc  | ...   | ...      | ...           | ...                | ...  |
+Embed the exact table output returned by the `list-files` skill without modifying its columns, structure, or formatting.
 
 ## Related Activity (optional)
 - {Recent comments, mentions, approvals}
