@@ -35,6 +35,7 @@ Clarify timezone for timestamps; default to the user's locale if unstated.
 
 - `google_drive_search` — query Drive metadata and, where permitted, file contents.
 - `google_drive_get_file` — pull preview snippets or contents for summarization.
+- `list-files` — hand off curated result sets so the skill can produce the standardized Drive file table for the briefing.
 - `list_drive_activity` (optional) — surface recent edits or comments tied to returned files.
 
 Respect Drive permissions. Never fabricate file access or contents.
@@ -58,10 +59,11 @@ Respect Drive permissions. Never fabricate file access or contents.
    - Layer exclusions with a leading minus (`-"draft"`, `-owner:archives@company.com`).  
    Document the primary query string for the final response.
 
-3. **Run Google Drive Searches**  
-   - Call `google_drive_search` with the primary query, sorting by last modified descending unless the user prefers another order.  
-   - Iterate with fallback queries if results < desired minimum (default minimum: 5 files) or clearly off-topic.  
+3. **Run Google Drive Searches**
+   - Call `google_drive_search` with the primary query, sorting by last modified descending unless the user prefers another order.
+   - Iterate with fallback queries if results < desired minimum (default minimum: 5 files) or clearly off-topic.
    - Capture file metadata: title, file type, owners, last modified timestamp, Drive link, permissions state.
+   - Once a high-quality candidate list is ready, invoke the `list-files` skill with the confirmed scope, limits, and filters so the final briefing embeds the standardized table output.
 
 4. **Retrieve Summaries**  
    - For each top-ranked file, fetch preview text via `google_drive_get_file` (respecting size limits).  
@@ -76,10 +78,10 @@ Respect Drive permissions. Never fabricate file access or contents.
 6. **Optional Activity Sweep**  
    If the user wants recent collaboration notes, call `list_drive_activity` for top files and extract comment/mention highlights.
 
-7. **Assemble Briefing**  
-   - Create an overview summarizing scope, query, file count, and coverage period.  
-   - Provide a table grouped by file type with columns for title, owner(s), last modified date (localized), summary, and link.  
-   - Add a "Highlights" section calling out must-read insights or action items from the files.  
+7. **Assemble Briefing**
+   - Create an overview summarizing scope, query, file count, and coverage period.
+   - Embed the `list-files` output to deliver the detailed file table, then add narrative groupings or highlights as needed.
+   - Add a "Highlights" section calling out must-read insights or action items from the files.
    - Include "Next Steps" with recommendations (request access, share with stakeholders, schedule review).
 
 8. **Quality Checks**  
