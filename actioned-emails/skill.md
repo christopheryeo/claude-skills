@@ -52,40 +52,19 @@ Use only verified Gmail data via these tools:
 7. **Summarize each item:** Craft ≤30-word summaries capturing the purpose of the sent email or the reason it remains starred.
 8. **Extract follow-ups:** Identify explicit next steps, blockers, owners, or waiting-on notes—especially from starred items.
 9. **Generate Gmail links:** Use the message IDs to create actionable links (e.g., `https://mail.google.com/mail/u/0/#sent/[id]`, `.../#starred/[id]`).
-10. **Format results:** Order items by timestamp (newest first) and prepare the executive summary, table, and follow-up bullets.
+10. **Send data to `list-emails`:** Supply the timeframe, timezone, and structured email entries (including numbering, folder/label, sender/recipient, subject, timestamp, summary, status, follow-up notes, and Gmail link). Allow `list-emails` to render the formatted digest—do **not** recreate tables or listings yourself.
+11. **Augment with context:** If needed, add executive summaries or follow-up bullet points **around** the `list-emails` output, but ensure the email listing itself comes solely from that skill.
 
 ## Output Format
-Reply with the following structure:
-```markdown
-# ✉️ ACTIONED EMAILS DIGEST
-**[Current date & timezone] | Sent: [window] | Starred: [window]**
-
-## Snapshot
-- **Sent emails reviewed:** [count] (show if truncated)
-- **Starred emails reviewed:** [count] (show if truncated)
-- **Most recent action:** [Subject] to [Recipient] at [time ago]
-- **Top follow-up alert:** [Brief reminder drawn from starred items]
-
-## Actioned Timeline
-| **#** | **Type** | **Participants** | **Subject** | **Timestamp** | **≤30-word Summary** | **Follow-up / Status** | **Link** |
-|-------|----------|------------------|-------------|---------------|----------------------|------------------------|----------|
-| 1 | Sent / Starred ⭐ | [Sender → Recipient(s)] | [Exact subject] | [Local timestamp] | [Summary of why it matters] | [Next step, owner, or waiting-on] | [📧 Open Thread] |
-| ... | ... | ... | ... | ... | ... | ... | ... |
-
-## Key Follow-ups
-- **[Email #] [Title]:** [Required action, owner, deadline, or blocker].
-- Highlight items still awaiting replies, dependencies, or deadlines.
-
-## Additional Insights (optional)
-- Trends across sent mail (e.g., "multiple investor updates").
-- Notes about unanswered sent emails or starred reminders older than the main window.
-```
+1. Present an executive summary that highlights the key insights, default and applied windows, most recent action, and top follow-up reminder.
+2. Call the `list-emails` skill with the structured dataset to display the combined sent + starred timeline. Do not display the email results in any other format.
+3. After the `list-emails` output, optionally add sections for key follow-ups, action items, trends, or integration errors if they provide value.
 
 ## Handling Special Cases
-- **No sent items:** State "No sent emails in [window]." Continue with starred recap if available.
-- **No starred items:** State "No starred emails in [window]." Still report recent sent mail.
-- **No results at all:** Provide a concise message and suggest adjusting filters or timeframe.
-- **Large result sets:** Show the top 20 most recent items and note how many additional messages exist.
+- **No sent items:** Provide that context in the executive summary and pass only starred entries to `list-emails`.
+- **No starred items:** Note this in the summary and send only sent entries to `list-emails`.
+- **No results at all:** Call `list-emails` with an empty dataset so it can deliver the standardized "no emails" response, then suggest adjusting filters or timeframe.
+- **Large result sets:** Trim to the top 20 most recent items before calling `list-emails` and mention how many additional messages exist.
 
 ## Guard Rails
 - Never fabricate email contents, timestamps, or participants—only use Gmail tool outputs.
