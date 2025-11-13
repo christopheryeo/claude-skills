@@ -22,110 +22,31 @@ Google Drive Root
 
 ## Usage
 
-When invoked, accept a date parameter:
-- If user provides a date (e.g., "tomorrow", "October 30", "2025-11-15"), use that date
-- If no date specified, default to today's date
-- Accept dates in any format and convert to YYYY-MM-DD format internally
+- Accept a date parameter if provided; otherwise default to today.
+- Parse relative terms ("today", "next Monday"), natural language dates ("October 30"), ISO strings ("2025-11-15"), or other common formats, then normalize to **YYYY-MM-DD**.
+- Translate the normalized date into the folder names `YYYY-MM Work` (month) and `YYYY-MM-DD` (day).
 
 ## Workflow
 
-Execute these steps in order:
+1. **Determine the target date.** Convert the user's input—or today's date if omitted—to ISO format. Reject only unparseable strings.
+2. **Walk the folder hierarchy with `google_drive_search`.**
+   - Locate `SNMG00 Management` at the Drive root, then `SNMG18 Working Docs` beneath it.
+   - Inside `SNMG18 Working Docs`, find the month folder (`YYYY-MM Work`).
+   - Within the month folder, find the day folder (`YYYY-MM-DD`).
+   - Report an error and stop at the first missing level.
+3. **List files from the day folder.** If the folder is empty, respond "No files found in this work-day folder". Otherwise, pass the folder ID to `list-files` with its default formatting (non-recursive scope, detailed summaries, modifiedTime desc) unless the user requests overrides.
 
-### Step 1: Determine Target Date
-
-Convert the user's input (or today's date if not specified) to ISO 8601 format (YYYY-MM-DD).
-
-For date parsing:
-- Relative dates: "today", "tomorrow", "yesterday"
-- Natural language: "October 30", "next Monday"
-- ISO format: "2025-11-15"
-- Other formats: Intelligently parse common date formats
-
-### Step 2: Verify Parent Folders
-
-Use **Claude's Google Drive search** (`google_drive_search`) to search for "SNMG00 Management" folder in Google Drive root:
-- If not found, report error to user and stop
-- If found, note the folder ID and proceed to next step
-
-Use **Claude's Google Drive search** (`google_drive_search`) to search for "SNMG18 Working Docs" folder inside "SNMG00 Management":
-- If not found, report error to user and stop
-- If found, note the folder ID and proceed to next step
-
-### Step 3: Locate Month and Day Folders
-
-Convert target date to YYYY-MM format (e.g., 2025-10) for month folder name with " Work" suffix.
-
-Use **Claude's Google Drive search** (`google_drive_search`) to search for the month folder (YYYY-MM Work) inside "SNMG18 Working Docs":
-- If not found, report that no work folder exists for that month and stop
-- If found, note the folder ID and proceed
-
-Use **Claude's Google Drive search** (`google_drive_search`) to search for the day folder (YYYY-MM-DD) inside the month folder:
-- If not found, report that no folder exists for that specific day and stop
-- If found, note the folder ID and proceed to next step
-
-### Step 4: List Files in Day Folder
-
-Use **Claude's Google Drive search** (`google_drive_search`) to confirm the target day folder contains files (exclude folders). Capture the folder ID for the next step. If no files are present, report "No files found in this work-day folder" and stop.
-
-### Step 5: Delegate Formatting to `list-files`
-
-Once the day folder ID is confirmed, call the `list-files` skill to generate the final catalog:
-
-- Pass the folder ID as the `scope` parameter (non-recursive).
-- Set `limit` high enough to cover all files in the folder (e.g., 30) unless the user specifies otherwise.
-- Choose `summary_length` = `detailed` so the table provides sufficient context.
-- Default `sort_by` to `modifiedTime desc` unless the user requests a different ordering.
-- Mention any filters (e.g., exclude folders) when invoking `list-files`.
-
-Embed the returned Markdown table from `list-files` directly in the response without additional formatting or summaries. Do not append custom file descriptions, counts, or alternative layouts—`list-files` output should stand alone as the complete answer.
+Embed the Markdown table returned by `list-files` directly in the response—no extra prose or reformatting.
 
 ## Tool Usage Notes
 
-**For searching folders and files**: Use Claude's native Google Drive integration
-- `google_drive_search` - to find folders and list files within them
-- Query format examples:
-  - Find folder: `name = '2025-10 Work' and '${SNMG18_ID}' in parents`
-  - List files: `'${DAY_FOLDER_ID}' in parents and mimeType != 'application/vnd.google-apps.folder'`
-
-**For retrieving content**: Use Claude's native integrations
-- `google_drive_fetch` - to retrieve full content of Google Docs
-- `web_fetch` - to retrieve content from shared Google Drive links (for PDFs, etc.)
-
-**For date conversion**: Use native date parsing or the reverse-date skill if needed
+- Use `google_drive_search` for every folder lookup and to confirm the day folder's contents.
+- Call `list-files` for the final table; adjust its parameters only when the requester specifies different limits, sorting, or filters.
+- Fetch file contents with `google_drive_fetch` or `web_fetch` only if the user asks for document details.
 
 ## Example Usage
 
-**User request**: "List files for today"
-→ Uses today's date (e.g., 2025-10-26)
-→ Navigates to SNMG18 Working Docs/2025-10 Work/2025-10-26/
-→ Returns the `list-files` Markdown table for that folder
-
-**User request**: "Show me files from October 30"
-→ Uses October 30, 2025
-→ Navigates to SNMG18 Working Docs/2025-10 Work/2025-10-30/
-→ Returns the `list-files` Markdown table for that folder
-
-**User request**: "What files are in tomorrow's folder?"
-→ Uses tomorrow's date
-→ Navigates to appropriate month and day folder
-→ Returns the `list-files` Markdown table for that folder
-
-**User request**: "Get files for 2025-11-15"
-→ Uses November 15, 2025
-→ Navigates to SNMG18 Working Docs/2025-11 Work/2025-11-15/
-→ Returns the `list-files` Markdown table for that folder
-
-## Date Format Reference
-
-Input format (user-provided) - any of these formats are accepted:
-- Relative: "today", "tomorrow", "yesterday"
-- Natural: "October 30", "next Monday", "last Friday"
-- ISO: "2025-11-15", "2025/11/15"
-- Other: "30 October 2025", "Oct 30", etc.
-
-Internal format (used for navigation):
-- **Month folder**: YYYY-MM Work (e.g., 2025-10 Work, 2025-11 Work)
-- **Day folder**: YYYY-MM-DD (e.g., 2025-10-25, 2025-11-03)
+Requests such as "today," "October 30," or "2025-11-15" all follow the same pattern: parse the date, navigate to `SNMG18 Working Docs/YYYY-MM Work/YYYY-MM-DD/`, and return the `list-files` table for that folder.
 
 ## Error Handling
 
