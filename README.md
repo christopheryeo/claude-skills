@@ -1,6 +1,6 @@
 # Claude Skills Library
 
-**Version:** 1.35.4
+**Version:** 1.35.5
 **Last Updated:** November 12, 2025
 **Maintained by:** Chris Yeo
 
@@ -9,6 +9,16 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.35.5 (November 12, 2025)
+- **Enhanced Integration**: Updated `work-day-files` skill to integrate with `list-files` micro-skill
+  - Standardized file presentation using the `list-files` table format
+  - Improved metadata handling and summary generation
+  - Enhanced documentation for consistent output with other file-related skills
+- **Improved Formatting**: Updated `actioned-emails` to use `list-emails` for consistent email presentation
+  - Unified email display format across all email-related skills
+  - Improved status indicators and action item tracking
+  - Enhanced documentation for better usability
 
 ### v1.35.4 (November 12, 2025)
 - **Enhanced Formatting**: Updated `list-files` skill with improved table presentation
