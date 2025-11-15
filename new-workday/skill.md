@@ -1,14 +1,14 @@
 ---
-name: set-up-workday
+name: new-workday
 description: Executes the full morning enablement workflow, including intelligence gathering, workspace prep, and executive bri
 f synthesis, in a single skill.
 license: Proprietary
 ---
 
-# Set Up Workday
+# New Workday
 
 ## Overview
-Set Up Workday is the principal's end-to-end morning activation skill. It now embeds the former Morning Recon Brief workflow dir
+New Workday is the principal's end-to-end morning activation skill. It now embeds the former Morning Recon Brief workflow dir
 ectly, combining intelligence gathering, communications triage, workspace preparation, and situational news into one orchestrat
 ed experience. Invoke it whenever the principal needs an actionable, decision-ready morning package without chaining multiple sk
 ills manually.
@@ -38,7 +38,7 @@ inks.
 utput into the standard sections.
 
 ## Embedded Morning Intelligence Components
-The five intelligence components from the former Morning Recon Brief are now native to Set Up Workday. Each component must be ru
+The five intelligence components from the former Morning Recon Brief are now native to New Workday. Each component must be ru
 n whenever relevant data exists unless the user explicitly opts out.
 
 ### Component 1: Unread Emails (Last 48 Hours)
@@ -128,7 +128,7 @@ mestamps), `dry_run_folders` (bool).
 
 ## Scripts
 
-### Orchestrator: `scripts/set_up_workday.py`
+### Orchestrator: `scripts/new_workday.py`
 **Purpose**: Placeholder for the automation layer that sequences dependency skills, manages state, and formats the final brief.
 **Status**: Not yet implemented; use this specification to guide future development.
 **Expected Responsibilities**:
@@ -159,8 +159,8 @@ mestamps), `dry_run_folders` (bool).
   - *This skill differs by*: Triggering Work Day's checks as part of the morning orchestration.
 
 ## Extending This Skill
-To extend Set Up Workday with new capabilities:
-1. Implement `scripts/set_up_workday.py` following the orchestration responsibilities above.
+To extend New Workday with new capabilities:
+1. Implement `scripts/new_workday.py` following the orchestration responsibilities above.
 2. Add optional integrations (e.g., task managers) and document configuration steps under a new `references/` guide.
 3. Update this SKILL.md with additional usage patterns and toggle descriptions as features roll out.
 
@@ -178,6 +178,6 @@ and headlines.
 dering.
 
 ## Version History
-- **2.0.0** (2025-11-04): Embedded the Morning Recon Brief components directly into Set Up Workday and retired the standalone ski
+- **2.0.0** (2025-11-04): Embedded the Morning Recon Brief components directly into New Workday and retired the standalone ski
 ll.
 - **1.0.0** (2025-11-03): Initial specification outlining workflow, dependencies, and integration opportunities.

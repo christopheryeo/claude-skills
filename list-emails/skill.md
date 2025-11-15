@@ -15,7 +15,7 @@ Call this skill after another skill has already retrieved Gmail messages and dis
 
 Examples:
 - Formatting the results of `recent-emails`
-- Creating a digest section within `set-up-workday`
+- Creating a digest section within `new-workday`
 - Listing starred or filtered messages returned by a topic skill
 
 ## Inputs Expected

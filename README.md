@@ -60,7 +60,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 - **New Skill**: Added `list-emails` formatting micro-skill for consistent email tables
   - Standardizes numbered listings, summaries, and Gmail links for reuse across workflows
   - Provides optional sections for starred, priority, financial, and action item callouts
-  - Designed to be embedded by retrieval-focused skills (e.g., `recent-emails`, `set-up-workday`)
+  - Designed to be embedded by retrieval-focused skills (e.g., `recent-emails`, `new-workday`)
   - Supports timezone-aware date formatting and multiple status indicators
 
 ### v1.33.1 (November 9, 2025)
@@ -124,12 +124,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
   - Supports multiple export formats and version control
 
 ### v1.26.0 (November 6, 2025)
-- **Documentation Update**: Standardized Work-Day skill reference in `set-up-workday`
+- **Documentation Update**: Standardized Work-Day skill reference in `new-workday`
   - Updated documentation to consistently use "Work-Day skill" terminology
   - Improved clarity in workflow step descriptions
 
 ### v1.25.0 (November 6, 2025)
-- **Enhanced Skill**: Updated `set-up-workday` with improved documentation and workflow clarity
+- **Enhanced Skill**: Updated `new-workday` with improved documentation and workflow clarity
   - Refined workspace preparation step in the workflow
   - Clarified skill boundaries and prerequisites
   - Improved integration with Work-Day skill
@@ -149,29 +149,29 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ### v1.21.0 (November 3, 2025)
 - **New Skill**: Added `project-pulse-brief` for integrated project tracking and reporting
-- **Repository Cleanup**: Removed `set-up-workday` idea file as it's now fully implemented
+- **Repository Cleanup**: Removed `new-workday` idea file as it's now fully implemented
 - **Documentation**: Added project pulse brief template and guidelines
 - **Repository Structure**: Added new project-pulse-brief directory with assets
 
 ### v1.20.0 (November 3, 2025)
 - **Documentation**: Updated README with latest project status
-- **Skill Status**: Marked `set-up-workday` as production-ready
+- **Skill Status**: Marked `new-workday` as production-ready
 
 ### v1.19.0 (November 3, 2025)
-- **Skill Enhancement**: Updated `set-up-workday` with improved YAML frontmatter and documentation
+- **Skill Enhancement**: Updated `new-workday` with improved YAML frontmatter and documentation
 - **Bug Fixes**: Resolved YAML parsing issues in skill metadata
 
 ### v1.18.0 (November 3, 2025)
-- **New Skill Implementation**: Added `set-up-workday` skill implementation with full orchestration
+- **New Skill Implementation**: Added `new-workday` skill implementation with full orchestration
 - **Enhanced Workflow**: Integrated with Morning Recon, Recent Emails, Calendar, and other core skills
 
 ### v1.17.0 (November 3, 2025)
-- **Enhanced Skill Idea**: Updated `set-up-workday` with workflow and integration details
+- **Enhanced Skill Idea**: Updated `new-workday` with workflow and integration details
 - **Efficiency Improvements**: Added optimization strategies for skill orchestration
 - **Documentation**: Enhanced setup instructions and dependency management
 
 ### v1.16.0 (November 3, 2025)
-- **New Skill Idea**: Added initial concept for `set-up-workday` skill
+- **New Skill Idea**: Added initial concept for `new-workday` skill
 - **Repository Structure**: Added new skill idea documentation
 
 ### v1.15.0 (November 3, 2025)
@@ -236,7 +236,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 - **search-calendar**: Google Calendar search with fuzzy matching
 - **recent-drive**: Google Drive file discovery
 - **news-snapshot**: International and Singapore news briefing
-- **set-up-workday**: Comprehensive morning orchestration and executive brief
+- **new-workday**: Comprehensive morning orchestration and executive brief
 - Established standardized folder structure with `skill.md` files
 - Created documentation and usage guidelines
 
@@ -271,7 +271,7 @@ Advanced Gmail email retrieval with support for received, sent, drafted, and sta
 ### 📅 **search-calendar**
 Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
 
-### 🔄 **set-up-workday**
+### 🔄 **new-workday**
 Runs the entire morning activation workflow in one command, including unread email triage, calendar review, Drive activity scan, task synthesis, news snapshot, and workspace preparation. Deduplicates inputs across supporting skills and outputs an executive-format kickoff brief with staged Drive links.
 
 ### 📂 **recent-drive**
@@ -342,7 +342,7 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 │   └── skill.md           # Skill implementation
 ├── news-snapshot/          # News briefing skill
 │   └── skill.md           # Skill implementation
-├── set-up-workday/       # Morning orchestration and executive brief skill
+├── new-workday/       # Morning orchestration and executive brief skill
 │   └── skill.md           # Skill implementation
 ├── list-emails/            # Shared email formatting micro-skill
 │   └── skill.md           # Skill implementation

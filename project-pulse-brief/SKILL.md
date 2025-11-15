@@ -80,7 +80,7 @@ collaboration space. No scripts, bots, or external integrations are required.
   the rest into linked reference docs.
 
 ## Related Skills
-- **set-up-workday**: Pair with Project Pulse Brief for a wider view of
+- **new-workday**: Pair with Project Pulse Brief for a wider view of
   operational signals plus delivery progress.
 - **recent-files**: Helps locate supporting artifacts referenced in the pulse
   brief.
