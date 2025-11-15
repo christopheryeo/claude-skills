@@ -1,200 +1,91 @@
 ---
 name: customer-brief
-description: Generate an executive-ready customer brief that fuses internal touchpoints, deliverables, and external market intelligence into a single actionable digest before key account interactions.
+description: Generate a concise, executive-ready digest of internal touchpoints and external intelligence for a named customer.
 ---
 
 # Customer Brief
 
-Create a consolidated, audit-friendly briefing on an individual customer that blends recent internal activity with curated external insights so relationship teams can walk into every touchpoint fully prepared.
+Deliver an audit-friendly briefing that blends current relationship signals, open work, and market context so account teams are ready for any touchpoint.
 
-## Overview
-
-This skill orchestrates a multi-source review to surface:
-- A crisp executive summary of customer health, momentum, and immediate asks
-- The latest communications, meetings, and deliverables tied to the account
-- Emerging risks, opportunities, and market signals worth raising with stakeholders
-- Documented search keywords, timestamps, and source URLs for compliance-ready traceability
-
-The voice should remain confident, empathetic, and professional—mirroring the Sentient.io brand guidance on clarity and credibility.
-
-## Intended Users
-
-- Account directors preparing pre-call briefs
-- Customer success managers tracking follow-ups and risks
-- Executive sponsors needing fast situational awareness
-
-## Triggers
-
-Invoke when a user says:
-- "Run a customer brief for [Account]"
-- "Prepare the [Account] touchpoint digest"
-- "What do I need to know before meeting [Account]?"
+## When to Use
+- Pre-call preparation for account directors, CSMs, or executive sponsors.
+- Requests such as "Run a customer brief for [Account]" or "What should I know before meeting [Account]?".
 
 ## Success Criteria
+- 3–5 executive bullets with sentiment and next actions.
+- ≤7 recent communications with channel, parties, action, and confidence score.
+- ≤7 upcoming meetings normalized to the account timezone with prep notes.
+- Deliverables rendered via the `list-files` skill output block, highlighting overdue items.
+- ≥3 external insights (or explicit "No new items in last 14 days") with URLs and an audit trail of sources and keywords.
 
-Deliverables are considered complete when the brief:
-- Captures top 3–5 highlights with sentiment indicators and next actions
-- Lists up to seven recent communications with channel, parties, summary, sentiment, and actions
-- Surfaces the next seven calendar events with normalized date/time and preparation notes
-- Flags overdue deliverables, blockers, or open approvals explicitly
-- Includes at least three external insights (or states "No new items in last 14 days" when applicable) with citation URLs
-- Logs search keywords, date ranges, and data sources consulted for auditing
+## Guardrails
+- **Do:** Separate internal vs external signals, annotate owners/dates, log connectors and keywords.
+- **Avoid:** CRM data, gated sources, or summarizing private chats without user-provided exports.
+- Default research window: last 14 days (call out exceptions). Social scanning must stay public.
+- Keep every section tight—use bullets, sentence fragments ≤30 words, and remove repeated phrasing to minimize token usage.
 
-## Guardrails & Assumptions
-
-**Does:**
-- Aggregate internal context from email, calendar, shared files, and task trackers
-- Curate public web intelligence (corporate site, newsrooms, press, blogs, analyst coverage)
-- Distinguish clearly between internal and external data with labeled sections
-- Annotate items requiring follow-up with owners and due dates
-
-**Does Not:**
-- Connect directly to CRM platforms or proprietary customer databases
-- Summarize confidential chat transcripts without explicit user-provided exports
-- Scrape gated or credential-protected content
-
-**Limitations:**
-- External research defaults to the past 14 days; state when extending the window
-- Social media scanning limited to publicly accessible posts
-- Sentiment analysis provides confidence scores but is not a substitute for human review
-
-**Assumes:**
-- Email and calendar integrations are authorized and scoped to the account workspace
-- Shared file repositories expose metadata (owner, last modified, status)
-- Users can provide supplemental context when automated retrieval fails
-
-## Pre-Execution Checklist
-
-1. Confirm the account name or unique identifier and primary timezone
-2. Verify access to:
-   - Email labels/folders tagged to the customer
-   - Calendar events including agenda notes and attendees
-   - Shared drive or collaboration workspace for deliverables
-   - Internal task tracker exports or spreadsheets (if applicable)
-3. Document the web search plan:
-   - Keywords and Boolean variations (e.g., "<Account> press release", "<Account> partnership")
-   - Date filter (default last 14 days)
-   - Target sources (corporate site, trusted news outlets, industry reports)
-4. Initialize sentiment scoring rubric (Positive / Neutral / Negative + confidence %)
-5. Open an audit log to capture timestamps, connectors used, and notable exceptions
+## Fast Prep Checklist
+1. Confirm account name/ID and primary timezone.
+2. Verify access to tagged email folders, relevant calendars, shared drives, and trackers.
+3. Align search plan (keywords, filters, priority sources) and sentiment rubric; start the audit log.
 
 ## Workflow
+1. **Internal Communications** – Pull last 14 days of key emails/messages. Capture date (account TZ), channel, participants, ≤40 word summary, sentiment + confidence, and required action. State fallback if empty.
+2. **Upcoming Touchpoints** – Query calendar for next meetings. Normalize times, list organizer, attendees, prep tasks, attachments, and flag critical sessions.
+3. **Deliverables & Files** – Invoke `list-files` with the customer scope (folder/search query, limit ≤7, short summaries). Embed the returned `# 📁 DRIVE FILE LISTING` section as-is and note overdue statuses in follow-up bullets.
+4. **Tasks/Trackers** – Import open items with owner, due date, status, blockers. If unavailable, log the gap and request updates.
+5. **External Intel** – Run targeted web/news searches per plan. Capture up to five items with source, publish date, headline, and 1–2 sentence impact. Include search keywords, filters, and timestamp in audit log.
+6. **Risks & Opportunities** – Distill recurring themes into Risks, Opportunities, Watchlist with owners and next steps. Highlight sentiment swings or repeated overdue work.
+7. **Executive Summary & Audit Log** – Draft 3–5 bullets referencing supporting sections, maintain confident/empathetic tone, and append a concise audit log (sources, keywords, timestamps, manual overrides).
 
-### 1. Gather Internal Communications
-- Use email search to pull latest starred, recent, or action-required threads tagged with the customer
-- Extract: received/sent date (local timezone), participants, concise summary (≤40 words), sentiment, required action, owner
-- If no emails found in past 14 days, state "No recent communications" and point to archive or CRM alternatives
-
-### 2. Compile Upcoming Touchpoints
-- Query calendar for next meetings including the account team or customer stakeholders
-- Normalize times to the primary account timezone while noting any multi-timezone adjustments
-- Capture meeting title, date, time, organizer, participants, prep tasks, and attachments/reference docs
-- Highlight meetings flagged as critical (e.g., QBR, renewal negotiation)
-
-### 3. Review Deliverables & Files
-- List latest documents from shared drives or collaboration spaces tied to the account
-- Include file name, owner, status (Draft/In Review/Approved/Overdue), last modified date, and link/path
-- Flag overdue deliverables in bold with recommended follow-up actions
-
-### 4. Aggregate Task Tracker Items
-- Import rows from spreadsheets or lightweight trackers
-- Present open items with owner, due date, status, and blocker notes
-- Note gaps if tracker data is unavailable or stale
-
-### 5. Conduct External Research
-- Execute web searches using documented keywords and filters
-- Capture top relevant URLs (max 5) with source name, headline, publish date, and 1–2 sentence impact summary
-- Differentiate categories: corporate updates, press/newsroom, analyst/industry coverage, competitive signals
-- Record search log: keywords, filters, timestamp, results count, and discarded sources (if notable)
-
-### 6. Assess Risks & Opportunities
-- Synthesize recurring themes from communications, tasks, and external intel
-- Classify items under **Risks**, **Opportunities**, and **Watchlist** with recommended owner and next step
-- Highlight sentiment shifts or at-risk deliverables triggering escalation thresholds (e.g., two consecutive negative emails)
-
-### 7. Assemble Executive Summary
-- Draft 3–5 bullets covering health, key blockers, immediate next actions, and strategic signals
-- Reference supporting sections inline (e.g., "See Deliverables #2")
-- Maintain confident yet empathetic tone per Sentient.io guidelines
-
-### 8. Produce Audit Trail
-- Append a log detailing:
-  - Data sources queried, connectors used, and timestamps
-  - Search keywords and filters applied
-  - Manual inputs or overrides supplied by user
-- Store audit log metadata for reuse in follow-up briefs
-
-## Output Template
-
+## Output Skeleton
 ```markdown
 ---
 # Customer Brief: {{Account Name}}
 *Generated: {{Local Timestamp}} | Primary Timezone: {{TZ}}*
 
 ## Executive Summary
-- [Bullet 1: sentiment + actionable insight]
-- [Bullet 2]
-- [Bullet 3]
+- {{Insight + sentiment + action}}
+- {{Insight}}
+- {{Insight}}
 
 ## Recent Communications (Last 14 Days)
-| Date ({{TZ}}) | Channel | Parties | Summary | Sentiment | Action Required |
+| Date ({{TZ}}) | Channel | Parties | Summary | Sentiment | Action |
 | --- | --- | --- | --- | --- | --- |
-| 2025-03-18 09:30 | Email | A. Director ↔ Customer PM | Scope alignment follow-up | Neutral (65%) | Confirm revised timeline |
+| {{Sample row}} |
 
 _Fallback_: "No new communications in last 14 days. Review archive label: {{Label}}."
 
 ## Upcoming Touchpoints
 | Date | Time ({{TZ}}) | Meeting | Owner | Prep Notes |
 | --- | --- | --- | --- | --- |
-| 2025-03-21 | 14:00 | Q1 Renewal Readiness | J. Lee | Review deck v3, confirm pricing guardrails |
+| {{Sample row}} |
 
-## Deliverables & Files
-- **Proposal v4** — Owner: R. Singh — Status: In Review — Updated: 2025-03-17 — [Drive Link]
-- **Security Questionnaire** — Owner: M. Chen — Status: Overdue (due 2025-03-15) — Escalate to Infosec
+{{Embed the `list-files` output here}}
 
 ## Risks & Opportunities
-- **Risk:** Timeline slip on security review; request expedited legal review (Owner: M. Chen)
-- **Opportunity:** Customer exploring APAC expansion; prepare analytics upsell (Owner: BD Team)
+- **Risk:** {{Summary}} (Owner: {{Name}})
+- **Opportunity:** {{Summary}} (Owner: {{Name}})
+- **Watchlist:** {{Summary}} (Owner: {{Name}})
 
-## Competitive / Market Watch
-1. _Reuters_ (2025-03-16) — {{Headline}} — {{Impact statement}} — [URL]
-2. _Industry Blog_ (2025-03-15) — {{Headline}} — {{Impact statement}} — [URL]
-
-## External Web Highlights
-- {{Source}} — {{Headline}} — {{1–2 sentence summary with actionable takeaway}} (URL)
+## External Highlights
+1. _{{Source}}_ ({{Date}}) — {{Headline}} — {{Impact + action}} — [URL]
+2. {{Additional items or "No new items in last 14 days."}}
 
 ## Search Log & Audit Notes
-- Keywords: "{{Account}} press release", "{{Account}} partnership"
-- Date Filter: Last 14 days (2025-03-04 → 2025-03-18)
-- Sources Queried: Corporate site, newsroom, Reuters, LinkedIn
-- Exceptions: Unable to access internal tracker; requested manual update from owner
+- Keywords: {{List}}
+- Filters: {{Date range, types}}
+- Sources Queried: {{List}}
+- Exceptions: {{Access issues or manual inputs}}
 ```
 
-## Quality Checklist
+## Quality Gate
+- ≤7 rows per table unless user approves more.
+- Every external item cites a working URL and date.
+- Overdue/negative items flagged with owner follow-up.
+- Audit log includes connectors, keywords, timestamps, and manual overrides.
 
-Before delivering the brief, verify:
-- [ ] All tables contain ≤7 entries unless user explicitly requests full export
-- [ ] Sentiment labels include confidence percentages
-- [ ] Internal vs external sources are clearly labeled
-- [ ] Every external insight references a valid, accessible URL
-- [ ] Overdue items or negative sentiment threads are highlighted with follow-up owners
-- [ ] Audit log details search parameters and connectors used
-
-## Testing & Validation Notes
-
-- Dry run with mock data covering: (a) active account with rich activity, (b) dormant account with minimal signals, (c) conflicting sentiment inputs
-- Validate timezone normalization by comparing calendar entries across at least two regions
-- Stress test with dense email threads to ensure summaries stay under 40 words
-- Confirm fallback messaging renders when a section has no data
-
-## Deployment & Packaging
-
-- Store this file at `customer-brief/skill.md` with YAML front matter
-- Include invocation phrases, workflow notes, and testing instructions above when packaging the skill manifest
-- When ready for release, zip the `customer-brief` directory and follow repository deployment workflow for upload and catalog registration
-
-## Future Enhancements
-
-- Define quantitative thresholds for "at-risk" status (e.g., ≥2 overdue deliverables or consecutive negative sentiment entries)
-- Evaluate compliance considerations for proactive social monitoring with legal/PR partners
-- Integrate optional CRM exports if approved in future roadmap
+## Validation Tips
+- Smoke-test with active vs dormant accounts.
+- Double-check timezone conversions on calendar entries.
+- Ensure communications summaries stay ≤40 words and sentiment labels include confidence.
