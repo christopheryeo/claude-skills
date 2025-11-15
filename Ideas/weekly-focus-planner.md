@@ -1,7 +1,7 @@
 # Weekly Focus Planner Skill Idea
 
 ## Opportunity
-- Existing productivity skills cover daily rituals (morning recon, evening summary) but lack a structured weekly planning cadence.
+- Existing productivity skills cover daily rituals (morning orchestration, evening summary) but lack a structured weekly planning cadence.
 - Users need a consolidated snapshot of the coming week’s meetings, deliverables, and external signals to align priorities proactively.
 - Reuses current integrations (Gmail, Calendar, Drive, news) to minimize implementation overhead while increasing strategic value.
 

@@ -163,7 +163,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ### v1.18.0 (November 3, 2025)
 - **New Skill Implementation**: Added `set-up-workday` skill implementation with full orchestration
-- **Enhanced Workflow**: Integrated with Morning Recon, Recent Emails, Calendar, and other core skills
+- **Enhanced Workflow**: Integrated the morning intelligence package with Recent Emails, Calendar, and other core skills
 
 ### v1.17.0 (November 3, 2025)
 - **Enhanced Skill Idea**: Updated `set-up-workday` with workflow and integration details
