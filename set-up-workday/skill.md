@@ -8,10 +8,10 @@ license: Proprietary
 # Set Up Workday
 
 ## Overview
-Set Up Workday is the principal's end-to-end morning activation skill. It now embeds the former Morning Recon Brief workflow dir
-ectly, combining intelligence gathering, communications triage, workspace preparation, and situational news into one orchestrat
-ed experience. Invoke it whenever the principal needs an actionable, decision-ready morning package without chaining multiple sk
-ills manually.
+Set Up Workday is the principal's end-to-end morning activation skill. It now embeds the full morning intelligence workflow
+directly, combining intelligence gathering, communications triage, workspace preparation, and situational news into one orchestrated
+experience. Invoke it whenever the principal needs an actionable, decision-ready morning package without chaining multiple skills
+manually.
 
 ## Quick Start
 1. Receive the user prompt (e.g., "Set up my workday" or "Kick off today using our standard morning stack").
@@ -38,7 +38,7 @@ inks.
 utput into the standard sections.
 
 ## Embedded Morning Intelligence Components
-The five intelligence components from the former Morning Recon Brief are now native to Set Up Workday. Each component must be ru
+The five morning intelligence components are now native to Set Up Workday. Each component must be ru
 n whenever relevant data exists unless the user explicitly opts out.
 
 ### Component 1: Unread Emails (Last 48 Hours)
@@ -178,6 +178,6 @@ and headlines.
 dering.
 
 ## Version History
-- **2.0.0** (2025-11-04): Embedded the Morning Recon Brief components directly into Set Up Workday and retired the standalone ski
+- **2.0.0** (2025-11-04): Embedded the morning intelligence components directly into Set Up Workday and retired the standalone morning briefing ski
 ll.
 - **1.0.0** (2025-11-03): Initial specification outlining workflow, dependencies, and integration opportunities.
