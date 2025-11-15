@@ -60,7 +60,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 - **New Skill**: Added `list-emails` formatting micro-skill for consistent email tables
   - Standardizes numbered listings, summaries, and Gmail links for reuse across workflows
   - Provides optional sections for starred, priority, financial, and action item callouts
-  - Designed to be embedded by retrieval-focused skills (e.g., `recent-emails`, `morning-recon-brief`)
+  - Designed to be embedded by retrieval-focused skills (e.g., `recent-emails`, `set-up-workday`)
   - Supports timezone-aware date formatting and multiple status indicators
 
 ### v1.33.1 (November 9, 2025)
@@ -236,7 +236,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 - **search-calendar**: Google Calendar search with fuzzy matching
 - **recent-drive**: Google Drive file discovery
 - **news-snapshot**: International and Singapore news briefing
-- **morning-recon-brief**: Comprehensive executive morning brief
+- **set-up-workday**: Comprehensive morning orchestration and executive brief
 - Established standardized folder structure with `skill.md` files
 - Created documentation and usage guidelines
 
@@ -272,16 +272,13 @@ Advanced Gmail email retrieval with support for received, sent, drafted, and sta
 Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
 
 ### 🔄 **set-up-workday**
-Orchestrates the morning startup stack by chaining existing skills to brief the principal, stage Drive folders, and surface top priorities for the workday. Features end-to-end orchestration of multiple skills with data de-duplication and workspace readiness checks.
+Runs the entire morning activation workflow in one command, including unread email triage, calendar review, Drive activity scan, task synthesis, news snapshot, and workspace preparation. Deduplicates inputs across supporting skills and outputs an executive-format kickoff brief with staged Drive links.
 
 ### 📂 **recent-drive**
 Lists the most recent files created or modified in Google Drive. Defaults to last 24 hours, or accepts custom timeframe. Returns files with modification dates, summaries, and clickable links sorted by recency.
 
 ### 📰 **news-snapshot**
 Retrieve and summarize current international and Singapore news stories with headlines, brief context, and source links in a professional executive format. Use when you need a quick daily news briefing with verified sources.
-
-### 🌅 **morning-recon-brief**
-Executive morning intelligence brief that combines unread emails, today's calendar, Drive updates, tasks, and news into a comprehensive decision-ready report. Triggered by "Run my Morning Brief".
 
 ### 📆 **reverse-date**
 Converts between natural language date descriptions and standard date formats. Supports relative dates (e.g., "two days ago"), date formatting, and date difference calculations.
@@ -345,7 +342,7 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 │   └── skill.md           # Skill implementation
 ├── news-snapshot/          # News briefing skill
 │   └── skill.md           # Skill implementation
-├── morning-recon-brief/    # Comprehensive morning brief skill
+├── set-up-workday/       # Morning orchestration and executive brief skill
 │   └── skill.md           # Skill implementation
 ├── list-emails/            # Shared email formatting micro-skill
 │   └── skill.md           # Skill implementation
