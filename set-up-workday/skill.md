@@ -177,6 +177,11 @@ and headlines.
 **Solution**: Cache folder IDs returned from Work Day and explicitly inject them into the Workspace & Resources section before ren
 dering.
 
+## Final Formatting Adjustment
+After assembling the executive kickoff brief, convert all headings from heading styles to normal text while retaining their ori
+ginal font size and formatting. This ensures the document preserves the intended visual hierarchy without relying on heading st
+yle metadata.
+
 ## Version History
 - **2.0.0** (2025-11-04): Embedded the morning intelligence components directly into Set Up Workday and retired the standalone morning briefing ski
 ll.
