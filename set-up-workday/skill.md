@@ -179,8 +179,9 @@ dering.
 
 ## Final Formatting Adjustment
 After assembling the executive kickoff brief, convert all headings from heading styles to normal text while retaining their ori
-ginal font size and formatting. This ensures the document preserves the intended visual hierarchy without relying on heading st
-yle metadata.
+ginal font size and formatting.
+Change all the heading styles to normal text styles, but preserve the original font size and font formatting.
+This ensures the document preserves the intended visual hierarchy without relying on heading style metadata.
 
 ## Version History
 - **2.0.0** (2025-11-04): Embedded the morning intelligence components directly into Set Up Workday and retired the standalone morning briefing ski
