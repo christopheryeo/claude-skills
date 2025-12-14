@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.36.0
-**Last Updated:** December 14, 2025
+**Version:** 1.36.1
+**Last Updated:** December 15, 2025
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.36.1 (December 15, 2025)
+- **Skill Status Update**: Documented which skills are not yet loaded into Claude
+  - Marked `actioned-emails` as pending Claude upload
+  - Confirmed `new-presentation` is now available in Claude
+  - Restated pending status for other skills still awaiting upload
 
 ### v1.36.0 (December 14, 2025)
 - **New Skill Added**: `change-headings`
@@ -268,7 +274,7 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 ### ⭐ **starred-email**
 Focused Gmail assistant that lists and summarizes your starred emails with actionable insights. Retrieves actual Gmail data, prioritizes recent starred messages, and highlights action items with direct Gmail links. Includes filtering by timeframe, keywords, and participants.
 
-### 🔄 **actioned-emails**
+### 🔄 **actioned-emails** *(Not yet loaded in Claude)*
 Unified Gmail recap that combines recently sent emails with starred follow-ups. Blends recently sent and starred Gmail emails into a single executive recap with summaries, metadata, and follow-up prompts. Use when users ask to review "what I sent" or "what I followed up on" recently, combine sent mail and starred mail into one recap, surface pending actions from starred threads alongside recent outbound communication, or provide a short executive summary of recent activity plus what still needs attention.
 
 ### 📧 **recent-emails**
@@ -307,8 +313,8 @@ Lists and summarizes files in work-day folders with 40-word summaries. Navigates
 ### 📝 **presentation-outline**
 Transforms Google Docs into structured presentation outlines with titles, subtitles, and bullet points. Generates up to 10 slides with clear organization and logical flow, ideal for quickly creating presentation drafts from existing documentation.
 
-### 🎯 **new-presentation** *(Not yet loaded in Claude)*
-Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity. *Note: This skill has been developed but not yet loaded into Claude's active skillset.*
+### 🎯 **new-presentation**
+Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity.
 
 ### 📄 **new-product**
 Generate comprehensive Enterprise AI Product White Papers using existing documentation as source material. Creates authoritative, research-backed documents that educate buyers and present solutions to complex business problems, with a focus on strategic value and ROI for enterprise audiences.
