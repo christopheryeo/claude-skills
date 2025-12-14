@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.35.5
-**Last Updated:** November 12, 2025
+**Version:** 1.36.0
+**Last Updated:** December 14, 2025
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,12 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.36.0 (December 14, 2025)
+- **New Skill Added**: `change-headings`
+  - Converts document headings to normal paragraphs while preserving visual formatting
+  - Maintains font size, weight, color, and inline styles
+  - Useful for normalizing document structure without changing appearance
 
 ### v1.35.5 (November 12, 2025)
 - **Enhanced Integration**: Updated `work-day-files` skill to integrate with `list-files` micro-skill
@@ -270,6 +276,9 @@ Advanced Gmail email retrieval with support for received, sent, drafted, and sta
 
 ### 📅 **search-calendar**
 Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
+
+### ✏️ **change-headings**
+Converts document headings into normal paragraphs while preserving their original visual appearance (font size, weight, color, and formatting). Ideal for normalizing document structure without altering the visual design. Handles all heading levels and maintains inline formatting.
 
 ### 🔄 **set-up-workday**
 Runs the entire morning activation workflow in one command, including unread email triage, calendar review, Drive activity scan, task synthesis, news snapshot, and workspace preparation. Deduplicates inputs across supporting skills and outputs an executive-format kickoff brief with staged Drive links.
