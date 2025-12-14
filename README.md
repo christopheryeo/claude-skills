@@ -283,7 +283,10 @@ Converts document headings into normal paragraphs while preserving their origina
 ### 🔄 **set-up-workday**
 Runs the entire morning activation workflow in one command, including unread email triage, calendar review, Drive activity scan, task synthesis, news snapshot, and workspace preparation. Deduplicates inputs across supporting skills and outputs an executive-format kickoff brief with staged Drive links.
 
-### 📂 **recent-drive**
+### � **project-pulse-brief** *(Not yet loaded in Claude)*
+Curates stakeholder-ready pulse briefs that summarize project portfolio updates, risks, and next steps. Provides a structured approach to project status reporting with reusable templates and checklists. *Note: This skill has been developed but not yet loaded into Claude's active skillset.*
+
+### �📂 **recent-drive**
 Lists the most recent files created or modified in Google Drive. Defaults to last 24 hours, or accepts custom timeframe. Returns files with modification dates, summaries, and clickable links sorted by recency.
 
 ### 📰 **news-snapshot**
@@ -304,8 +307,8 @@ Lists and summarizes files in work-day folders with 40-word summaries. Navigates
 ### 📝 **presentation-outline**
 Transforms Google Docs into structured presentation outlines with titles, subtitles, and bullet points. Generates up to 10 slides with clear organization and logical flow, ideal for quickly creating presentation drafts from existing documentation.
 
-### 🎯 **new-presentation**
-Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity.
+### 🎯 **new-presentation** *(Not yet loaded in Claude)*
+Create powerful presentations using Steve Jobs's 3-Second Rule methodology. Applies the Billboard Test principles for minimal cognitive load, maximum visual impact, and elegant slide design. Ideal for product launches, pitches, and keynotes that require high audience retention and visual clarity. *Note: This skill has been developed but not yet loaded into Claude's active skillset.*
 
 ### 📄 **new-product**
 Generate comprehensive Enterprise AI Product White Papers using existing documentation as source material. Creates authoritative, research-backed documents that educate buyers and present solutions to complex business problems, with a focus on strategic value and ROI for enterprise audiences.
@@ -313,8 +316,11 @@ Generate comprehensive Enterprise AI Product White Papers using existing documen
 ### 🧾 **new-quotation**
 Generate customer quotations using a structured template and pricing inputs. Includes a Sentient Quotation Excel template and Markdown template for consistent formatting.
 
-### 📑 **new-proposal**
-Create and manage professional sales proposals with AI-powered templates. Features include dynamic content generation, comprehensive case studies, and automated Google Docs output. The skill is optimized for executive audiences with streamlined input requirements and direct Workday integration for document management. Includes a structured AI Sales Proposal Outline for mid-market enterprises, following Sentient.io brand standards.
+### 📑 **new-proposal** *(Not yet loaded in Claude)*
+Create and manage professional sales proposals with AI-powered templates. Features include dynamic content generation, comprehensive case studies, and automated Google Docs output. The skill is optimized for executive audiences with streamlined input requirements and direct Workday integration for document management. *Note: This skill has been developed but not yet loaded into Claude's active skillset.*
+
+### 💰 **smartchat-service-costs** *(Not yet loaded in Claude)*
+Analyzes and estimates costs for SmartChat service implementations. Provides cost breakdowns, scenario planning, and ROI calculations for different deployment scales. Includes reference architectures and cost optimization recommendations. *Note: This skill has been developed but not yet loaded into Claude's active skillset.*
 
 ### 📂 **Topic Files**
 Advanced document management and summarization tool for organizing and analyzing document collections. Features include Google Drive query support, structured summarization, and comprehensive documentation for query operators. Includes a summary checklist for consistent output quality.
