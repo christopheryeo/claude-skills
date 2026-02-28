@@ -10,6 +10,10 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Version History
 
+### v1.37.0 (February 28, 2026)
+- **Consolidated Email Skills**: Added `daily-emails` skill, uniting 7 sub-commands (recent, starred, actioned, topic, stakeholders, draft, format)
+- **Repository Cleanup**: Removed 5 deprecated email skills (`recent-emails`, `starred-email`, `monitor-stakeholders`, `draft-email`, `list-emails`)
+
 ### v1.36.1 (December 15, 2025)
 - **Skill Status Update**: Documented which skills are not yet loaded into Claude
   - Marked `actioned-emails` as pending Claude upload
@@ -271,14 +275,11 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 
 ## Available Skills
 
-### ⭐ **starred-email**
-Focused Gmail assistant that lists and summarizes your starred emails with actionable insights. Retrieves actual Gmail data, prioritizes recent starred messages, and highlights action items with direct Gmail links. Includes filtering by timeframe, keywords, and participants.
+### 📧 **daily-emails**
+Unified Gmail skill with 7 sub-commands: recent, starred, actioned, topic, stakeholders, draft, and format. Consolidates email retrieval, drafting, stakeholder monitoring, and executive formatting into a single efficient workflow.
 
 ### 🔄 **actioned-emails** *(Not yet loaded in Claude)*
 Unified Gmail recap that combines recently sent emails with starred follow-ups. Blends recently sent and starred Gmail emails into a single executive recap with summaries, metadata, and follow-up prompts. Use when users ask to review "what I sent" or "what I followed up on" recently, combine sent mail and starred mail into one recap, surface pending actions from starred threads alongside recent outbound communication, or provide a short executive summary of recent activity plus what still needs attention.
-
-### 📧 **recent-emails**
-Advanced Gmail email retrieval with support for received, sent, drafted, and starred emails. Features include newsletter filtering, chronological work narrative, and comprehensive activity analysis. Returns emails with timestamps, senders/recipients, subject lines, summaries, and direct Gmail links.
 
 ### 📅 **search-calendar**
 Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
@@ -331,17 +332,6 @@ Analyzes and estimates costs for SmartChat service implementations. Provides cos
 ### 📂 **Topic Files**
 Advanced document management and summarization tool for organizing and analyzing document collections. Features include Google Drive query support, structured summarization, and comprehensive documentation for query operators. Includes a summary checklist for consistent output quality.
 
-### 📧 **list-emails**
-Formats Gmail message metadata into consistent, executive-style tables with numbered rows, summaries, and direct Gmail deep links. Features include:
-- Standardized email listings with timestamps, sender/recipient info, and status indicators
-- Automatic email status tagging with visual indicators (📩 Unread, ✓ Read, 📝 Draft, etc.)
-- Smart summarization of email content (≤35 words per message)
-- Direct Gmail deep links for each message
-- Support for special markers (⭐ starred, ⏰ follow-up, $ financial, 🔒 confidential)
-- Timezone-aware date/time formatting
-- Designed as a reusable micro-skill for embedding in other workflows
-- Consistent output format for easy parsing and integration
-
 ### 📄 **list-files**
 Generate organized file listings with consistent formatting, metadata, and Google Drive deep links. Includes file type categorization, size indicators, and last modified timestamps. Ideal for creating structured file inventories and document collections.
 
@@ -355,7 +345,7 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 
 ```
 /
-├── recent-emails/          # Gmail email retrieval skill
+├── daily-emails/           # Unified Gmail skill (recent, starred, drafting, stakeholders)
 │   └── skill.md           # Skill implementation
 ├── search-calendar/        # Google Calendar search skill
 │   └── skill.md           # Skill implementation
@@ -364,8 +354,6 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 ├── news-snapshot/          # News briefing skill
 │   └── skill.md           # Skill implementation
 ├── set-up-workday/       # Morning orchestration and executive brief skill
-│   └── skill.md           # Skill implementation
-├── list-emails/            # Shared email formatting micro-skill
 │   └── skill.md           # Skill implementation
 ├── reverse-date/          # Date conversion and parsing skill
 │   ├── scripts/           # Python scripts for date handling
