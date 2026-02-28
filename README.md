@@ -278,9 +278,6 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 ### 📧 **daily-emails**
 Unified Gmail skill with 7 sub-commands: recent, starred, actioned, topic, stakeholders, draft, and format. Consolidates email retrieval, drafting, stakeholder monitoring, and executive formatting into a single efficient workflow.
 
-### 🔄 **actioned-emails** *(Not yet loaded in Claude)*
-Unified Gmail recap that combines recently sent emails with starred follow-ups. Blends recently sent and starred Gmail emails into a single executive recap with summaries, metadata, and follow-up prompts. Use when users ask to review "what I sent" or "what I followed up on" recently, combine sent mail and starred mail into one recap, surface pending actions from starred threads alongside recent outbound communication, or provide a short executive summary of recent activity plus what still needs attention.
-
 ### 📅 **search-calendar**
 Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
 
