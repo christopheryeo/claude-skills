@@ -38,6 +38,7 @@ For returned events, structure results as:
   {
     "event_id": "string",
     "title": "string",
+    "event_link": "optional Google Calendar URL",
     "start_time": "ISO datetime (Asia/Singapore)",
     "end_time": "ISO datetime (Asia/Singapore)",
     "duration_minutes": 30,
@@ -99,7 +100,7 @@ Exclude cancelled events. Sort chronologically by start time. Limit to 50 result
 
 - Keep full descriptions when relevant to the query.
 - Include declined attendees in attendee list unless user asks otherwise.
-- If filters are missing (e.g., "show my calendar"), default to upcoming events for today.
+- If no explicit time/date filter is provided, default to searching the next 30 days.
 
 ## Reference Script
 
