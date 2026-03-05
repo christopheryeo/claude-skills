@@ -233,12 +233,12 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Purpose:** Scan Gmail for emails from tracked stakeholder contacts and present a grouped digest.
 
-**Requires:** A `Knowledge/Stakeholder_Monitoring.md` file in the current workspace with stakeholder groups and email addresses.
+**Requires:** A Monitor Stakeholders Command section in the team member's `claude.md` with inline stakeholder groups and email addresses.
 
 ### Steps
 
-1. Read `Knowledge/Stakeholder_Monitoring.md` — extract groups, contacts (Name, Role, Email), and monitoring notes
-2. If file not found, ask the user: "No stakeholder list found. Would you like to provide a Stakeholder_Monitoring.md file, or shall I show your recent emails instead?" If the user chooses recent, execute the **recent** sub-command instead
+1. Read the Monitor Stakeholders Command section in the current team member's `claude.md` — extract groups, contacts (Name, Role, Email), and monitoring notes
+2. If no stakeholder list found in `claude.md`, ask the user: "No stakeholder list found in claude.md. Would you like to add one, or shall I show your recent emails instead?" If the user chooses recent, execute the **recent** sub-command instead
 3. Default timeframe: last 48 hours (accepts custom)
 4. For each stakeholder group, build query: `newer_than:2d (from:email1 OR from:email2 OR to:email1 OR to:email2)`
 5. Run all group queries (parallel where possible)
