@@ -1,7 +1,7 @@
 # Claude Skills Library
 
-**Version:** 1.36.1
-**Last Updated:** December 15, 2025
+**Version:** 1.37.1
+**Last Updated:** March 5, 2026
 **Maintained by:** Chris Yeo
 
 A collection of custom Claude skills that extend Claude's capabilities with specialized workflows for productivity, email management, calendar operations, and information retrieval.
@@ -9,6 +9,10 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ---
 
 ## Version History
+
+### v1.37.1 (March 5, 2026)
+- **Consolidated Calendar Skills**: Added `daily-calendars` as a unified calendar skill with a `search` sub-command
+- **Migration**: Moved standalone `search-calendar` workflow into `daily-calendars/scripts/search_calendar_helper.py` for sub-command reuse
 
 ### v1.37.0 (February 28, 2026)
 - **Consolidated Email Skills**: Added `daily-emails` skill, uniting 7 sub-commands (recent, starred, actioned, topic, stakeholders, draft, format)
@@ -249,7 +253,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ### v1.0.0 (October 21, 2025)
 - Initial release with 5 core skills
 - **recent-emails**: Gmail email retrieval functionality
-- **search-calendar**: Google Calendar search with fuzzy matching
+- **daily-calendars**: Unified calendar operations with search sub-command and fuzzy matching
 - **recent-drive**: Google Drive file discovery
 - **news-snapshot**: International and Singapore news briefing
 - **set-up-workday**: Comprehensive morning orchestration and executive brief
@@ -278,8 +282,8 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 ### 📧 **daily-emails**
 Unified Gmail skill with 7 sub-commands: recent, starred, actioned, topic, stakeholders, draft, and format. Consolidates email retrieval, drafting, stakeholder monitoring, and executive formatting into a single efficient workflow.
 
-### 📅 **search-calendar**
-Search your Google Calendar across multiple dimensions - by day, date, week, subject, attendee names, and emails. Supports flexible natural language queries with fuzzy matching for intelligent results.
+### 📅 **daily-calendars**
+Unified calendar skill with a `search` sub-command for Google Calendar retrieval by day/date/week, subject, attendee names, and attendee emails/domains. Supports flexible natural language queries with fuzzy matching and enriched event context.
 
 ### ✏️ **change-headings**
 Converts document headings into normal paragraphs while preserving their original visual appearance (font size, weight, color, and formatting). Ideal for normalizing document structure without altering the visual design. Handles all heading levels and maintains inline formatting.
@@ -344,8 +348,9 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 /
 ├── daily-emails/           # Unified Gmail skill (recent, starred, drafting, stakeholders)
 │   └── skill.md           # Skill implementation
-├── search-calendar/        # Google Calendar search skill
-│   └── skill.md           # Skill implementation
+├── daily-calendars/       # Unified calendar skill (search sub-command)
+│   ├── skill.md           # Skill implementation
+│   └── scripts/           # Calendar helper reference code
 ├── recent-drive/           # Google Drive file discovery skill
 │   └── skill.md           # Skill implementation
 ├── news-snapshot/          # News briefing skill
@@ -393,7 +398,7 @@ Each subfolder contains a `skill.md` file that implements the Claude skill with 
 ## How to Use
 
 1. **Prepare the skill**: Navigate to the skill's subfolder you want to use
-2. **Create a zip file**: Compress the entire subfolder into a `.zip` file (e.g., `search-calendar.zip`)
+2. **Create a zip file**: Compress the entire subfolder into a `.zip` file (e.g., `daily-calendars.zip`)
 3. **Upload to Claude**: Upload the zip file to Claude's Skills functionality
 4. **Invoke the skill**: Reference the skill by name or use the trigger phrase specified in the skill description
 5. **Customize**: Edit the `skill.md` files to match your specific needs and preferences before zipping
