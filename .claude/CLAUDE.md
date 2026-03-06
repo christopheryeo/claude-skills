@@ -42,8 +42,8 @@ description: Brief description of what the skill does
 
 ## Deployment Workflow
 To deploy a skill to Claude:
-1. Navigate to the specific skill's subfolder (e.g., `cd "DEV/Claude Skills/search-calendar"`).
-2. Compress the entire subfolder into a `.zip` file (e.g., `search-calendar.zip`).
+1. Navigate to the specific skill's subfolder (e.g., `cd "DEV/Claude Skills/daily-calendars"`).
+2. Compress the entire subfolder into a `.zip` file (e.g., `daily-calendars.zip`).
 3. Upload the resulting zip file to Claude's custom Skills console.
 
 ## Standard Formats

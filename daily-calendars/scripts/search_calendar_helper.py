@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Helper script for search-calendar skill
+Helper script for daily-calendars skill (search sub-command)
 Claude can execute this to search your Google Calendar based on the skill instructions
 
 OPTIMIZED FOR TIME-BASED BRIEFINGS:

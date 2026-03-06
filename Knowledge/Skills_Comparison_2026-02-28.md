@@ -42,7 +42,7 @@ A comparison of skills **registered in Claude Cowork** (the system skill list) v
 | 20 | reverse-date | ✅ | ✅ | ✅ Synced |
 | 21 | reverse-month | ✅ | ✅ | ✅ Synced |
 | 22 | schedule | ✅ | — | ⚠️ Registered only (core skill, no local folder expected) |
-| 23 | search-calendar | ✅ | ✅ | ✅ Synced |
+| 23 | daily-calendars | ✅ | ✅ | ✅ Synced (replaces search-calendar) |
 | 24 | sentient-brand-guidelines | ✅ | ✅ (as `sentient-brand-guideline`) | ⚠️ Synced but folder name differs — missing trailing "s" |
 | 25 | set-up-workday | ✅ | ✅ | ✅ Synced |
 | 26 | skill-creator | ✅ | — | ⚠️ Registered only (core skill, no local folder expected) |
