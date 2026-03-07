@@ -183,6 +183,43 @@ def extract_conference_link(event):
     return None
 
 
+
+
+def get_typical_meeting_definition():
+    """
+    Return the default definition for a typical meeting.
+    """
+    return {
+        'duration_minutes': 60,
+        'mode': 'online',
+        'requires_google_meet': True,
+    }
+
+
+def is_typical_meeting(meeting):
+    """
+    Validate whether a meeting matches the default typical meeting definition.
+
+    Expected input keys (flexible):
+    - duration_minutes (int)
+    - is_online (bool) or mode ("online"/"offline")
+    - conference_url (str) or conference_type (str)
+
+    Returns: bool
+    """
+    duration_ok = meeting.get('duration_minutes') == 60
+
+    if 'is_online' in meeting:
+        online_ok = bool(meeting.get('is_online'))
+    else:
+        online_ok = str(meeting.get('mode', '')).lower() == 'online'
+
+    conference_url = str(meeting.get('conference_url', '')).lower()
+    conference_type = str(meeting.get('conference_type', '')).lower()
+    google_meet_ok = ('meet.google.com' in conference_url) or ('google meet' in conference_type)
+
+    return duration_ok and online_ok and google_meet_ok
+
 def extract_criteria(query):
     """
     Extract search criteria from user query
@@ -299,7 +336,12 @@ def main():
     Main entry point - can be called by Claude
     """
     if len(sys.argv) < 2:
-        print("Usage: python search_calendar_helper.py '<search query>'")
+        definition = get_typical_meeting_definition()
+        print("Typical meeting definition:")
+        print(f"- Duration: {definition['duration_minutes']} minutes")
+        print(f"- Mode: {definition['mode']}")
+        print("- Conference: Google Meet (meet.google.com)")
+        print("\nUsage: python search_calendar_helper.py '<search query>'")
         print("Example: python search_calendar_helper.py 'Show me events with Eddie on Monday'")
         return
     

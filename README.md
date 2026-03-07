@@ -253,7 +253,7 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 ### v1.0.0 (October 21, 2025)
 - Initial release with 5 core skills
 - **recent-emails**: Gmail email retrieval functionality
-- **daily-calendars**: Unified calendar operations with search sub-command and fuzzy matching
+- **daily-calendars**: Unified calendar operations with search + meeting sub-commands, fuzzy matching, and meeting-profile validation
 - **recent-drive**: Google Drive file discovery
 - **news-snapshot**: International and Singapore news briefing
 - **set-up-workday**: Comprehensive morning orchestration and executive brief
@@ -283,7 +283,7 @@ Claude Skills are structured prompt templates that teach Claude how to perform s
 Unified Gmail skill with 7 sub-commands: recent, starred, actioned, topic, stakeholders, draft, and format. Consolidates email retrieval, drafting, stakeholder monitoring, and executive formatting into a single efficient workflow.
 
 ### 📅 **daily-calendars**
-Unified calendar skill with a `search` sub-command for Google Calendar retrieval by day/date/week, subject, attendee names, and attendee emails/domains. Supports flexible natural language queries with fuzzy matching and enriched event context.
+Unified calendar skill with `search` and `meeting` sub-commands. `search` handles Google Calendar retrieval by day/date/week, subject, attendee names, and attendee emails/domains with enriched context; `meeting` returns or validates a default typical meeting definition (60 minutes, online, Google Meet).
 
 ### ✏️ **change-headings**
 Converts document headings into normal paragraphs while preserving their original visual appearance (font size, weight, color, and formatting). Ideal for normalizing document structure without altering the visual design. Handles all heading levels and maintains inline formatting.
@@ -348,7 +348,7 @@ Track and analyze recent Google Drive activity with detailed metadata and insigh
 /
 ├── daily-emails/           # Unified Gmail skill (recent, starred, drafting, stakeholders)
 │   └── skill.md           # Skill implementation
-├── daily-calendars/       # Unified calendar skill (search sub-command)
+├── daily-calendars/       # Unified calendar skill (search + meeting sub-commands)
 │   ├── skill.md           # Skill implementation
 │   └── scripts/           # Calendar helper reference code
 ├── recent-drive/           # Google Drive file discovery skill
