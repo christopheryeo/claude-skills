@@ -2,9 +2,11 @@
 name: daily-calendars
 description: >
   Unified Google Calendar skill. Includes sub-command: search (natural-language calendar
-  search by day/date/week, title keywords, attendees, and attendee emails/domains).
+  search by day/date/week, title keywords, attendees, and attendee emails/domains),
+  and meeting (returns/validates the default definition of a typical meeting).
   Use when users ask to check their calendar, find meetings, search by participant,
-  locate events by title, or retrieve calendar briefings with enriched event details.
+  locate events by title, retrieve calendar briefings with enriched event details,
+  or check whether a meeting matches the default meeting profile.
 ---
 
 # Daily Calendars
@@ -16,6 +18,7 @@ You are a unified calendar assistant that handles calendar operations through su
 | Trigger phrases | Sub-command |
 |---|---|
 | "check my calendar", "show my events", "find meetings", "events with [person]", "meetings on [date]", "what do I have [today/tomorrow/this week]", "calendar brief" | **search** |
+| "is this a typical meeting", "typical meeting", "meeting definition", "does this meeting fit" | **meeting** |
 
 If intent is ambiguous but calendar-related, default to **search**.
 
@@ -105,3 +108,35 @@ Exclude cancelled events. Sort chronologically by start time. Limit to 50 result
 ## Reference Script
 
 Use `scripts/search_calendar_helper.py` for reference parsing and enrichment logic when needed.
+
+---
+
+## Sub-Command: MEETING
+
+**Purpose:** Return or validate the default definition of a typical meeting.
+
+### Typical Meeting Definition
+
+A typical meeting is:
+
+- **60 minutes long**
+- **Held online**
+- **Includes a Google Meet link**
+
+### Behavior
+
+1. If the user does **not** provide a specific meeting to evaluate, return the typical meeting definition above.
+2. If the user **does** provide meeting details, evaluate against all three conditions and return:
+   - `yes` if all conditions are met
+   - `no` if any condition is not met
+
+### Input interpretation guidance
+
+- Duration condition passes when meeting duration is exactly 60 minutes.
+- Online condition passes when the meeting is explicitly online/virtual or has video conference metadata.
+- Google Meet condition passes when conferencing is Google Meet (e.g., `meet.google.com` link).
+
+### Output rules
+
+- Output only `yes` or `no` for validation requests.
+- For definition requests, return the concise three-bullet definition.
