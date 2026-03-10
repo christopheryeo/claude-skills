@@ -1,14 +1,16 @@
 ---
 name: daily-emails
 description: >
-  Unified Gmail skill with 7 sub-commands: recent (inbox/sent/drafts/starred activity),
+  Unified Gmail skill with 8 sub-commands: recent (inbox/sent/drafts/starred activity),
   starred (priority flagged emails), actioned (sent + starred recap), topic (keyword search),
-  stakeholders (tracked contact monitoring), draft (compose reply-all drafts), and format
+  stakeholders (tracked contact monitoring), draft (compose reply-all drafts), respond
+  (safe reply with duplicate-draft and already-replied checks), and format
   (executive table rendering). Use whenever the user asks about emails, wants to search mail,
-  check recent activity, review starred items, monitor stakeholders, draft replies, or any
-  Gmail-related request. Triggers include "show emails", "recent emails", "starred emails",
-  "what did I send", "emails about [topic]", "stakeholder emails", "draft a reply",
-  "reply to [person]", "email digest", "check my mail", or any similar Gmail request.
+  check recent activity, review starred items, monitor stakeholders, draft replies, respond
+  to threads, or any Gmail-related request. Triggers include "show emails", "recent emails",
+  "starred emails", "what did I send", "emails about [topic]", "stakeholder emails",
+  "draft a reply", "reply to [person]", "respond to [person]", "respond to that email",
+  "email digest", "check my mail", or any similar Gmail request.
 ---
 
 # Daily Emails
@@ -24,7 +26,8 @@ You are a unified Gmail assistant that handles all email operations through sub-
 | "what I sent", "what I followed up on", "sent and starred", "actioned emails", "email recap" | **actioned** |
 | "emails about [X]", "threads related to [X]", "pull emails on [topic]", "email history for [project]" | **topic** |
 | "monitor stakeholders", "stakeholder emails", "emails from [stakeholder group]", "stakeholder digest" | **stakeholders** |
-| "draft a reply", "reply to [person]", "draft an email", "write back to [person]", "respond to that thread" | **draft** |
+| "draft a reply", "reply to [person]", "draft an email", "write back to [person]" | **draft** |
+| "respond to [person]", "respond to that email", "respond to the thread about [topic]", "respond to that thread" | **respond** |
 
 If the intent is ambiguous, ask which operation is intended. If the user says something generic like "check my emails", default to **recent**.
 
@@ -296,6 +299,68 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 - **Always show recipients** before creating draft
 - **If ambiguous** — ask for clarification
 - **If thread is long/complex** — summarise the context you're basing the reply on
+
+---
+
+## Sub-Command: RESPOND
+
+**Purpose:** Safely respond to an email thread by first verifying no duplicate draft exists and the thread hasn't already been replied to, then delegating to the **draft** sub-command to compose the reply.
+
+**Requires:** A target thread — identified by person name, subject, or topic from the user. Optional: explicit reply content.
+
+### Steps
+
+1. **Identify the target thread:**
+   - Thread already in context → use it
+   - User names a person/subject → search Gmail to find thread
+   - If multiple matches → ask which one
+   - Read full thread with `read_gmail_thread` to get all messages, participants, and message IDs
+
+2. **Check 1 — Already replied:**
+   - Inspect the thread's messages for any message sent **from** `chris@sentient.io` that is **newer** than the most recent inbound message
+   - If found → **hard-block**: inform the user that this thread has already been responded to, show the date/time and a brief summary of the existing reply, and stop. Do NOT proceed to drafting
+   - If not found → continue
+
+3. **Check 2 — Existing draft for same thread:**
+   - Search Gmail drafts using: `in:drafts` combined with the thread's subject line (e.g., `in:drafts subject:"{thread subject}"`)
+   - Also verify by comparing thread IDs if available from draft metadata
+   - If a matching draft is found → **hard-block**: inform the user that a draft already exists for this thread, show the draft date/time, a brief summary of its content, and a direct Gmail link to the existing draft, and stop. Do NOT create a duplicate draft
+   - If no matching draft → continue
+
+4. **Delegate to DRAFT sub-command:**
+   - Pass the identified thread and any user-provided reply content to the **draft** sub-command
+   - The draft sub-command handles recipient determination, HTML composition, and draft creation as normal
+   - All draft sub-command safeguards apply (never send, show recipients, clarify if ambiguous)
+
+### Hard-Block Response Formats
+
+**Already replied:**
+```markdown
+⛔ **Thread already responded to**
+- **Thread:** [Subject]
+- **Your reply sent:** [DD MMM YYYY HH:MM SGT]
+- **Reply summary:** [≤30-word summary of your sent message]
+- **Link:** [📧 Open Thread](https://mail.google.com/mail/u/0/#inbox/MSG_ID)
+
+No draft created. If you'd like to send a follow-up, use the **draft** sub-command directly.
+```
+
+**Duplicate draft exists:**
+```markdown
+⛔ **Draft already exists for this thread**
+- **Thread:** [Subject]
+- **Existing draft created:** [DD MMM YYYY HH:MM SGT]
+- **Draft summary:** [≤30-word summary of draft content]
+- **Link:** [📧 Open Draft](https://mail.google.com/mail/u/0/#drafts/DRAFT_MSG_ID)
+
+No new draft created. Review or edit the existing draft in Gmail.
+```
+
+### Safeguards
+
+- Inherits all safeguards from the **draft** sub-command
+- Both checks (already replied + existing draft) must pass before any draft is created
+- If Gmail search fails or returns ambiguous results during either check, ask the user for clarification rather than proceeding
 
 ---
 
