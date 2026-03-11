@@ -17,7 +17,7 @@ move quickly from discovery to a shareable document while keeping messaging alig
 ## Quick Start
 1. Run the latest **customer-brief** skill to capture discovery findings for the account.
 2. Open the relevant product narrative in `product-white-paper/` and flag the sections that map to the customer's needs.
-3. Reference the tone and messaging guidance in **sentient-brand-guideline** to keep language on-brand.
+3. Reference the tone and messaging guidance in **sentient-brand-guidelines** to keep language on-brand.
 4. Combine the above into a proposal outline using your preferred editor (Docs, Notion, Markdown). The sample outline in
    `presentation-outline/` is a good starting point when you need structure.
 
@@ -45,7 +45,7 @@ move quickly from discovery to a shareable document while keeping messaging alig
 ## Related Skills & Artifacts
 - **customer-brief** – Use to gather and refresh account discovery notes before drafting.
 - **product-white-paper** – Provides canonical product positioning and technical capabilities.
-- **sentient-brand-guideline** – Supplies tone, terminology, and styling cues for all outbound materials.
+- **sentient-brand-guidelines** – Supplies tone, terminology, and styling cues for all outbound materials.
 - **work-day** – Automates saving final drafts to the shared Workday folder once ready for review.
 
 ## Extending Later

@@ -55,7 +55,7 @@ This file contains the essential principles you must follow:
 For every presentation, **review the Sentient Brand Guidelines skill** to apply the correct colors, typography, and logo usage:
 
 ```
-Read sentient-brand-guideline/skill.md
+Read sentient-brand-guidelines/skill.md
 ```
 
 Key alignment points:
