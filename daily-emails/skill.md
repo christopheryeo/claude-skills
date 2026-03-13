@@ -1,16 +1,19 @@
 ---
 name: daily-emails
 description: >
-  Unified Gmail skill with 8 sub-commands: recent (inbox/sent/drafts/starred activity),
+  Unified Gmail skill with 9 sub-commands: recent (inbox/sent/drafts/starred activity),
   starred (priority flagged emails), actioned (sent + starred recap), topic (keyword search),
   stakeholders (tracked contact monitoring), draft (compose reply-all drafts), respond
-  (safe reply with duplicate-draft and already-replied checks), and format
-  (executive table rendering). Use whenever the user asks about emails, wants to search mail,
-  check recent activity, review starred items, monitor stakeholders, draft replies, respond
-  to threads, or any Gmail-related request. Triggers include "show emails", "recent emails",
-  "starred emails", "what did I send", "emails about [topic]", "stakeholder emails",
-  "draft a reply", "reply to [person]", "respond to [person]", "respond to that email",
-  "email digest", "check my mail", or any similar Gmail request.
+  (safe reply with duplicate-draft and already-replied checks), propose (reply to a meeting
+  request email by accepting a proposed time or counter-proposing the next available slot,
+  always saved to draft), and format (executive table rendering). Use whenever the user asks
+  about emails, wants to search mail, check recent activity, review starred items, monitor
+  stakeholders, draft replies, respond to threads, propose a meeting time, or any Gmail-related
+  request. Triggers include "show emails", "recent emails", "starred emails", "what did I send",
+  "emails about [topic]", "stakeholder emails", "draft a reply", "reply to [person]", "respond
+  to [person]", "respond to that email", "propose a time", "reply with availability", "suggest
+  a meeting time", "respond with a slot", "email digest", "check my mail", or any similar
+  Gmail request.
 ---
 
 # Daily Emails
@@ -28,6 +31,7 @@ You are a unified Gmail assistant that handles all email operations through sub-
 | "monitor stakeholders", "stakeholder emails", "emails from [stakeholder group]", "stakeholder digest" | **stakeholders** |
 | "draft a reply", "reply to [person]", "draft an email", "write back to [person]" | **draft** |
 | "respond to [person]", "respond to that email", "respond to the thread about [topic]", "respond to that thread" | **respond** |
+| "propose a time", "reply with availability", "suggest a meeting time", "respond with a slot", "reply to the meeting request from [person]" | **propose** |
 
 If the intent is ambiguous, ask which operation is intended. If the user says something generic like "check my emails", default to **recent**.
 
@@ -361,6 +365,134 @@ No new draft created. Review or edit the existing draft in Gmail.
 - Inherits all safeguards from the **draft** sub-command
 - Both checks (already replied + existing draft) must pass before any draft is created
 - If Gmail search fails or returns ambiguous results during either check, ask the user for clarification rather than proceeding
+
+---
+
+## Sub-Command: PROPOSE
+
+**Purpose:** Reply to a meeting request email with a proposed meeting time. If the sender has already suggested a specific time, validate it against your calendar and availability rules. If it works, accept it. If not — or if no time was proposed — find the next available slot and counter-propose. Always saves to draft. Never sends.
+
+**Requires:** A target thread — identified by person name, subject, or topic from the user.
+
+### Steps
+
+1. **Identify the target thread:**
+   - Thread already in context → use it
+   - User names a person/subject → search Gmail to find thread
+   - If multiple matches → ask which one
+   - Read full thread with `read_gmail_thread`
+
+2. **Run safety checks (same as RESPOND):**
+   - **Check 1 — Already replied:** If a message from `chris@sentient.io` is newer than the most recent inbound message → hard-block (show existing reply summary and link, do not proceed)
+   - **Check 2 — Existing draft:** Search `in:drafts subject:"{thread subject}"` → if found → hard-block (show draft summary and link, do not proceed)
+
+3. **Parse the thread for a proposed time and meeting format:**
+   - Scan the most recent inbound message(s) for explicit date/time patterns (e.g. "Monday 3pm", "March 20 at 14:00", "next Tuesday morning")
+   - Also check for duration hints (e.g. "30-minute call", "an hour", "quick catch-up")
+   - **Detect meeting format** — scan the thread for physical meeting signals:
+     - Signals: "meet in person", "your office", "Sentient office", "come to", "drop by", "face to face", "F2F", "in-person", "office visit", "meet at your place"
+     - If the sender requests a physical meeting **at the Sentient office specifically** → set `meeting_format = PHYSICAL_SENTIENT`
+     - If the sender requests a physical meeting **at a neutral or unspecified location** → set `meeting_format = PHYSICAL_OTHER`
+     - If no physical meeting signals → set `meeting_format = ONLINE` (default)
+   - **If a specific time is found** → go to Step 4A
+   - **If no time is found** → go to Step 4B
+
+4A. **Validate the proposed time (sender proposed a time):**
+   - Retrieve your calendar events for that date using `list_gcal_events`
+   - Apply your availability rules in order:
+     1. Must be a weekday (Mon–Fri)
+     2. Must fall within 10:00 AM – 6:00 PM SGT
+     3. Must not overlap the lunch block (12:00 PM – 2:00 PM)
+     4. Must not start within 30 minutes of an existing meeting ending
+     5. Must not conflict with any existing event
+   - **If available** → go to Step 5A (accept)
+   - **If unavailable** → go to Step 5B (counter-propose), noting the specific rule that blocked it
+
+4B. **Find the next available slot (no time proposed):**
+   - Starting from the next working day (or later today if before 4:00 PM and a slot exists), scan forward day by day
+   - For each day, retrieve calendar events and identify open windows respecting all four availability rules
+   - Use a default meeting duration of **60 minutes** unless the thread specifies otherwise
+   - Take the earliest open slot found → go to Step 5B (propose)
+
+5A. **Draft: Accept their proposed time:**
+   - Compose a warm, concise reply confirming the proposed date and time
+   - Include the meeting date, time (SGT), and duration if mentioned
+   - **Apply meeting format logic:**
+     - `PHYSICAL_SENTIENT`: Politely acknowledge the request and note that Sentient operates fully virtually and does not have a physical office. Ask whether they would prefer to meet virtually (Google Meet) or in person — and if in person, invite them to suggest a convenient location
+     - `PHYSICAL_OTHER`: Acknowledge the in-person preference; confirm the proposed location if stated, or invite the sender to suggest one
+     - `ONLINE` (default): Propose a Google Meet video call; note that an invite with a meeting link will be sent upon confirmation
+   - Delegate to DRAFT sub-command for HTML formatting and draft creation
+
+5B. **Draft: Counter-propose or propose a new time:**
+   - Compose a reply that:
+     - (If counter-proposing) Politely notes the proposed time doesn't work, without disclosing internal meeting details
+     - Proposes the specific available date and time (in SGT, with day of week)
+     - States the proposed duration (default 60 minutes or as derived from thread)
+     - Invites confirmation or an alternative if the slot doesn't suit them
+   - **Apply meeting format logic:**
+     - `PHYSICAL_SENTIENT`: Politely note that Sentient operates fully virtually and does not have a physical office. Ask whether they would prefer to meet virtually (Google Meet) or in person — and if in person, invite them to suggest a convenient location
+     - `PHYSICAL_OTHER`: Acknowledge the in-person preference; confirm or propose the meeting location alongside the proposed time
+     - `ONLINE` (default): Propose a Google Meet video call; note that an invite with a meeting link will follow upon confirmation
+   - Delegate to DRAFT sub-command for HTML formatting and draft creation
+
+### Availability Rules (mirrors daily-calendars AVAILABLE)
+
+| Rule | Constraint |
+|------|-----------|
+| Working days | Monday – Friday only |
+| Working hours | 10:00 AM – 6:00 PM SGT |
+| Lunch block | No meetings 12:00 PM – 2:00 PM |
+| Gap between meetings | Minimum 30 minutes after any existing meeting ends |
+| Default duration | 60 minutes (override from thread if stated) |
+
+### Hard-Block Response Formats
+
+**Already replied:**
+```
+⛔ Thread already responded to
+- Thread: [Subject]
+- Your reply sent: [DD MMM YYYY HH:MM SGT]
+- Reply summary: [≤30-word summary]
+- Link: [📧 Open Thread]
+
+No draft created. Use the draft sub-command directly if you want to send a follow-up.
+```
+
+**Duplicate draft exists:**
+```
+⛔ Draft already exists for this thread
+- Thread: [Subject]
+- Existing draft created: [DD MMM YYYY HH:MM SGT]
+- Draft summary: [≤30-word summary]
+- Link: [📧 Open Draft]
+
+No new draft created. Review or edit the existing draft in Gmail.
+```
+
+### Confirmation to User (after draft is created)
+
+```
+✅ Meeting reply drafted
+- Thread: [Subject]
+- Sender: [Name / Email]
+- Outcome: [Accepted their proposed time / Counter-proposed new slot / Proposed new slot]
+- Proposed time: [Day, DD MMM YYYY, HH:MM – HH:MM SGT]
+- Meeting format: [Online (Google Meet) / In-person at [location] / Note: No Sentient office — sender asked to choose format or suggest location]
+- Recipients: To: [name] | Cc: [names if any]
+- Link: [📧 Open Draft]
+
+Review and send from Gmail when ready.
+```
+
+### Safeguards
+
+- **Never send** — always draft only, every time, no exceptions
+- **Always show recipients** before creating draft
+- **Never disclose** the title or details of conflicting calendar events to the sender
+- **If thread contains no meeting request** — inform the user and stop; do not draft a reply
+- **Sentient virtual office policy** — Sentient operates fully virtually and has no physical office. If a sender requests a physical meeting at the Sentient office, always communicate this politely, then ask whether they prefer a virtual meeting (Google Meet) or in person at a location of their choosing. Never imply a Sentient office exists
+- **If multiple proposed times are found** — use the most recent one
+- **If proposed time is ambiguous** (e.g. "sometime next week") — treat as no time proposed and find the next available slot
 
 ---
 
