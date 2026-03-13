@@ -1,19 +1,15 @@
 ---
 name: daily-emails
 description: >
-  Unified Gmail skill with 9 sub-commands: recent (inbox/sent/drafts/starred activity),
-  starred (priority flagged emails), actioned (sent + starred recap), topic (keyword search),
-  stakeholders (tracked contact monitoring), draft (compose reply-all drafts), respond
-  (safe reply with duplicate-draft and already-replied checks), propose (reply to a meeting
-  request email by accepting a proposed time or counter-proposing the next available slot,
-  always saved to draft), and format (executive table rendering). Use whenever the user asks
-  about emails, wants to search mail, check recent activity, review starred items, monitor
-  stakeholders, draft replies, respond to threads, propose a meeting time, or any Gmail-related
-  request. Triggers include "show emails", "recent emails", "starred emails", "what did I send",
-  "emails about [topic]", "stakeholder emails", "draft a reply", "reply to [person]", "respond
-  to [person]", "respond to that email", "propose a time", "reply with availability", "suggest
-  a meeting time", "respond with a slot", "email digest", "check my mail", or any similar
-  Gmail request.
+  Unified Gmail skill with 9 sub-commands: recent (inbox/sent/drafts/starred), starred
+  (priority emails), actioned (sent + starred recap), topic (keyword search), stakeholders
+  (contact monitoring), draft (compose reply-all drafts), respond (safe reply with
+  duplicate-draft and already-replied checks), propose (reply to meeting request by
+  accepting or counter-proposing next available slot, always saved to draft), and format
+  (executive table rendering). Use for any Gmail request: show emails, recent emails,
+  starred emails, what did I send, emails about [topic], stakeholder emails, draft a reply,
+  reply to [person], respond to that email, propose a time, reply with availability,
+  suggest a meeting time, respond with a slot, email digest, check my mail.
 ---
 
 # Daily Emails
