@@ -251,13 +251,30 @@ Each task gets its own `##` heading — never group multiple tasks. The Output f
 
 ## Operation: STATUS
 
-**Purpose:** Show a quick summary of today's plan progress.
+**Purpose:** Show a quick summary of today's plan progress, with an optional filter to show only tasks of a specific status.
+
+### Optional Status Filter
+
+The user may request a filtered view by specifying a status in their trigger phrase. Recognised filter phrases and their mappings:
+
+| Trigger phrase | Filter applied |
+|---|---|
+| "show new tasks", "what's new", "show pending" | 🆕 New only |
+| "show in progress", "what's in progress", "what's underway" | 🔄 In Progress only |
+| "show done", "what's done", "what's completed" | ✅ Done only |
+| "show blocked", "what's blocked", "any blockers" | ❌ Blocked only |
+| "show deferred", "what's deferred", "what's postponed" | ⏭️ Deferred only |
+| "plan status", "what's the plan", "show plan", "where are we" (no qualifier) | All tasks (no filter) |
+
+If a filter is detected, note it at the top of the response (e.g., *Showing: 🆕 New tasks only*).
 
 ### Steps
 
 1. **Read the plans file.** If none exists, report that and offer to create one.
 
-2. **Present a summary table** grouped by priority:
+2. **Apply the filter (if any).** If the user specified a status filter, restrict the displayed tasks to only those matching that status. If no filter was given, include all tasks regardless of status.
+
+3. **Present a summary table** grouped by priority (omit priority groups with no matching tasks when a filter is active):
 
 | # | Task | Status | Effort |
 |---|------|--------|--------|
@@ -265,14 +282,16 @@ Each task gets its own `##` heading — never group multiple tasks. The Output f
 | 1.2 | Task title | 🆕 New | ~10 mins |
 | 2.1 | Task title | 🔄 In Progress | ~15 mins |
 
-3. **Include totals:**
+If no tasks match the active filter, report: *"No tasks found with status [filter] in today's plan."*
+
+4. **Include totals** (always based on the full plan, not the filtered view — label clearly):
 
 | | Completed | Remaining | Blocked/Deferred |
 |---|---|---|---|
 | **Count** | X | Y | Z |
 | **Effort** | ~N mins | ~N mins | ~N mins |
 
-4. If there are blocked or deferred tasks, briefly note the reason for each.
+5. If there are blocked or deferred tasks (in the full plan), briefly note the reason for each.
 
 ---
 
