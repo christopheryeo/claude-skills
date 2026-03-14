@@ -1,12 +1,12 @@
 ---
 name: daily-plans
 description: >
-  Manages a daily task planning system using Plans/ in whatever folder is currently selected — creating plans, executing tasks one-by-one, logging completed work, checking status, deleting tasks, and carrying forward incomplete items. Works from any mounted folder. Six operations: CREATE, EXECUTE (one task per invocation), LOG, STATUS, DELETE (with auto-renumbering), CARRY-FORWARD. Use whenever the user says "plan my day", "create a plan", "execute the plan", "next task", "log task", "log that", "plan status", "what's the plan", "where are we", "carry forward", "carry over", "add a task", "delete task", "remove task", "drop task", or provides a numbered task list. Do NOT trigger for "set up my workday", "what did I do today?", meeting prep, email drafting, or calendar searches.
+  Manages a daily task planning system using Plans/ in whatever folder is currently selected — creating plans, adding new tasks, executing tasks one-by-one, logging completed work, checking status, deleting tasks, and carrying forward incomplete items. Works from any mounted folder. Seven operations: CREATE, NEW, EXECUTE (one task per invocation), LOG, STATUS, DELETE (with auto-renumbering), CARRY-FORWARD. Use whenever the user says "plan my day", "create a plan", "new task", "add a task", "add task [X]", "execute the plan", "next task", "log task", "log that", "plan status", "what's the plan", "where are we", "carry forward", "carry over", "delete task", "remove task", "drop task", or provides a numbered task list. Do NOT trigger for "set up my workday", "what did I do today?", meeting prep, email drafting, or calendar searches.
 ---
 
 # Daily Plans
 
-A unified daily task planning system with six operations: **create**, **execute**, **log**, **status**, **delete**, and **carry-forward**. All operations work with markdown files in a `Plans/` folder resolved dynamically from the user's selected workspace.
+A unified daily task planning system with seven operations: **create**, **new**, **execute**, **log**, **status**, **delete**, and **carry-forward**. All operations work with markdown files in a `Plans/` folder resolved dynamically from the user's selected workspace.
 
 ---
 
@@ -24,7 +24,8 @@ All file operations use this resolved path. Never hardcode a specific parent fol
 
 | Trigger phrases | Operation |
 |---|---|
-| "plan my day", "create a plan", provides a list of tasks, "add task [X]" | **create** |
+| "plan my day", "create a plan", provides a list of tasks | **create** |
+| "new task", "add a task", "add task [X]" | **new** |
 | "execute the plan", "run today's tasks", "start the plan", "next task" | **execute** |
 | "log task", "log that", "log the task" | **log** |
 | "plan status", "what's the plan?", "show plan", "where are we?" | **status** |
@@ -81,7 +82,7 @@ When a task belongs to a specific domain, note the delegate in the Delegate fiel
 
 ### Steps
 
-1. **Check for an existing plan today.** If a plans file already exists with tasks, ask whether to replace or append.
+1. **Check for an existing plan today.** If a plans file already exists with tasks, do **not** offer to append new tasks to it — that is the **NEW** sub-command's responsibility. Instead, let the user know a plan already exists and ask if they want to **replace** it entirely. If yes, overwrite it. If no, stop and suggest using `new task` to add individual items.
 
 2. **Gather tasks.** If the user has provided a task list, use it. If they said "plan my day" without specifics, ask what tasks they want planned.
 
@@ -146,14 +147,39 @@ When a task belongs to a specific domain, note the delegate in the Delegate fiel
 
 6. **Present the plan summary** — a compact table showing task numbers, titles, priorities, and effort estimates. Ask for approval before considering the plan final.
 
-### Adding a Task
+> **Scope boundary:** CREATE is only for initialising a brand-new plan. It does not add tasks to an existing plan. Use the **NEW** sub-command for that.
 
-If the user says "add task [X]" and a plan already exists for today:
+---
 
-1. Read the current plans file
-2. Add the new task to the appropriate priority group with the next available number
-3. Update the Estimated Total Effort table
-4. Present the updated plan summary
+## Operation: NEW
+
+**Purpose:** Add a single new task to today's existing plan.
+
+### Steps
+
+1. **Read today's plans file.** If none exists, offer to create one with CREATE instead.
+
+2. **Gather task details.** The user may supply the full task inline (e.g., "add task: Review pitch deck — P1, ~10 mins") or just a title. If any required field is missing, ask:
+   - Task title (required)
+   - Action description — what Claude should actually do (required)
+   - Priority level — 🔴 P1 / 🟡 P2 / 🟢 P3 / 🟠 P4+ (default: 🟡 P2 if not specified)
+   - Delegate — AI Workforce member or N/A (optional; omit if not in Sentient context)
+   - Effort estimate, e.g. `~10 mins` (optional; omit if unknown)
+
+3. **Determine the task number.** Find the highest existing task number in the chosen priority group and increment by 1. If the priority group does not yet exist, create it with task number X.1 (e.g., new P2 group starts at 2.1).
+
+4. **Add the task block** to the plans file in the correct priority group using this format:
+
+```markdown
+#### N.N 🆕 [Task title]
+- **Action:** [What Claude should do]
+- **Delegate:** [Name or N/A]
+- **Effort:** ~N mins
+```
+
+5. **Update the Estimated Total Effort table** — increment the item count and time for the affected priority level and the totals row.
+
+6. **Present a confirmation** — show the newly added task and the updated effort summary.
 
 ---
 
