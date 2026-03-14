@@ -283,6 +283,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
    - Sign-off: "Best regards," then "Christopher Yeo" (use `<br/>` between, single `<p>` tag)
    - **No title/role line** — Gmail signature handles that
    - **No contact details** — Gmail signature appends these
+   - **Quoted thread:** After the sign-off, append the full original thread as a quoted block using: `<blockquote style="margin: 12px 0 0 0; padding-left: 12px; border-left: 2px solid #cccccc; color: #666666; font-family: Arial, sans-serif; font-size: 14px;">` — include all prior messages in reverse chronological order (most recent first), each prefixed with the sender name and timestamp in the format `<strong>From:</strong> [Name] | <strong>Sent:</strong> [DD MMM YYYY HH:MM]`
 
 4. **Determine recipients (Reply-All):**
    - **To:** Sender of most recent message in thread
