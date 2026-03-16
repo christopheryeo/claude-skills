@@ -10,6 +10,14 @@ description: >
 
 This skill manages the flow of knowledge into and out of Christopher's Knowledge Fabric — the structured system that underpins the entire Sentient AI Workforce. It has three operations: retrieving knowledge (FIND), routing knowledge to the right place (CLASSIFY), and writing knowledge to that place (FILE).
 
+The Knowledge Fabric rests on **three essential knowledge layers:**
+
+1. **Long Term Memory** — Durable reference knowledge stored in shared Google Drive files (profiles, company data, stakeholder records). Consulted on demand.
+2. **Operational Knowledge** — Domain-specific files in each AI Workforce member's `Knowledge/` sub-folder. The working files that power day-to-day execution.
+3. **Learned Preferences** — Ever-present knowledge embedded in the `## Learned Preferences` section of each `claude.md` file. Always loaded, always applied — no lookup required.
+
+Every CLASSIFY and FILE operation routes knowledge to one of these three layers.
+
 ---
 
 ## FIND Sub-command
@@ -72,9 +80,13 @@ CLASSIFY is read-only — it analyses and recommends a destination but does not 
 
 ### Step 1 — Read the Knowledge Fabric
 
-Read `Knowledge/knowledge_fabric.md` to load the full structure. The fabric contains these classifiable destinations:
+Read `Knowledge/knowledge_fabric.md` to load the full structure. The fabric's three knowledge layers each contain classifiable destinations. When routing new knowledge, first determine which layer it belongs to, then identify the specific target file within that layer.
 
-**AI Workforce Working Knowledge (root `Knowledge/` files):**
+---
+
+#### Layer 1: Long Term Memory
+
+Durable reference knowledge in the root `Knowledge/` folder — company-wide files that any agent can read. These are consulted on demand and change infrequently.
 
 | File | Content type |
 |---|---|
@@ -86,11 +98,18 @@ Read `Knowledge/knowledge_fabric.md` to load the full structure. The fabric cont
 | `personal-drives.md` | Descriptions of Christopher's three personal Google Drive folders |
 | `knowledge_fabric.md` | The fabric index itself — new sections, files, or sources |
 
-**Protocols & Procedures (within the fabric):**
+Also includes **Protocols & Procedures** within the fabric:
 - Meeting Minutes lookup sequence
+- Lead-to-Prospect Handoff (Mary → Donny)
 - Any new operational protocols or standard procedures
 
-**Folder Directory domains (mapped to AI Workforce members):**
+---
+
+#### Layer 2: Operational Knowledge
+
+Domain-specific files in each AI Workforce member's `Knowledge/` sub-folder. These are the working files that power day-to-day execution — the most precise filing targets. Always check whether new knowledge fits an existing operational file before defaulting to the broader domain folder.
+
+**Domain owners (for routing when no specific operational file exists):**
 
 | Domain | Owner | Examples of what belongs here |
 |---|---|---|
@@ -102,9 +121,7 @@ Read `Knowledge/knowledge_fabric.md` to load the full structure. The fabric cont
 | **Admin/HR** | Vivien (PA) | HR records, admin docs, legal templates, ACRA/BizFile, expense claims |
 | **CEO Ops** | Christopher (root) | Daily plans, journals, learning materials |
 
-**Operational Knowledge (member-level `Knowledge/` sub-folders):**
-
-Each AI Workforce member maintains domain-specific operational files in their own `Knowledge/` folder. These are the most precise filing targets — always check whether new knowledge fits an existing operational file before defaulting to the broader domain folder.
+**Specific operational files (preferred targets):**
 
 | Member | File / Folder | Content type |
 |---|---|---|
@@ -121,23 +138,35 @@ Each AI Workforce member maintains domain-specific operational files in their ow
 | **Alex (Dev)** | `Alex (Dev)/Knowledge/techstack.md` | Technology stack reference — languages, frameworks, infrastructure |
 | **Alex (Dev)** | `Alex (Dev)/Knowledge/Skills_Comparison.md` | Claude Skills comparison matrix — capabilities and benchmarks |
 | **Vivien (PA)** | `Vivien (PA)/Knowledge/` | (Empty — reserved for admin procedures, HR policies, legal references) |
-| **Donny (Sales)** | `Donny (Sales)/Knowledge/` | (Empty — reserved for pipeline playbooks, pricing, tender guidelines) |
+| **Donny (Sales)** | `Donny (Sales)/Knowledge/Sales Prospects Tracker.md` | Active sales pipeline from handoff to close |
 
-**Long Term Memory categories:**
-1. Christopher Yeo — personal & professional → `chris-profile.md`
-2. Sentient.io — company context → `company-profile.md`
-3. Key relationships & stakeholders → `Shareholder_Contacts.md`
-4. Personal workflows & preferences → relevant `claude.md` Learned Preferences section
-5. Personal Google Drive folders → `personal-drives.md`
+---
 
-**Learned Preferences (across `claude.md` files):**
-- If the knowledge is about Christopher's working style, formatting preferences, tool preferences, or delegation patterns → append to `## Learned Preferences` in the relevant `claude.md`
-- If it's domain-specific (e.g., how Christopher wants financial reports formatted) → that AI Workforce member's `claude.md`
-- If it's cross-functional → root `claude.md`
+#### Layer 3: Learned Preferences (Ever-Present Knowledge)
+
+Knowledge embedded in the `## Learned Preferences` section of `claude.md` files. Unlike the other two layers, Learned Preferences are always loaded and always applied — they don't need to be looked up. This makes them the right destination for recurring patterns, terminology, corrections, workflow preferences, and decision-making styles that should influence every session.
+
+| Scope | Target file | What belongs here |
+|---|---|---|
+| Cross-functional / CEO-level | `claude.md` (root) | Christopher's global preferences, protocols, correction dictionaries, and patterns that apply across all domains |
+| Finance-specific | `Eddie (CFO)/claude.md` | How Christopher wants financial reports, how Eddie should handle creditor queries, etc. |
+| Sales-specific | `Donny (Sales)/claude.md` | Sales process preferences, proposal formatting, pipeline reporting style |
+| Marketing-specific | `Mary (Marketing)/claude.md` | Brand tone preferences, lead handling rules, content formatting |
+| Projects-specific | `Cedric (Projects)/claude.md` | Stakeholder reporting preferences, project update formats |
+| Dev-specific | `Alex (Dev)/claude.md` | Technical preferences, code review standards, skill development patterns |
+| Admin/HR-specific | `Vivien (PA)/claude.md` | Admin workflow preferences, document handling, scheduling patterns |
+
+**When to route to Learned Preferences instead of the other layers:**
+- The knowledge is about *how* Christopher wants something done, not *what* the facts are → Layer 3
+- It's a correction, abbreviation, or terminology mapping that should be applied automatically → Layer 3
+- It's a process or workflow that Christopher expects to be followed without reminding → Layer 3
+- It's a factual record (profile data, company info, contacts) → Layer 1
+- It's a working document that gets updated as part of operations → Layer 2
 
 ### Step 2 — Analyse the Input
 
 Determine what the new knowledge is about:
+- **Which layer?** — Is it a durable fact (Layer 1: Long Term Memory), a working operational file (Layer 2: Operational Knowledge), or a preference/pattern/correction (Layer 3: Learned Preferences)?
 - **Subject matter** — What domain does it cover? (finance, sales, HR, personal, governance, etc.)
 - **Knowledge type** — Is it a fact, a preference, a process, a contact, a reference, a new source?
 - **Scope** — Does it apply to one AI Workforce member's domain, or is it cross-functional?
@@ -149,11 +178,11 @@ Present the classification to Christopher as a clear recommendation:
 
 ```
 Classification:
-- Section: [Knowledge Fabric section name]
+- Layer: [1: Long Term Memory / 2: Operational Knowledge / 3: Learned Preferences]
 - Target file: [exact file path]
 - Owner: [AI Workforce member name and role]
 - Action: [append to existing section / create new entry / add new section]
-- Rationale: [one sentence explaining why this is the right destination]
+- Rationale: [one sentence explaining why this is the right destination and layer]
 ```
 
 If the classification is ambiguous (could belong in multiple places), present the top 2 options and ask Christopher to choose.
