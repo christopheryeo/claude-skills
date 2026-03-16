@@ -102,6 +102,27 @@ Read `Knowledge/knowledge_fabric.md` to load the full structure. The fabric cont
 | **Admin/HR** | Vivien (PA) | HR records, admin docs, legal templates, ACRA/BizFile, expense claims |
 | **CEO Ops** | Christopher (root) | Daily plans, journals, learning materials |
 
+**Operational Knowledge (member-level `Knowledge/` sub-folders):**
+
+Each AI Workforce member maintains domain-specific operational files in their own `Knowledge/` folder. These are the most precise filing targets — always check whether new knowledge fits an existing operational file before defaulting to the broader domain folder.
+
+| Member | File / Folder | Content type |
+|---|---|---|
+| **Eddie (CFO)** | `Eddie (CFO)/Knowledge/Shareholder_Contacts.md` | Eddie's working copy of shareholder contacts (must sync with root copy) |
+| **Eddie (CFO)** | `Eddie (CFO)/Knowledge/Creditor_Interactions_Tracker.md` | Creditor communications, payment arrangements, outstanding obligations |
+| **Eddie (CFO)** | `Eddie (CFO)/Knowledge/Legal & Loans/` | Loan agreements and legal settlement documents |
+| **Eddie (CFO)** | `Eddie (CFO)/Knowledge/Payroll/` | Monthly payroll records — pay-run screenshots and salary reports |
+| **Eddie (CFO)** | `Eddie (CFO)/Knowledge/Reference/` | CFO research and compliance material (skills research, compliance tracker) |
+| **Mary (Marketing)** | `Mary (Marketing)/Knowledge/Carbon Amber Brand Guidelines.md` | Carbon Amber brand identity — colours, typography, tone, logo usage |
+| **Mary (Marketing)** | `Mary (Marketing)/Knowledge/Marketing Materials Index.md` | Master index of all marketing collateral with locations and versions |
+| **Mary (Marketing)** | `Mary (Marketing)/Knowledge/Lead Generation Log.md` | Inbound/outbound lead log with source, status, and follow-up actions |
+| **Mary (Marketing)** | `Mary (Marketing)/Knowledge/Sentient Ecosystem.csv` | Partner and product ecosystem map |
+| **Cedric (Projects)** | `Cedric (Projects)/Knowledge/` | Stakeholder monitoring reports — engagement, sentiment, actions |
+| **Alex (Dev)** | `Alex (Dev)/Knowledge/techstack.md` | Technology stack reference — languages, frameworks, infrastructure |
+| **Alex (Dev)** | `Alex (Dev)/Knowledge/Skills_Comparison.md` | Claude Skills comparison matrix — capabilities and benchmarks |
+| **Vivien (PA)** | `Vivien (PA)/Knowledge/` | (Empty — reserved for admin procedures, HR policies, legal references) |
+| **Donny (Sales)** | `Donny (Sales)/Knowledge/` | (Empty — reserved for pipeline playbooks, pricing, tender guidelines) |
+
 **Long Term Memory categories:**
 1. Christopher Yeo — personal & professional → `chris-profile.md`
 2. Sentient.io — company context → `company-profile.md`
