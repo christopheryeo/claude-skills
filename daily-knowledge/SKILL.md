@@ -1,14 +1,14 @@
 ---
 name: daily-knowledge
 description: >
-  Personal knowledge management skill for Christopher Yeo with three sub-commands. FIND: search Christopher's Personal - Daily Reading folder in Google Drive first, fetch full document content, then fall back to web search only if nothing is found — ensuring his curated knowledge is always the first source consulted. CLASSIFY: given a piece of new knowledge, read the Knowledge Fabric and determine where in the AI Workforce structure it belongs — which section, which file, and which team member owns that domain. FILE: write classified knowledge to its target destination after Christopher confirms. CLASSIFY must always be run before FILE. Use this skill whenever Christopher asks to find, search, look up, or get a briefing on any topic; whenever he provides new knowledge and wants it stored; whenever he asks "where does this go?", "file this", "add this to the knowledge base", "classify this", or any knowledge retrieval, classification, or filing request.
+  Personal knowledge management skill with four sub-commands. FIND: search Daily Reading in Google Drive first, fetch full content, fall back to web search if nothing found. CLASSIFY: read the Knowledge Fabric and determine where new knowledge belongs — which layer, file, and owner. FILE: write classified knowledge to its destination after Christopher confirms. LEARN: extract significant learnings from the conversation, write to Learnings journal, and auto-classify each for potential filing. Use whenever Christopher asks to find, search, look up, or brief on any topic; provides new knowledge to store; says "where does this go?", "file this", "classify this", "what did we learn", "capture learnings", "log what we learned", or "learn".
 ---
 
 # Daily Knowledge Skill
 
 ## Purpose
 
-This skill manages the flow of knowledge into and out of Christopher's Knowledge Fabric — the structured system that underpins the entire Sentient AI Workforce. It has three operations: retrieving knowledge (FIND), routing knowledge to the right place (CLASSIFY), and writing knowledge to that place (FILE).
+This skill manages the flow of knowledge into and out of Christopher's Knowledge Fabric — the structured system that underpins the entire Sentient AI Workforce. It has four operations: retrieving knowledge (FIND), routing knowledge to the right place (CLASSIFY), writing knowledge to that place (FILE), and extracting learnings from conversation (LEARN).
 
 The Knowledge Fabric rests on **three essential knowledge layers:**
 
@@ -232,6 +232,73 @@ Report what was written, where, and confirm the fabric index was updated if appl
 
 ---
 
+## LEARN Sub-command
+
+**Trigger:** Christopher says "what did we learn", "capture learnings", "log what we learned", "learn", or asks to extract insights from the current conversation.
+
+LEARN is a compound operation — it extracts, classifies, and journals in a single flow. It reviews the preceding conversation, identifies significant learnings, classifies each one against the Knowledge Fabric, writes them to the Learnings journal (after checking for duplicates), and presents filing recommendations.
+
+### What Qualifies as a "Significant Learning"
+
+Not every piece of conversation is a learning. LEARN should extract only items that meet at least one of these criteria:
+
+- **Structural insight** — A gap, inconsistency, or improvement opportunity discovered in the Knowledge Fabric, folder structure, or AI Workforce setup
+- **Behavioural observation** — A pattern, quirk, or limitation discovered in a tool, skill, API, or system during use
+- **Process improvement** — A better way of doing something that emerged from the work (a new protocol, a shortcut, a validation technique)
+- **Domain knowledge** — A new fact, relationship, or context about the business, a stakeholder, a product, or a market that was surfaced during the conversation
+- **Decision or rationale** — A significant decision Christopher made during the session, along with the reasoning, that should be remembered
+
+Do **not** extract: routine task completions, trivial observations, status updates, or anything already captured in the plans/audit files.
+
+### Step 1 — Review the Conversation
+
+Scan the full conversation history from the current session. Identify all candidate learnings that meet the criteria above. Aim for quality over quantity — 2–5 learnings per session is typical. A session with no significant learnings is also valid; report "No significant learnings identified in this session" and stop.
+
+### Step 2 — Draft the Learnings
+
+For each learning, write a concise entry in this format:
+
+```markdown
+- **[Short descriptive title].** [One to three sentences explaining the learning — what was discovered, why it matters, and any implication for future work.]
+```
+
+Proceed directly — do not pause for Christopher's approval on drafted entries.
+
+### Step 3 — Auto-Classify Each Learning
+
+For each drafted learning, run the CLASSIFY logic (Step 1–3 of the CLASSIFY sub-command) to determine where it should also be filed in the Knowledge Fabric. This step reuses the full CLASSIFY infrastructure — read the fabric, analyse the input, return a classification.
+
+Present all classifications together in a summary table:
+
+```
+| # | Learning | Layer | Target file | Owner | Action |
+|---|----------|-------|-------------|-------|--------|
+| 1 | [title]  | [1/2/3] | [path]    | [name] | [append/create] |
+| 2 | [title]  | [1/2/3] | [path]    | [name] | [append/create] |
+```
+
+If a learning is purely observational and does not need to be filed anywhere beyond the journal (e.g., a validated finding with no action), mark it as `Journal only` in the Action column.
+
+### Step 4 — Write to the Learnings Journal
+
+1. **Locate the journal.** Look for `Journals/YYYY-MM Learnings.md` where `YYYY-MM` is the current month. If it does not exist, create it with the heading `# YYYY-MM Learnings`.
+2. **Find or create the date header.** Look for `## YYYY-MM-DD` matching today's date. If it exists, read all existing entries under that date. If not, insert a new date header in reverse-chronological position (newest first).
+3. **Check for duplicates.** Before writing each learning, compare it against all existing entries in the journal (not just today's date — check the entire file). A learning is a duplicate if an existing entry covers the same core insight, even if the wording differs. Skip any learning that is a duplicate and note it in the output (e.g., "Skipped — duplicate of entry on YYYY-MM-DD").
+4. **Write non-duplicate learnings** as bullet points beneath the date header, using the format from Step 2.
+
+### Step 5 — Await Filing Instructions
+
+LEARN does **not** auto-file. After presenting the classifications, wait for Christopher to decide:
+
+- **"File all"** — Run FILE for every classified learning
+- **"File 1 and 3"** — Run FILE for specific items only
+- **"Just the journal is fine"** — Stop; the journal entries are sufficient
+- **"File X as a task instead"** — Add the item to today's daily plan via the daily-plans skill (NEW operation) rather than filing it as knowledge
+
+LEARN never writes to the Knowledge Fabric without explicit confirmation.
+
+---
+
 ## Key Implementation Notes
 
 1. **Always search Drive first in FIND** — never go straight to web search, even if the topic seems obscure
@@ -241,3 +308,6 @@ Report what was written, where, and confirm the fabric index was updated if appl
 5. **Confirm before writing** — FILE never executes without Christopher's explicit go-ahead
 6. **Apply transcription corrections** — per Christopher's preferences: "Jack" → "Jeg", "VCOM" → "WeCom", "DSDA" → "DSTA"
 7. **Update the fabric when structure changes** — any new file or section added via FILE must be reflected in `knowledge_fabric.md`
+8. **LEARN extracts, not summarises** — learnings should be specific insights, not a summary of the conversation
+9. **LEARN classifies first, journals second** — classification happens before journalling so that duplicates can be checked and skipped before writing; the journal is still the guaranteed output, but only for non-duplicate learnings
+10. **LEARN can trigger FILE or NEW (daily-plans)** — Christopher may choose to file a learning into the Knowledge Fabric or convert it into a task; support both paths
