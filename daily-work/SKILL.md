@@ -1,19 +1,16 @@
 ---
 name: daily-work
 description: >
-  Manages the full arc of a workday — from morning setup to end-of-day recap. Three sub-commands:
-  START (morning enablement replacing set-up-workday: email triage, calendar audit, Drive activity,
-  news snapshot, workspace prep, and executive brief), RECAP (end-of-day cross-reference of Google
-  Calendar, Gmail, Google Drive, and AI workforce Plans task logs to build a comprehensive activity
-  report stored in the work-day folder), and MINUTES (given a meeting title, locate the meeting in
-  Calendar, find the meeting minutes file in the work-day Drive folder, and if unavailable search
-  Gmail for the meeting notes transcript — then present a summary with a direct link). Use whenever
-  the user says "set up my workday", "start my day", "kick off today", "morning brief", "daily
-  recap", "end of day", "wrap up the day", "what did I do today", "what happened today", "day
-  summary", "find the minutes", "meeting minutes for [title]", "where are the minutes", "get me
-  the notes from [meeting]", "meeting transcript", or any reference to reviewing or summarising
-  workday activity. Also triggers on "work day" when the intent is about tracking activity rather
-  than just creating Drive folders.
+  Full workday lifecycle with three sub-commands: START (morning enablement — email triage,
+  calendar audit, Drive activity, news snapshot, workspace prep, executive brief; replaces
+  set-up-workday), RECAP (end-of-day cross-reference of Calendar, Gmail, Drive, and all AI
+  workforce Plans task logs into a comprehensive activity report in the work-day folder), and
+  MINUTES (given a meeting title, find it in Calendar, search the work-day Drive folder for
+  minutes, fall back to Gmail for transcript, then return a direct link). Use for
+  "set up my workday", "start my day", "kick off today", "morning brief", "daily recap",
+  "end of day", "wrap up the day", "what did I do today", "what happened today", "find the
+  minutes", "meeting minutes for [title]", "where are the minutes", "get me the notes from
+  [meeting]", "meeting transcript", or any workday activity review.
 ---
 
 # Daily Work
@@ -286,7 +283,7 @@ This gives you a consolidated view of what the entire AI workforce accomplished 
 
 ## Sub-Command: MINUTES
 
-**Purpose:** Given a meeting title (or partial title), locate the meeting in Google Calendar, find the corresponding meeting minutes file in the work-day Drive folder, and if no minutes file is available, search Gmail for the meeting notes transcript. Present a summary of the content with a direct link.
+**Purpose:** Given a meeting title (or partial title), locate the meeting in Google Calendar, find the corresponding meeting minutes file in the work-day Drive folder, and if no minutes file is available, search Gmail for the meeting notes transcript. Return a direct link to what was found — no summary needed.
 
 ### Steps
 
@@ -310,7 +307,7 @@ This gives you a consolidated view of what the entire AI workforce accomplished 
      - `MOM - [Meeting Title]` (Minutes of Meeting)
      - Files containing the meeting title as a substring
    - Matching is case-insensitive and tolerant of minor variations (e.g., "Weekly Sync" matches "weekly-sync-minutes.docx").
-   - **If a minutes file is found:** Read its content (via Drive or by fetching the Google Doc), generate a summary, and present it with a direct link. Go to step 5.
+   - **If a minutes file is found:** Return a direct link to the file. Go to step 5.
    - **If no minutes file is found:** Proceed to step 4.
 
 4. **Fall back to Gmail for meeting transcript or notes.**
@@ -321,53 +318,21 @@ This gives you a consolidated view of what the entire AI workforce accomplished 
      - Emails with "minutes", "notes", "transcript", "summary", or "MOM" in the subject or body
      - Emails with attachments (which may contain the minutes as an attached document)
      - Automated meeting transcript emails (from Google Meet, Otter.ai, Fireflies.ai, etc.)
-   - If found: read the most relevant email/thread, generate a summary, and present it with a Gmail link.
+   - If found: return a direct link to the most relevant email. Do not read the content or generate a summary.
    - If nothing found in email either: report that no minutes or transcript could be located.
 
 5. **Present the result.**
 
    **When minutes are found (Drive):**
    ```markdown
-   # 📝 MEETING MINUTES — [Meeting Title]
-
-   **Meeting:** [Full title] | **Date:** DD MMM YYYY, HH:MM–HH:MM SGT
-   **Attendees:** [Names from calendar event]
-   **Source:** Google Drive
-
-   ## Summary
-   [Concise summary of the minutes content — key discussion points, decisions, and action items. Aim for 100–200 words.]
-
-   ## Key Decisions
-   - [Decision 1]
-   - [Decision 2]
-
-   ## Action Items
-   - [Action item with owner and deadline if stated]
-
-   **Full minutes:** [📄 Open in Drive](drive_link)
-   **Calendar event:** [📅 View](calendar_link)
+   📄 **Meeting Minutes:** [Meeting Title] — DD MMM YYYY
+   [📄 Open minutes in Drive](drive_link) | [📅 View calendar event](calendar_link)
    ```
 
    **When transcript is found (Gmail):**
    ```markdown
-   # 📝 MEETING NOTES — [Meeting Title]
-
-   **Meeting:** [Full title] | **Date:** DD MMM YYYY, HH:MM–HH:MM SGT
-   **Attendees:** [Names from calendar event]
-   **Source:** Gmail (transcript/notes email)
-
-   ## Summary
-   [Concise summary of the transcript or notes — key discussion points, decisions, and action items. Aim for 100–200 words.]
-
-   ## Key Decisions
-   - [Decision 1]
-   - [Decision 2]
-
-   ## Action Items
-   - [Action item with owner and deadline if stated]
-
-   **Email:** [📧 Open in Gmail](gmail_link)
-   **Calendar event:** [📅 View](calendar_link)
+   📧 **Meeting Transcript:** [Meeting Title] — DD MMM YYYY
+   [📧 Open transcript in Gmail](gmail_link) | [📅 View calendar event](calendar_link)
    ```
 
    **When nothing is found:**
@@ -405,7 +370,7 @@ If the initial search doesn't find results, the skill progressively broadens:
 - Keep summaries neutral and derived from actual data.
 - Cache folder IDs, message IDs, and event IDs within the session to prevent repeated lookups.
 - All source links must be real — Gmail links from message IDs, Calendar links from event data, Drive links from file metadata.
-- MINUTES never modifies files — it is read-only. It finds and summarises, nothing else.
+- MINUTES never modifies files — it is read-only. It finds and returns a direct link, nothing else.
 
 ### Quality Checklist (before finalizing any output)
 
