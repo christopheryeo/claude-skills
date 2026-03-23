@@ -1,29 +1,36 @@
-# OS files
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS/System
 .DS_Store
 ._*
 Thumbs.db
+
+# Project Dependencies
+node_modules/
+
+# Environment/Logs
+.env
+*.log
 
 # Dropbox
 .dropbox
 .dropbox.attr
 .dropbox.cache
-
-# Node
-node_modules/
-
-# Editor/IDE files
-*.swp
-*.swo
-*~
-.vscode/
-.idea/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-venv/
-
-# Environment
-.env
