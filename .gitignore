@@ -1,0 +1,29 @@
+# OS files
+.DS_Store
+._*
+Thumbs.db
+
+# Dropbox
+.dropbox
+.dropbox.attr
+.dropbox.cache
+
+# Node
+node_modules/
+
+# Editor/IDE files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Environment
+.env
