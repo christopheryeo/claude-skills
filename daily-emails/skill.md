@@ -125,6 +125,8 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Default:** Last 48 hours. Accepts custom timeframes.
 
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. Do NOT use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools).
+
 ### Steps
 
 1. Calculate timeframe → Gmail query format
@@ -262,6 +264,8 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 ## Sub-Command: DRAFT
 
 **Purpose:** Compose a reply-all email and save to Gmail drafts for user review. Nothing is sent.
+
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations — including searching, reading threads, and creating drafts. Do NOT use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools).
 
 ### Steps
 
