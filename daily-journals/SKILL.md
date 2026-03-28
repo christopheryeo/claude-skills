@@ -1,6 +1,7 @@
 ---
 name: daily-journals
-description: Manages markdown journal files in a Journals/ folder — creating new journal files, adding date-stamped entries, and deleting entries. A journal is a markdown file named with reverse-month and purpose (e.g., "2026-03 Activities.md") containing chronological entries grouped under reverse-date headers. Use whenever the user says "create a journal", "new journal", "journal entry", "add to journal", "delete journal entry", "remove entry", "show journals", or mentions logging thoughts, activities, notes, or reflections into a dated journal format.
+description: >
+  Manages markdown journal files in a Journals/ folder — creating new journal files, adding date-stamped entries, and deleting entries. A journal is a markdown file named with reverse-month and purpose (e.g., "2026-03 Activities.md") containing chronological entries grouped under reverse-date headers. Three operations: CREATE-JOURNAL, CREATE-ENTRY, DELETE-ENTRY. Use whenever the user says "create a journal", "new journal", "journal entry", "add to journal", "delete journal entry", "remove entry", "show journals", or mentions logging thoughts, activities, notes, or reflections into a dated journal format.
 ---
 
 # Daily Journals
@@ -60,7 +61,6 @@ All file operations use this resolved path.
 | "create a journal", "new journal", "start a journal for [purpose]" | **create-journal** |
 | "add journal entry", "journal entry", "log to journal", "add to [purpose] journal" | **create-entry** |
 | "delete journal entry", "remove entry from journal" | **delete-entry** |
-| "consolidate entries", "consolidate [folder]", "consolidate entries for [folder]" | **consolidate-entries** |
 
 If the intent is ambiguous, ask which operation is intended.
 
@@ -208,64 +208,6 @@ The skill does not maintain a trash or history log. If archival is important, th
 
 ---
 
-## Operation: CONSOLIDATE-ENTRIES
-
-**Purpose:** Scan all reverse-date files in a named sub-folder and consolidate their contents into journal files, grouped by month.
-
-### Steps
-
-1. **Determine the target sub-folder.** The user provides a folder name (e.g., "plans", "scratchpad"). Resolve it relative to the mounted root. If the folder does not exist, inform the user and stop — do not proceed.
-
-2. **List and sort all reverse-date files.** Scan the sub-folder for files whose names begin with a `YYYY-MM-DD` prefix (e.g., `2026-03-15-plans.md`). Ignore any files that do not match this pattern. Sort all matching files from oldest to newest by their date prefix.
-
-3. **Group files by month.** Partition the sorted file list into month buckets (`YYYY-MM`). Each bucket will map to its own journal file (e.g., files dated `2026-03-xx` → `Journals/2026-03 <FolderName>.md`).
-
-4. **Derive the journal purpose label.** Use a title-cased version of the sub-folder name as the purpose (e.g., `plans` → `Plans`, `scratchpad` → `Scratchpad`).
-
-5. **For each month bucket (oldest month first):**
-
-   a. **Locate or create the journal file.** Check `Journals/` for a file named `YYYY-MM <Purpose>.md`. If it does not exist, create it using the CREATE-JOURNAL logic (file with just the `# YYYY-MM <Purpose>` title heading). Do not ask for confirmation — purpose and month are already known.
-
-   b. **For each file in the bucket (oldest date first):**
-      - Extract the date from the filename prefix (`YYYY-MM-DD`).
-      - Read the journal file and check whether a `## YYYY-MM-DD` header for that date already exists.
-      - **If the header already exists:** Skip this file silently — it has already been consolidated.
-      - **If the header does not exist:** Read the raw contents of the source file in full and add them as a new entry under a `## YYYY-MM-DD` header, using the CREATE-ENTRY insertion logic to maintain reverse-chronological order.
-
-6. **Report the outcome.** After processing all files, provide a concise summary to the user:
-   - How many files were processed
-   - How many entries were written vs. skipped (already existed)
-   - Which journal files were created or updated (with filenames)
-
-### Raw Content Handling
-
-The full raw contents of each source file are written as-is into the journal entry — no summarisation, trimming, or reformatting. The content sits directly beneath the `## YYYY-MM-DD` date header exactly as it appears in the source file.
-
-### Cross-Month Behaviour
-
-Files spanning multiple months are each written into the journal file for their own month. There is no upper limit on how many months can be consolidated in a single run — all files found in the sub-folder are processed.
-
-### Duplicate Protection
-
-A file is skipped if and only if a `## YYYY-MM-DD` header with the exact same date already exists in the target journal. This check is date-based — it does not compare content — so if an entry was manually written for that date, the source file is still skipped to avoid duplication.
-
-### Examples
-
-**User says:** "Consolidate entries for plans"
-**Sub-folder:** `Plans/` containing `2026-02-28-plans.md`, `2026-03-01-plans.md`, `2026-03-14-plans.md`
-**Result:**
-- Creates or opens `Journals/2026-02 Plans.md` → writes entry for `2026-02-28`
-- Creates or opens `Journals/2026-03 Plans.md` → writes entries for `2026-03-01` and `2026-03-14`
-- Reports: "3 files processed, 3 entries written across 2 journal files."
-
-**User says:** "Consolidate entries for scratchpad"
-**Sub-folder:** `Scratchpad/` containing `2026-03-10-scratchpad.md` (already in journal), `2026-03-12-scratchpad.md` (new)
-**Result:**
-- Opens `Journals/2026-03 Scratchpad.md` → skips `2026-03-10` (already exists), writes `2026-03-12`
-- Reports: "2 files processed, 1 entry written, 1 skipped (already consolidated)."
-
----
-
 ## Edge Cases
 
 - **No Journals/ folder exists:** Create it automatically before proceeding.
@@ -281,5 +223,3 @@ A file is skipped if and only if a `## YYYY-MM-DD` header with the exact same da
 - **No entries found for the specified date:** Inform the user — don't silently do nothing. List available dates in the journal so they can pick the right one.
 - **User asks to delete an entire journal file:** This skill only deletes entries within journals, not journal files themselves. Clarify the distinction and suggest the user delete the file manually if that's the intent.
 - **Ambiguous entry match:** If the user describes an entry to delete but it matches multiple entries, list them numbered and ask which one(s) to remove.
-- **consolidate-entries — sub-folder has no reverse-date files:** Inform the user that no files matching the `YYYY-MM-DD` naming pattern were found in that folder — nothing to consolidate.
-- **consolidate-entries — sub-folder not found:** Inform the user the folder doesn't exist at the mounted root and stop. Do not create the folder.

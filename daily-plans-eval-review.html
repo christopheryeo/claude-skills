@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "daily-plans", "runs": [{"id": "create-day-plan-with_skill", "prompt": "Plan my day with these tasks: 1) Review Q2 sales pipeline report \u2014 this is urgent and blocking the board meeting (P1, ~15 mins), 2) Draft reply to BeeNext partnership email with proposed terms (P1, ~10 mins), 3) Update the project roadmap document with Q3 milestones (P2, ~20 mins). Today is 2026-03-26.", "eval_id": 1, "outputs": [], "grading": {"expectations": [{"text": "A file named 'Journals/2026-03 Plans.md' (or similar path) is created", "passed": true, "evidence": "File exists at /sessions/vigilant-serene-dijkstra/daily-plans-workspace/iteration-1/create-day-plan/with_skill/outputs/Journals/2026-03 Plans.md"}, {"text": "The plans journal contains a ## 2026-03-26 date header", "passed": true, "evidence": "Line 3 of Journals/2026-03 Plans.md shows: '## 2026-03-26'"}, {"text": "There are exactly 3 tasks in the plan", "passed": true, "evidence": "Three task entries present: 1.1 (Review Q2 sales pipeline report), 1.2 (Draft reply to BeeNext partnership email), 2.1 (Update project roadmap document)"}, {"text": "Tasks are grouped by priority: 2 tasks under P1 (\ud83d\udd34) and 1 task under P2 (\ud83d\udfe1)", "passed": true, "evidence": "Line 28 shows '##### \ud83d\udd34 Priority 1: Urgent & Blocking' containing tasks 1.1 and 1.2; Line 42 shows '##### \ud83d\udfe1 Priority 2: Important but not urgent' containing task 2.1"}, {"text": "Task numbering follows the X.Y convention (1.1, 1.2 for P1; 2.1 for P2)", "passed": true, "evidence": "Line 30 shows '###### 1.1 \ud83c\udd95', Line 35 shows '###### 1.2 \ud83c\udd95', Line 44 shows '###### 2.1 \ud83c\udd95'"}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "Task 1.1 (line 30), 1.2 (line 35), and 2.1 (line 44) all display the \ud83c\udd95 (New) status icon"}, {"text": "Each task has Action, Effort fields", "passed": true, "evidence": "All three tasks include both fields: Task 1.1 has Action (lines 31-32) and Effort (line 33); Task 1.2 has Action (line 36) and Effort (line 38); Task 2.1 has Action (line 45) and Effort (line 47)"}, {"text": "An Estimated Total Effort summary table is present with correct counts", "passed": true, "evidence": "Lines 51-58 show the summary table with correct counts: P1 = 2 items (~25 mins), P2 = 1 item (~20 mins), Total = 3 items (~45 mins). Math checks out: 15+10=25 for P1, total 25+20=45"}, {"text": "A Plans/2026-03-26 Audit.md shell file is created", "passed": true, "evidence": "File exists at /sessions/vigilant-serene-dijkstra/daily-plans-workspace/iteration-1/create-day-plan/with_skill/outputs/Plans/2026-03-26 Audit.md with header '# Daily Plan Audit \u2014 26 March 2026' and divider, ready for task completion records"}], "summary": {"passed": 9, "failed": 0, "total": 9, "pass_rate": 1.0}, "execution_metrics": null, "timing": {"total_tokens": 150164, "duration_ms": 35501, "total_duration_seconds": 35.5}, "claims": [{"claim": "The skill organized tasks into two priority groups with correct color coding", "type": "factual", "verified": true, "evidence": "Priority 1 (\ud83d\udd34) has 2 tasks, Priority 2 (\ud83d\udfe1) has 1 task. Color coding matches the expected convention."}, {"claim": "The effort estimates are accurate and sum correctly", "type": "factual", "verified": true, "evidence": "P1 tasks: 15+10 = 25 mins; P2 tasks: 20 mins; Total: 45 mins. All math is correct."}, {"claim": "The audit file is ready for task completion records", "type": "factual", "verified": true, "evidence": "Audit file contains only header and separator, providing a clean shell for logging task completions"}, {"claim": "The skill assigned delegation to workforce members", "type": "factual", "verified": true, "evidence": "Task 1.1 delegated to 'Donny (Sales)', Task 1.2 to 'N/A', Task 2.1 to 'Cedric (Projects)' \u2014 demonstrates intelligent delegation"}], "user_notes_summary": {"uncertainties": [], "needs_review": [], "workarounds": []}, "eval_feedback": {"suggestions": [{"reason": "No expectation checks whether task Actions accurately reflect the user's input prompt. While the plan structure is correct, the specific wording and accuracy of each action's description could be verified more rigorously."}, {"reason": "No expectation verifies that the date provided in the prompt (2026-03-26) was correctly incorporated. Consider adding an explicit check that the header date matches the user's input."}, {"reason": "The expectations do not verify the Status Legend table or 'Status of Previous Plans' section, which are structurally present but not explicitly asserted."}], "overall": "All expectations passed cleanly. The assertions are straightforward and well-targeted at the core deliverables. The output demonstrates proper file structure, task organization, priority grouping, numbering convention, and audit shell creation. Suggestions above reflect opportunities to deepen content verification, not deficiencies in the current eval design."}}}, {"id": "create-day-plan-without_skill", "prompt": "Plan my day with these tasks: 1) Review Q2 sales pipeline report \u2014 this is urgent and blocking the board meeting (P1, ~15 mins), 2) Draft reply to BeeNext partnership email with proposed terms (P1, ~10 mins), 3) Update the project roadmap document with Q3 milestones (P2, ~20 mins). Today is 2026-03-26.", "eval_id": 1, "outputs": [{"name": "2026-03-26-context.md", "type": "text", "content": "# Daily Plan Context & Notes \u2014 March 26, 2026\n\n## Overview\n\nThree high-value tasks scheduled for March 26, with heavy emphasis on urgent P1 items blocking critical business activities (board meeting, partnership negotiation).\n\n---\n\n## Task Context\n\n### 1.1 Review Q2 Sales Pipeline Report (P1, 15 mins)\n\n**Why it's urgent:**\n- Directly blocks board meeting \u2014 decision-makers need this data\n- Sales performance is typically a top board agenda item\n- Delays here cascade to executive communication delays\n\n**What you might need:**\n- Access to sales dashboard/CRM\n- Q2 sales data file\n- Any comparison benchmarks (prior quarters, targets)\n- Key metrics: deals closed, pipeline value, win rates, churn\n\n**Success looks like:**\n- You've read the report\n- You can articulate 3-5 key insights or risks\n- You're prepared to answer board questions on pipeline health\n- You've flagged any concerning trends\n\n**Suggested approach:**\n1. Open the Q2 report (locate file first if needed)\n2. Scan for headline numbers (total pipeline value, deal velocity, etc.)\n3. Note any red flags or significant changes vs. Q1\n4. Prepare a 2-3 sentence summary for board context\n\n---\n\n### 1.2 Draft Reply to BeeNext Partnership Email (P1, 10 mins)\n\n**Why it's urgent:**\n- Partnership opportunities require quick turnaround to maintain momentum\n- Delayed responses can signal low interest or organizational disfunction\n- Proposed terms need careful wording (legal/commercial implications)\n\n**What you might need:**\n- The original BeeNext partnership email (find in Gmail)\n- Your internal partnership criteria or playbook\n- Draft proposed terms (compensation, equity, timeline, exclusivity, etc.)\n- Legal review (flag if needed before sending)\n\n**Success looks like:**\n- Reply draft addresses all terms sections raised by BeeNext\n- Tone is professional, clear, and collaborative\n- Email is ready to send (or staged in drafts for review)\n- Key commercial points are locked down\n\n**Suggested approach:**\n1. Locate the original BeeNext email\n2. Identify all items they proposed\n3. Draft your counter/response in natural language\n4. Review for tone and clarity\n5. Save as draft if uncertain; send if confident\n\n---\n\n### 2.1 Update Project Roadmap with Q3 Milestones (P2, 20 mins)\n\n**Why it's important:**\n- Q3 planning is foundational for team alignment\n- Teams need clear visibility into what's coming\n- Delays in roadmap updates cascade to missed planning windows\n\n**What you might need:**\n- Access to the project roadmap document (Google Drive, etc.)\n- Q3 project priorities or strategic goals\n- Engineering/product capacity for Q3\n- Dependency map (what needs to ship before what)\n\n**Success looks like:**\n- Q3 milestones are documented with dates\n- Timeline is realistic and achievable\n- Team can see the sequence of deliverables\n- Roadmap is shareable with stakeholders\n\n**Suggested approach:**\n1. Open the project roadmap document\n2. Add a Q3 section (if not present)\n3. List planned milestones with target delivery dates\n4. Group by theme or team (if applicable)\n5. Ensure dates are consistent with capacity planning\n\n---\n\n## Resource Links\n\n| Resource | Location | Notes |\n|----------|----------|-------|\n| Q2 Sales Report | _(locate in Drive/Salesforce)_ | Check sales dashboard first |\n| BeeNext Email | _(search Gmail)_ | Subject line or \"BeeNext partnership\" |\n| Project Roadmap | _(locate in Drive/Notion)_ | Shared document with team |\n\n---\n\n## Blocked/Dependent Tasks\n\n- **Board Meeting:** Cannot proceed until Q2 report is reviewed (1.1)\n- **BeeNext Deal:** Awaiting your reply (1.2) \u2014 follow up expected\n- **Team Planning:** Q3 roadmap (2.1) informs sprint planning next week\n\n---\n\n## Notes\n\n**Time Estimate:** 45 minutes total (realistic for focused execution)\n\n**Recommended Execution Window:** Morning or early afternoon (before 3 PM) to allow time for follow-up if needed on partnership email.\n\n**Context Switch Risk:** Low (all three tasks are distinct; minimal context switching within the day)\n\n**Dependencies:** None \u2014 all three can be executed independently\n"}, {"name": "2026-03-26-daily-plan.md", "type": "text", "content": "---\ndate: 2026-03-26\ncreated: 2026-03-28\ntotal-tasks: 3\ntotal-effort: 45 minutes\n---\n\n# Daily Plan \u2014 March 26, 2026\n\n## Summary\n\n| Priority | Count | Total Effort | Status |\n|----------|-------|--------------|--------|\n| P1 (Urgent) | 2 | 25 mins | \ud83c\udd95 Not Started |\n| P2 (Important) | 1 | 20 mins | \ud83c\udd95 Not Started |\n| **Total** | **3** | **45 mins** | \u2014 |\n\n---\n\n## Priority 1: Urgent & Blocking\n\n### 1.1 \ud83c\udd95 Review Q2 Sales Pipeline Report\n- **Effort:** ~15 mins\n- **Context:** Urgent \u2014 blocking the board meeting\n- **Status:** Not started\n- **Notes:** This is a critical blocker for stakeholder decision-making. Must be completed before board meeting convenes.\n\n### 1.2 \ud83c\udd95 Draft Reply to BeeNext Partnership Email\n- **Effort:** ~10 mins\n- **Context:** Partnership negotiation with proposed terms\n- **Status:** Not started\n- **Notes:** High-priority response needed to maintain deal momentum and demonstrate responsiveness to partner.\n\n---\n\n## Priority 2: Important\n\n### 2.1 \ud83c\udd95 Update Project Roadmap with Q3 Milestones\n- **Effort:** ~20 mins\n- **Context:** Strategic planning for next quarter\n- **Status:** Not started\n- **Notes:** Ensures alignment across team on Q3 deliverables. Less time-critical than P1 items but important for overall planning.\n\n---\n\n## Execution Order\n\n1. **Start with 1.1** (Review Q2 Sales Pipeline) \u2014 unblock the board meeting\n2. **Follow with 1.2** (BeeNext Partnership Reply) \u2014 maintain external momentum\n3. **Close with 2.1** (Q3 Roadmap Update) \u2014 consolidate planning work\n\n**Estimated Total Duration:** 45 minutes\n**Recommended Time Window:** Morning focus block (avoid context-switching)\n"}, {"name": "2026-03-26-execution-log.md", "type": "text", "content": "# Execution Log \u2014 March 26, 2026\n\nThis file tracks real-time progress as you work through the daily plan.\n\n---\n\n## Task 1.1: Review Q2 Sales Pipeline Report\n\n**Start Time:** ________________\n**End Time:** ________________\n**Duration:** ________________\n\n**Log:**\n- [ ] Located Q2 sales report\n- [ ] Reviewed key metrics and trends\n- [ ] Identified risks or highlights\n- [ ] Noted insights for board discussion\n\n**Key Findings:**\n_________________________________________________________________\n\n_________________________________________________________________\n\n**Status:** \ud83c\udd95 Not Started | \ud83d\udd04 In Progress | \u2705 Completed\n\n**Notes:**\n_________________________________________________________________\n\n---\n\n## Task 1.2: Draft Reply to BeeNext Partnership Email\n\n**Start Time:** ________________\n**End Time:** ________________\n**Duration:** ________________\n\n**Log:**\n- [ ] Located original BeeNext email\n- [ ] Identified all proposed terms\n- [ ] Drafted reply with counter-terms\n- [ ] Reviewed for tone and completeness\n\n**Key Points Addressed:**\n_________________________________________________________________\n\n_________________________________________________________________\n\n**Status:** \ud83c\udd95 Not Started | \ud83d\udd04 In Progress | \u2705 Completed\n\n**Notes:**\n_________________________________________________________________\n\n---\n\n## Task 2.1: Update Project Roadmap with Q3 Milestones\n\n**Start Time:** ________________\n**End Time:** ________________\n**Duration:** ________________\n\n**Log:**\n- [ ] Opened project roadmap document\n- [ ] Added Q3 section with milestones\n- [ ] Set realistic delivery dates\n- [ ] Verified alignment with team capacity\n\n**Q3 Milestones Added:**\n_________________________________________________________________\n\n_________________________________________________________________\n\n**Status:** \ud83c\udd95 Not Started | \ud83d\udd04 In Progress | \u2705 Completed\n\n**Notes:**\n_________________________________________________________________\n\n---\n\n## Daily Summary\n\n**Total Time Invested:** ________________\n\n**Tasks Completed:** ___ of 3\n\n**Blockers Encountered:**\n_________________________________________________________________\n\n**Decisions Made:**\n_________________________________________________________________\n\n**Follow-Up Actions Required:**\n_________________________________________________________________\n\n**Next Day Carryover (if any):**\n_________________________________________________________________\n"}, {"name": "2026-03-26-task-checklist.md", "type": "text", "content": "# Task Execution Checklist \u2014 March 26, 2026\n\n## Quick Reference\n\n| # | Task | Effort | Priority | Status |\n|---|------|--------|----------|--------|\n| 1.1 | Review Q2 Sales Pipeline Report | 15m | P1 | \u2b1c Not Started |\n| 1.2 | Draft Reply to BeeNext Partnership Email | 10m | P1 | \u2b1c Not Started |\n| 2.1 | Update Project Roadmap with Q3 Milestones | 20m | P2 | \u2b1c Not Started |\n\n---\n\n## Task Details\n\n### Task 1.1: Review Q2 Sales Pipeline Report\n- **Priority:** P1 (Urgent \u2014 Board Meeting Blocker)\n- **Duration:** ~15 minutes\n- **Acceptance Criteria:**\n  - [ ] Report has been reviewed end-to-end\n  - [ ] Key insights and risks identified\n  - [ ] Ready to present findings to board\n  - [ ] Any critical gaps flagged\n\n### Task 1.2: Draft Reply to BeeNext Partnership Email\n- **Priority:** P1 (Urgent \u2014 Deal Momentum)\n- **Duration:** ~10 minutes\n- **Acceptance Criteria:**\n  - [ ] Reply drafted with proposed terms\n  - [ ] Tone and messaging reviewed\n  - [ ] Ready for send (or staged in drafts)\n  - [ ] Key commercial points addressed\n\n### Task 2.1: Update Project Roadmap with Q3 Milestones\n- **Priority:** P2 (Important \u2014 Strategic Planning)\n- **Duration:** ~20 minutes\n- **Acceptance Criteria:**\n  - [ ] Q3 milestones documented\n  - [ ] Timeline and deliverables clarified\n  - [ ] Roadmap document updated\n  - [ ] Team alignment ready for communication\n\n---\n\n## Progress Tracking\n\n**Start Time:** _____________\n**End Time:** _____________\n**Total Time Spent:** _____________\n\n### Completed Tasks Log\n(Mark each task as complete below)\n\n- [ ] 1.1 \u2705 Review Q2 Sales Pipeline Report\n- [ ] 1.2 \u2705 Draft Reply to BeeNext Partnership Email\n- [ ] 2.1 \u2705 Update Project Roadmap with Q3 Milestones\n\n**Notes/Blockers:** _____________________________________________________________\n\n_____________________________________________________________________________\n"}, {"name": "README.md", "type": "text", "content": "# Daily Plan Package \u2014 March 26, 2026\n\n## Contents\n\nThis package contains a complete daily planning system for March 26, 2026. All files are self-contained markdown documents designed to be used together.\n\n### Files Included\n\n1. **2026-03-26-daily-plan.md** \u2014 Main planning document with priority matrix, task list, and execution sequence\n2. **2026-03-26-task-checklist.md** \u2014 Quick-reference checklist with acceptance criteria for each task\n3. **2026-03-26-context.md** \u2014 Detailed context, resource links, and success criteria for each task\n4. **2026-03-26-execution-log.md** \u2014 Real-time progress tracking as you work through the day\n5. **README.md** \u2014 This file\n\n---\n\n## Quick Start\n\n### Step 1: Review the Daily Plan\nOpen **2026-03-26-daily-plan.md** to see the full picture:\n- 3 tasks organized by priority (2 P1, 1 P2)\n- Total effort: 45 minutes\n- Recommended execution order: 1.1 \u2192 1.2 \u2192 2.1\n\n### Step 2: Understand Task Details\nOpen **2026-03-26-context.md** for:\n- Why each task is important\n- What resources you'll need\n- Success criteria for each task\n- Suggested approach/workflow\n\n### Step 3: Execute & Track\nAs you complete each task:\n- Check items off in **2026-03-26-task-checklist.md**\n- Log real-time progress in **2026-03-26-execution-log.md**\n- Note any blockers or decisions\n\n### Step 4: Close Out the Day\nAt day's end, update the execution log with:\n- Total time invested\n- Tasks completed\n- Blockers and follow-ups\n- Carryover items (if any)\n\n---\n\n## File Breakdown\n\n### Primary Planning Document\n**2026-03-26-daily-plan.md**\n- High-level overview\n- Priority grouping (P1, P2)\n- Task summaries with effort estimates\n- Recommended execution sequence\n\n### Task Checklist\n**2026-03-26-task-checklist.md**\n- All 3 tasks in table format\n- Acceptance criteria for each\n- Real-time completion tracking\n- Progress notes and blocker log\n\n### Detailed Context\n**2026-03-26-context.md**\n- Full context for each task\n- What you might need before starting\n- Success criteria (detailed)\n- Suggested workflow/approach\n- Resource links\n\n### Execution Log\n**2026-03-26-execution-log.md**\n- Per-task timing and progress\n- Key findings/decisions log\n- Daily summary section\n- Follow-up action tracker\n\n---\n\n## Key Information\n\n| Item | Value |\n|------|-------|\n| **Date** | March 26, 2026 |\n| **Total Tasks** | 3 |\n| **P1 Tasks** | 2 (urgent/blocking) |\n| **P2 Tasks** | 1 (important) |\n| **Estimated Total Effort** | 45 minutes |\n| **Execution Window** | Morning focus block recommended |\n\n---\n\n## Priority Breakdown\n\n### P1 \u2014 Urgent & Blocking\n- **1.1:** Review Q2 Sales Pipeline Report (15 mins) \u2014 *Blocks board meeting*\n- **1.2:** Draft Reply to BeeNext Partnership Email (10 mins) \u2014 *Maintains deal momentum*\n\n### P2 \u2014 Important\n- **2.1:** Update Project Roadmap with Q3 Milestones (20 mins) \u2014 *Strategic planning*\n\n---\n\n## Usage Tips\n\n1. **Print or View:** Open these files side-by-side for easy reference\n2. **Edit as Needed:** Add notes, update times, or modify task order as situation demands\n3. **Archive:** Keep these files for end-of-day review and future reference\n4. **Carryover:** Any incomplete tasks can be carried forward to the next day's plan\n\n---\n\n## Notes\n\nAll files use standard markdown formatting and can be opened in any text editor, markdown viewer, or Google Docs.\n\nNo special tools or integrations required \u2014 this is a pure markdown planning system.\n"}], "grading": {"expectations": [{"text": "A file named 'Journals/2026-03 Plans.md' (or similar path) is created", "passed": false, "evidence": "No Journals/ directory exists in the output. Files created were: 2026-03-26-daily-plan.md, 2026-03-26-task-checklist.md, 2026-03-26-context.md, 2026-03-26-execution-log.md, and README.md. These files are stored in the outputs directory, not in a Journals/ subdirectory with a Plans filename convention."}, {"text": "The plans journal contains a ## 2026-03-26 date header", "passed": false, "evidence": "The daily plan file uses # Daily Plan \u2014 March 26, 2026 as its top-level header (single #), not a ## 2026-03-26 date-formatted header. While the date 2026-03-26 is referenced, it doesn't follow the expected journal format with a dedicated ## YYYY-MM-DD date header."}, {"text": "There are exactly 3 tasks in the plan", "passed": true, "evidence": "The daily plan file contains exactly 3 tasks as shown in the summary table and detailed sections: 1.1 Review Q2 Sales Pipeline Report, 1.2 Draft Reply to BeeNext Partnership Email, and 2.1 Update Project Roadmap with Q3 Milestones. Confirmed in transcript: 'Created a complete structured daily planning system for March 26, 2026, organizing three high-value tasks.'"}, {"text": "Tasks are grouped by priority: 2 tasks under P1 (\ud83d\udd34) and 1 task under P2 (\ud83d\udfe1)", "passed": true, "evidence": "The daily plan correctly groups tasks by priority. Section ## Priority 1: Urgent & Blocking contains tasks 1.1 and 1.2 (2 tasks). Section ## Priority 2: Important contains task 2.1 (1 task). The summary table shows: P1 (Urgent) = 2 tasks, P2 (Important) = 1 task."}, {"text": "Task numbering follows the X.Y convention (1.1, 1.2 for P1; 2.1 for P2)", "passed": true, "evidence": "All tasks follow the X.Y numbering convention: P1 tasks are numbered 1.1 and 1.2; P2 task is numbered 2.1. This is consistent across the daily plan, task checklist, and context files."}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "In the daily plan file, all tasks display the \ud83c\udd95 icon: '### 1.1 \ud83c\udd95 Review Q2 Sales Pipeline Report', '### 1.2 \ud83c\udd95 Draft Reply to BeeNext Partnership Email', '### 2.1 \ud83c\udd95 Update Project Roadmap with Q3 Milestones'. The summary table also shows: 'P1 (Urgent) | 2 | 25 mins | \ud83c\udd95 Not Started' and 'P2 (Important) | 1 | 20 mins | \ud83c\udd95 Not Started'."}, {"text": "Each task has Action, Effort fields", "passed": true, "evidence": "Each task in the daily plan includes both Action and Effort information. For example, task 1.1 includes: '- **Effort:** ~15 mins' and context describing the action. The task checklist explicitly shows 'Task | Effort' columns with effort values (15m, 10m, 20m). However, the field naming is not explicitly labeled as 'Action' \u2014 the action is described in the context line (e.g., 'Review Q2 Sales Pipeline Report')."}, {"text": "An Estimated Total Effort summary table is present with correct counts", "passed": true, "evidence": "The daily plan contains a summary table showing: Priority | Count | Total Effort | Status. P1 (Urgent) has 2 tasks totaling 25 mins; P2 (Important) has 1 task totaling 20 mins; Total shows 3 tasks and 45 mins. This matches the input requirements (15 mins + 10 mins = 25 P1; 20 mins P2; 45 mins total)."}, {"text": "A Plans/2026-03-26 Audit.md shell file is created", "passed": false, "evidence": "No Plans/ directory or Audit.md file exists in the outputs. The executor created 5 markdown files in the outputs directory but none follow the Plans/ directory structure or Audit.md naming convention. The transcript describes creating multiple planning documents but no audit shell file."}], "summary": {"passed": 6, "failed": 3, "total": 9, "pass_rate": 0.67}, "execution_metrics": {"total_tokens": 142682, "duration_ms": 69609}, "timing": {"executor_duration_seconds": 69.6, "total_duration_seconds": 69.6}, "claims": [{"claim": "A complete structured daily planning system was created", "type": "quality", "verified": true, "evidence": "The output includes five comprehensive markdown files (daily plan, checklist, context, execution log, README) that form a multi-perspective planning system. Each file provides a different view of the same three tasks with appropriate levels of detail."}, {"claim": "Tasks are organized by priority, effort, and execution sequence", "type": "quality", "verified": true, "evidence": "The daily plan clearly separates tasks by priority (P1 vs P2), shows effort estimates (15m, 10m, 20m), and provides an explicit execution order (1.1 \u2192 1.2 \u2192 2.1). The execution order section states: 'Start with 1.1 (Review Q2 Sales Pipeline) \u2014 unblock the board meeting'."}, {"claim": "The planning system follows project planning best practices", "type": "quality", "verified": true, "evidence": "Transcript documents the approach: Priority Classification (P1 vs P2), Effort Estimation (~15-20 mins per item), Sequencing (dependencies), Context Richness (multiple views). These align with standard project planning methodology."}, {"claim": "Files are created in the output directory without using external skills", "type": "process", "verified": true, "evidence": "Transcript explicitly states: 'No Skill Files Used: Plan created from first principles using judgment and standard planning practices.' All files are self-contained markdown documents created directly in the outputs folder."}, {"claim": "The plan follows the specific journal/audit file structure expected by the skill-based system", "type": "quality", "verified": false, "evidence": "The baseline run does not create files in a Journals/ directory or a Plans/ directory with Audit.md files. Instead, it created a flat structure with date-prefixed filenames (2026-03-26-*). This suggests the baseline approach diverges significantly from the expected skill-based structure."}], "eval_feedback": {"suggestions": [{"reason": "Expectation 1 and 9 are very specific about directory structure (Journals/ and Plans/) and file naming conventions (Audit.md). These are implementation-detail expectations that will fail for any baseline that doesn't happen to use that exact structure. While the expectations correctly distinguish the baseline from a skill-based system, they may be testing implementation detail rather than functional outcome. Consider whether the critical distinction is 'a plan exists in some documented form' (functional) versus 'the plan exists in the specific directory structure the skill would use' (implementation)."}, {"reason": "Expectation 2 about the ## 2026-03-26 header is overly prescriptive about markdown formatting. The baseline created a well-structured document with the date in the title (# Daily Plan \u2014 March 26, 2026) and in YAML frontmatter, just not in the exact header format specified. This passes the functional intent but fails the literal specification. Consider whether format specificity is necessary for discrimination."}, {"reason": "Expectation 7 specifies 'Action, Effort fields' but the baseline provides these semantically without using those exact field labels. The content is present and clear ('Review Q2 Sales Pipeline Report' = action, '~15 mins' = effort), but field naming differs. This is a pass in function but would fail on literal field naming. The assertion could be more robust by specifying the information should be present rather than the exact label."}, {"reason": "No assertion currently checks whether the plan is actually usable or actionable. The baseline produced rich context files with suggested approaches, acceptance criteria, and dependency mapping \u2014 which are qualitative improvements beyond the minimal specification. Consider adding an assertion about actionability or completeness of task guidance, since this is a meaningful outcome that went unmeasured."}], "overall": "The evals correctly identify structural differences between baseline and skill-based approaches (directory layout, file naming, audit trails). However, some assertions are overly specific about implementation details (exact header format, exact field labels) rather than functional outcomes. The baseline actually produces a functional, high-quality planning system that exceeds the minimum requirements, but fails on structural expectations. Consider calibrating expectations to separate 'structural/architectural compliance' assertions from 'functional quality' assertions so results are more interpretable."}}}, {"id": "create-add-status-with_skill", "prompt": "First, create a plan for today (2026-03-27) with these 3 tasks: 1) Prepare board meeting slides (P1, ~30 mins), 2) Review team OKRs for Q2 alignment (P2, ~15 mins), 3) Send newsletter draft to Mary for marketing review (P3, ~10 mins). After the plan is created, add a new task: Follow up with Cap Vista on funding terms (P1, ~10 mins). Then show me the plan status.", "eval_id": 2, "outputs": [], "grading": {"expectations": [{"text": "A plans journal file is created with a ## 2026-03-27 date header", "passed": true, "evidence": "File `/outputs/Journals/2026-03 Plans.md` exists and contains `## 2026-03-27` as the date header on line 3."}, {"text": "The final plan contains exactly 4 tasks (3 original + 1 added)", "passed": true, "evidence": "Transcript Step 3 (lines 62-67) displays all 4 tasks in the status summary. Journals file contains tasks 1.1, 1.2 (Cap Vista), 2.1, and 3.1."}, {"text": "The added Cap Vista task appears under the P1 (\ud83d\udd34) priority group", "passed": true, "evidence": "Journals file lines 35-38 show task 1.2 'Follow up with Cap Vista on funding terms' positioned within the `##### \ud83d\udd34 Priority 1` section (line 28)."}, {"text": "The Cap Vista task is numbered sequentially after existing P1 tasks (e.g., 1.3)", "passed": false, "evidence": "The Cap Vista task is numbered as 1.2 (Journals line 35), not 1.3 as specified in the expectation. Transcript Step 2 (line 41) confirms 'Determined next task number in P1 group: 1.2'. While sequentially numbered within P1, it does not match the example number (1.3) given in the expectation."}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "All four task headers in Journals file contain \ud83c\udd95 icons: line 30 (task 1.1), line 35 (task 1.2), line 42 (task 2.1), line 49 (task 3.1)."}, {"text": "The Estimated Total Effort table reflects 4 tasks with updated totals (~65 mins total)", "passed": true, "evidence": "Journals file Estimated Total Effort table (lines 56-63) shows 4 total items with ~65 mins total. Breakdown: P1 (2 items, ~40 mins), P2 (1 item, ~15 mins), P3 (1 item, ~10 mins)."}, {"text": "A status summary table is displayed showing all 4 tasks grouped by priority", "passed": true, "evidence": "Transcript Step 3 (lines 62-67) shows a status summary table with all 4 tasks grouped by priority: 2 P1 tasks (1.1, 1.2), 1 P2 task (2.1), 1 P3 task (3.1), with columns for Task, Priority, Status, and Effort."}, {"text": "A Plans/2026-03-27 Audit.md shell file exists", "passed": true, "evidence": "File `/outputs/Plans/2026-03-27 Audit.md` exists with shell content: header 'Daily Plan Audit \u2014 27 March 2026' and empty body ready for task logging (lines 1-3)."}], "summary": {"passed": 7, "failed": 1, "total": 8, "pass_rate": 0.875}, "execution_metrics": null, "timing": {"total_duration_seconds": 53.7, "total_tokens": 154011}, "claims": [{"claim": "The daily-plans skill correctly added a new task to an existing priority group with auto-numbering", "type": "process", "verified": true, "evidence": "Transcript Step 2 demonstrates the skill read the existing plan, located Priority 1, and auto-numbered the new task as 1.2. The Journals file confirms this was executed correctly."}, {"claim": "Task numbering is sequential within priority groups", "type": "factual", "verified": true, "evidence": "P1 tasks are numbered 1.1 and 1.2 (sequential). P2 has 2.1. P3 has 3.1. Each priority group maintains correct numbering order."}, {"claim": "Effort estimates sum correctly to the total", "type": "factual", "verified": true, "evidence": "Journals file shows P1: 30+10=40 mins, P2: 15 mins, P3: 10 mins. Total: 40+15+10=65 mins. All arithmetic is correct."}, {"claim": "The Cap Vista task was added as the second P1 task, not a new P1 group item", "type": "factual", "verified": true, "evidence": "Task numbered 1.2 appears in the same P1 section as 1.1, confirming it was inserted into the existing group rather than creating a new group."}], "user_notes_summary": {"uncertainties": [], "needs_review": [], "workarounds": []}, "eval_feedback": {"suggestions": [{"assertion": "The Cap Vista task is numbered sequentially after existing P1 tasks (e.g., 1.3)", "reason": "The expectation incorrectly specifies the task should be numbered '1.3' but the skill correctly implemented sequential numbering as '1.2' (since it was the second P1 task being added). The expectation's example number is mathematically incorrect given there was only one pre-existing P1 task. Consider clarifying that the task should be numbered as the next sequential P1 item (which is 1.2 when adding to a group with only 1.1), or remove the specific example number to avoid confusion."}, {"reason": "No assertion verifies that the plan correctly uses the proper Priority Group structure with emojis (\ud83d\udd34 for P1, \ud83d\udfe1 for P2, \ud83d\udfe2 for P3) or checks the visual formatting of the journal entry. While this passed visually, an assertion about emoji correctness or markdown structure would strengthen future evals."}, {"reason": "No assertion verifies the content of task descriptions or action items. The expectation checks structure but not that the Cap Vista task action description is sensible or accurate to the user's input. Adding content verification would catch cases where the task number is correct but the description is wrong or missing."}], "overall": "The evals mostly pass, but Expectation 4 contains a logical error in the example number. The skill appears to have executed correctly, but the expectation specification was flawed. Consider revising numbered examples to match the actual expected output from the operation rather than using a generic placeholder."}}}, {"id": "create-add-status-without_skill", "prompt": "First, create a plan for today (2026-03-27) with these 3 tasks: 1) Prepare board meeting slides (P1, ~30 mins), 2) Review team OKRs for Q2 alignment (P2, ~15 mins), 3) Send newsletter draft to Mary for marketing review (P3, ~10 mins). After the plan is created, add a new task: Follow up with Cap Vista on funding terms (P1, ~10 mins). Then show me the plan status.", "eval_id": 2, "outputs": [{"name": "2026-03-27-plans.md", "type": "text", "content": "# Daily Plan \u2014 2026-03-27\n\n## Priority 1: Critical\n\n| # | Task | Status | Effort |\n|---|------|--------|--------|\n| 1.1 | Prepare board meeting slides | \ud83c\udd95 New | 30m |\n| 1.2 | Follow up with Cap Vista on funding terms | \ud83c\udd95 New | 10m |\n\n## Priority 2: Important\n\n| # | Task | Status | Effort |\n|---|------|--------|--------|\n| 2.1 | Review team OKRs for Q2 alignment | \ud83c\udd95 New | 15m |\n\n## Priority 3: Opportunistic\n\n| # | Task | Status | Effort |\n|---|------|--------|--------|\n| 3.1 | Send newsletter draft to Mary for marketing review | \ud83c\udd95 New | 10m |\n\n---\n\n**Total Tasks:** 4\n**Total Estimated Time:** 65 minutes\n"}], "grading": {"expectations": [{"text": "A plans journal file is created with a ## 2026-03-27 date header", "passed": false, "evidence": "File 2026-03-27-plans.md exists, but the header is '# Daily Plan \u2014 2026-03-27' (h1), not '## 2026-03-27' (h2). The expectation specifically requires a '## 2026-03-27' date header, which is not present."}, {"text": "The final plan contains exactly 4 tasks (3 original + 1 added)", "passed": true, "evidence": "The 2026-03-27-plans.md file contains exactly 4 tasks: 1.1 Prepare board meeting slides, 1.2 Follow up with Cap Vista on funding terms, 2.1 Review team OKRs for Q2 alignment, and 3.1 Send newsletter draft to Mary for marketing review. Total Tasks footer confirms '4'."}, {"text": "The added Cap Vista task appears under the P1 (\ud83d\udd34) priority group", "passed": true, "evidence": "The Cap Vista task '1.2 Follow up with Cap Vista on funding terms' appears under the 'Priority 1: Critical' section in the plans file."}, {"text": "The Cap Vista task is numbered sequentially after existing P1 tasks (e.g., 1.3)", "passed": false, "evidence": "The Cap Vista task is numbered 1.2, not 1.3. The expectation states it should be numbered 'e.g., 1.3' (sequentially after existing P1 tasks), but since there was only one initial P1 task (1.1 Prepare board meeting slides), the second P1 task is correctly numbered 1.2. However, the expectation's example of '1.3' suggests there should be at least 2 existing P1 tasks before adding the Cap Vista task, which contradicts the prompt that only specifies 3 initial tasks (one per priority level). The actual numbering 1.2 is logically correct given the inputs, but does not match the expectation's stated example."}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "All four tasks in the plans file display '\ud83c\udd95 New' status in the Status column: 1.1, 1.2, 2.1, and 3.1."}, {"text": "The Estimated Total Effort table reflects 4 tasks with updated totals (~65 mins total)", "passed": true, "evidence": "The plans file footer contains 'Total Estimated Time: 65 minutes' with breakdown: P1 has 30m + 10m = 40m, P2 has 15m, P3 has 10m. Total: 40 + 15 + 10 = 65 minutes."}, {"text": "A status summary table is displayed showing all 4 tasks grouped by priority", "passed": true, "evidence": "The 2026-03-27-plans.md file displays three markdown tables grouped under priority headings (Priority 1: Critical, Priority 2: Important, Priority 3: Opportunistic), with all 4 tasks organized by priority: 2 under P1, 1 under P2, 1 under P3."}, {"text": "A Plans/2026-03-27 Audit.md shell file exists", "passed": false, "evidence": "No audit file was found in the outputs directory or the parent directory. The directory listing shows only '2026-03-27-plans.md', 'transcript.md', and 'timing.json'. No '2026-03-27 Audit.md' or similar audit file exists."}], "summary": {"passed": 5, "failed": 3, "total": 8, "pass_rate": 0.625}, "execution_metrics": {"total_tokens": 137317, "duration_seconds": 22.2}, "claims": [{"claim": "No skill tools were used; task management was handled through direct markdown file creation and editing", "type": "process", "verified": true, "evidence": "Transcript states 'No skill tools were used' and the transcript shows direct markdown manipulation without any skill tool invocations. This is the baseline ('without_skill') run as expected."}, {"claim": "Plans file follows standard daily planning format with reverse-date naming (YYYY-MM-DD)", "type": "factual", "verified": true, "evidence": "File is named '2026-03-27-plans.md' which follows the YYYY-MM-DD reverse-date naming convention."}, {"claim": "Automatically numbered as task 1.2 within the P1 priority group", "type": "factual", "verified": true, "evidence": "Cap Vista task is listed as '1.2' in the P1 section of the plans file."}, {"claim": "Total Estimated Time: 65 minutes", "type": "factual", "verified": true, "evidence": "The plans file footer explicitly states 'Total Estimated Time: 65 minutes' and arithmetic confirms: 30 + 10 + 15 + 10 = 65."}, {"claim": "All tasks remain in 'New' state and ready for execution", "type": "factual", "verified": true, "evidence": "All four tasks display '\ud83c\udd95 New' status in the Status column of their respective tables."}], "user_notes_summary": {"uncertainties": [], "needs_review": [], "workarounds": []}, "eval_feedback": {"suggestions": [{"reason": "Expectation 1 specifies '## 2026-03-27' (h2) but the file uses '# Daily Plan \u2014 2026-03-27' (h1). The expectation's phrasing suggests the date header must be h2, but this is very strict \u2014 a plans file with an h1 title and no h2 date header is arguably still valid. The assertion should clarify whether it requires '## 2026-03-27' specifically or merely requires the date to appear somewhere as a clear date identifier."}, {"reason": "Expectation 4 states the Cap Vista task should be 'numbered sequentially after existing P1 tasks (e.g., 1.3)' but the prompt only specifies 3 initial tasks (one per priority level, so only one initial P1 task). The example '1.3' appears to assume multiple existing P1 tasks. Given the prompt only provides one initial P1 task, numbering the added task as 1.2 is correct, making the expectation's example misleading. The assertion should either adjust the example or clarify that numbering should match the sequence of P1 tasks present, regardless of the starting count."}, {"reason": "Expectation 8 requires 'A Plans/2026-03-27 Audit.md shell file exists' but the prompt does not explicitly request audit file creation. The requirement appears to come from project standards (CLAUDE.md mentions audit files for tracking development progress), but neither the eval prompt nor the user prompt in the transcript requests an audit file. This expectation should be clarified: should audit files be auto-created as part of plans workflow, or only when executing/completing tasks? The standard may apply only to with-skill runs where tasks are executed."}], "overall": "Most assertions are well-formed and verified. Three failures are noteworthy: (1) the h2 date header requirement is overly strict without clarification, (2) the numbering example assumes initial conditions not present in the prompt, and (3) the audit file expectation may reflect a misalignment between project standards and the actual scope of the create-and-display workflow. Consider refining these three assertions for future eval runs."}}}, {"id": "create-delete-status-with_skill", "prompt": "Create a plan for today (2026-03-28) with: 1) Finalize investor update email to all LPs (P1, ~20 mins), 2) Debug the API authentication timeout issue reported by Alex (P1, ~25 mins), 3) Schedule team retrospective for next Friday (P3, ~5 mins). Then delete task 1.2 (the debug task). Then show me the updated plan status.", "eval_id": 3, "outputs": [], "grading": {"expectations": [{"text": "A plans journal file is created with a ## 2026-03-28 date header", "passed": true, "evidence": "File Journals/2026-03 Plans.md exists with date header ## 2026-03-28 on line 3"}, {"text": "The plan initially contains 3 tasks across P1 and P3", "passed": true, "evidence": "Transcript Step 1 confirms: Initial Plan Structure shows 2 P1 items (~45 mins total) and 1 P3 item (~5 mins), totaling 3 tasks and ~50 mins"}, {"text": "After deletion, the debug task (originally 1.2) is removed", "passed": true, "evidence": "Output file Journals/2026-03 Plans.md shows only tasks 1.1 and 3.1 in the Today's Tasks section (lines 26-40). Task 1.2 is completely absent. Transcript Step 2 confirms deletion of task 1.2"}, {"text": "After deletion, the P1 group contains only 1 task (1.1 \u2014 investor email)", "passed": true, "evidence": "Output file shows Priority 1 section (line 28) with only one task: 1.1 Finalize investor update email to all LPs (lines 30-33). No other P1 tasks present"}, {"text": "Task renumbering is correct \u2014 no gaps in P1 numbering", "passed": true, "evidence": "Output file shows P1 contains only task 1.1. Transcript Step 2 explicitly states: 'No renumbering needed within P1 (task 1.1 remained as 1.1)'"}, {"text": "The P3 task (schedule retrospective) remains unchanged", "passed": true, "evidence": "Output file shows task 3.1 Schedule team retrospective for next Friday (lines 37-40) with identical action, effort (~5 mins), and delegate values as in initial plan"}, {"text": "The Estimated Total Effort table is updated to reflect 2 tasks (~25 mins)", "passed": true, "evidence": "Output file lines 44-51 show Estimated Total Effort table with P1: 1 item (~20 mins), P3: 1 item (~5 mins), Total: 2 items (~25 mins). Transcript Step 2 confirms table updated from 3 tasks (~50 mins) to 2 tasks (~25 mins)"}, {"text": "The final status display shows exactly 2 remaining tasks", "passed": true, "evidence": "Transcript Step 3 shows plan status table with exactly 2 rows: 1.1 Finalize investor update email and 3.1 Schedule team retrospective. Totals section shows Remaining: 2, Total Effort Remaining: ~25 mins"}], "summary": {"passed": 8, "failed": 0, "total": 8, "pass_rate": 1.0}, "execution_metrics": {"timing": {"total_tokens": 153769, "duration_ms": 59755, "duration_seconds": 59.8}}, "claims": [{"claim": "The daily-plans skill executed all three operations sequentially (CREATE, DELETE, STATUS)", "type": "process", "verified": true, "evidence": "Transcript shows all three operations completed in sequence with proper state transitions. Files created and modified accordingly"}, {"claim": "Task deletion correctly updated the Estimated Total Effort table", "type": "quality", "verified": true, "evidence": "Output file shows effort table with correct totals (2 items, ~25 mins). Effort for deleted P1 task (~25 mins) was subtracted correctly"}, {"claim": "The plan file structure follows the expected markdown format with status legend and task sections", "type": "quality", "verified": true, "evidence": "Output file contains status legend (lines 7-14), previous plans section (lines 18-22), today's tasks by priority (lines 26-40), and effort summary table (lines 44-51)"}], "user_notes_summary": {"uncertainties": [], "needs_review": [], "workarounds": []}, "eval_feedback": {"suggestions": [{"reason": "Expectation 2 (plan initially contains 3 tasks) cannot be fully verified from the output file itself, only from the transcript. The output shows the final state after deletion (2 tasks). Consider adding an expectation that checks the audit file was created to track the deletion event, which would provide additional evidence of task removal"}, {"reason": "No assertion verifies that the status legend, previous plans section, or other structural elements are actually present in the output. Expectations focus on task counts and effort but not on format compliance. Consider adding an assertion that checks for required sections in the plan file"}], "overall": "Evals are solid for task management outcomes (create, delete, count, effort). Minor gap: the output-only evidence for initial 3-task state relies on transcript. Format structure verification would strengthen coverage"}}}, {"id": "create-delete-status-without_skill", "prompt": "Create a plan for today (2026-03-28) with: 1) Finalize investor update email to all LPs (P1, ~20 mins), 2) Debug the API authentication timeout issue reported by Alex (P1, ~25 mins), 3) Schedule team retrospective for next Friday (P3, ~5 mins). Then delete task 1.2 (the debug task). Then show me the updated plan status.", "eval_id": 3, "outputs": [{"name": "2026-03-28-plans.md", "type": "text", "content": "# Daily Plan \u2014 2026-03-28\n\n## Priority 1: Critical/High-Impact\n| # | Task | Status | Effort |\n|---|------|--------|--------|\n| 1.1 | Finalize investor update email to all LPs | \ud83c\udd95 New | ~20 mins |\n\n## Priority 3: Low Priority/Administrative\n| # | Task | Status | Effort |\n|---|------|--------|--------|\n| 3.1 | Schedule team retrospective for next Friday | \ud83c\udd95 New | ~5 mins |\n\n**Total Effort:** ~25 mins\n"}], "grading": {"expectations": [{"text": "A plans journal file is created with a ## 2026-03-28 date header", "passed": true, "evidence": "File `/outputs/2026-03-28-plans.md` exists with header `# Daily Plan \u2014 2026-03-28` containing properly formatted plan content."}, {"text": "The plan initially contains 3 tasks across P1 and P3", "passed": false, "evidence": "Transcript claims 3 tasks were created initially, but the output file shows only 2 tasks after deletion. No intermediate snapshot of the initial 3-task state is available in the outputs to verify the initial state existed. The expectation requires evidence that the initial plan contained all 3 tasks before deletion."}, {"text": "After deletion, the debug task (originally 1.2) is removed", "passed": true, "evidence": "Final plan file shows no task 1.2. Transcript confirms: 'Removed \"Debug the API authentication timeout issue reported by Alex\" (task 1.2) from the plan'. Only tasks 1.1 and 3.1 remain."}, {"text": "After deletion, the P1 group contains only 1 task (1.1 \u2014 investor email)", "passed": true, "evidence": "Final plan Priority 1 section shows one row: `1.1 | Finalize investor update email to all LPs | \ud83c\udd95 New | ~20 mins`. No other P1 tasks present."}, {"text": "Task renumbering is correct \u2014 no gaps in P1 numbering", "passed": true, "evidence": "P1 contains only task 1.1. With a single task remaining in P1, there are no numbering gaps. No second P1 task exists to create a gap."}, {"text": "The P3 task (schedule retrospective) remains unchanged", "passed": true, "evidence": "Final plan Priority 3 section shows: `3.1 | Schedule team retrospective for next Friday | \ud83c\udd95 New | ~5 mins`. Status and effort values unchanged from original specification."}, {"text": "The Estimated Total Effort table is updated to reflect 2 tasks (~25 mins)", "passed": true, "evidence": "Final plan shows `**Total Effort:** ~25 mins`. This correctly sums the remaining 2 tasks: 1.1 (~20 mins) + 3.1 (~5 mins) = ~25 mins."}, {"text": "The final status display shows exactly 2 remaining tasks", "passed": true, "evidence": "Final plan contains exactly 2 tasks: task 1.1 in Priority 1 and task 3.1 in Priority 3. Transcript confirms: 'The daily plan now contains 2 tasks (down from 3)' with total effort ~25 mins."}], "summary": {"passed": 7, "failed": 1, "total": 8, "pass_rate": 0.875}, "execution_metrics": {"total_tokens": 137474, "duration_ms": 23689}, "timing": {"executor_duration_seconds": 23.7}, "claims": [{"claim": "All three sequential steps completed successfully", "type": "quality", "verified": false, "evidence": "The transcript claims all three steps completed, but the output lacks an intermediate verification snapshot. We can only confirm the final state (2 tasks) matches the expected result after deletion, not that all intermediate steps executed correctly."}, {"claim": "No renumbering required as task 1.1 remained unchanged", "type": "process", "verified": true, "evidence": "Since only task 1.2 was deleted and task 1.1 remained in P1 with the same task number, no renumbering was needed. The claim is technically true but represents a minimal scenario."}, {"claim": "Total estimated effort updated from ~50 mins to ~25 mins", "type": "factual", "verified": true, "evidence": "Initial plan would have been: 20 mins (1.1) + 25 mins (1.2) + 5 mins (3.1) = 50 mins. Final plan shows 25 mins (20 + 5), confirming the update calculation is correct."}], "user_notes_summary": {"uncertainties": ["No snapshot of the initial 3-task state was saved; only the final state after deletion is available in outputs"], "needs_review": [], "workarounds": []}, "eval_feedback": {"suggestions": [{"assertion": "The plan initially contains 3 tasks across P1 and P3", "reason": "This expectation cannot be verified from the outputs because there is no intermediate file or state showing the plan with 3 tasks before deletion. The executor only provided the final plan after deletion. To make this assertion verifiable, the eval should either: (1) require the executor to save intermediate states, or (2) split this into a separate sequential step where the executor creates the plan, displays it, then deletes\u2014all with documented output at each stage."}, {"reason": "No assertion checks whether task deletion happened correctly by verifying that the exact same task (with matching description and effort) was actually removed. The output only shows the final state; it doesn't prove the right task was deleted or that deletion was executed correctly rather than the plan just being recreated without that task."}, {"reason": "The evaluation doesn't capture the format and presentation quality of the plan. While the task counts and effort totals are correct, there's no assertion checking that the markdown formatting (table structure, priority headings, status icons) matches an expected standard or template."}], "overall": "Expectation #2 reveals a significant gap in the eval design: it asks for verification of an initial state that isn't captured in the outputs. The remaining assertions are well-designed and discriminating, but adding visibility into intermediate steps would strengthen the eval's ability to verify the full workflow."}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "daily-plans", "skill_path": "/sessions/vigilant-serene-dijkstra/mnt/Claude Skills/daily-plans", "executor_model": "claude-haiku-4-5-20251001", "analyzer_model": "most-capable-model", "timestamp": "2026-03-28T00:00:00Z", "evals_run": [1, 2, 3], "runs_per_configuration": 1}, "runs": [{"eval_id": 1, "eval_name": "create-day-plan", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 9, "failed": 0, "total": 9, "time_seconds": 35.5, "tokens": 150164, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "A file named 'Journals/2026-03 Plans.md' (or similar path) is created", "passed": true, "evidence": "File exists at /sessions/vigilant-serene-dijkstra/daily-plans-workspace/iteration-1/create-day-plan/with_skill/outputs/Journals/2026-03 Plans.md"}, {"text": "The plans journal contains a ## 2026-03-26 date header", "passed": true, "evidence": "Line 3 of Journals/2026-03 Plans.md shows: '## 2026-03-26'"}, {"text": "There are exactly 3 tasks in the plan", "passed": true, "evidence": "Three task entries present: 1.1, 1.2, 2.1"}, {"text": "Tasks are grouped by priority: 2 tasks under P1 and 1 task under P2", "passed": true, "evidence": "Priority groups properly organized with color coding"}, {"text": "Task numbering follows the X.Y convention", "passed": true, "evidence": "All tasks follow X.Y format"}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "All three tasks display the \ud83c\udd95 icon"}, {"text": "Each task has Action, Effort fields", "passed": true, "evidence": "All three tasks include both fields"}, {"text": "An Estimated Total Effort summary table is present with correct counts", "passed": true, "evidence": "Summary table shows correct counts: P1 = 2, P2 = 1, Total = 3 items (~45 mins)"}, {"text": "A Plans/2026-03-26 Audit.md shell file is created", "passed": true, "evidence": "File exists at /sessions/vigilant-serene-dijkstra/daily-plans-workspace/iteration-1/create-day-plan/with_skill/outputs/Plans/2026-03-26 Audit.md"}], "notes": ["Skill delivered perfect structural compliance with all 9 expectations passing", "Proper file organization in Journals/ and Plans/ directories", "Audit shell file created automatically for task tracking", "Delegation assignments present (Donny for sales task, Cedric for projects task)"]}, {"eval_id": 1, "eval_name": "create-day-plan", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.667, "passed": 6, "failed": 3, "total": 9, "time_seconds": 69.6, "tokens": 142682, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "A file named 'Journals/2026-03 Plans.md' (or similar path) is created", "passed": false, "evidence": "Created as 2026-03-26-daily-plan.md in flat structure, not in Journals/ directory"}, {"text": "The plans journal contains a ## 2026-03-26 date header", "passed": false, "evidence": "Uses # Daily Plan \u2014 March 26, 2026 as top-level header, not ## 2026-03-26"}, {"text": "There are exactly 3 tasks in the plan", "passed": true, "evidence": "Contains exactly 3 tasks"}, {"text": "Tasks are grouped by priority: 2 tasks under P1 and 1 task under P2", "passed": true, "evidence": "Priority groups properly organized"}, {"text": "Task numbering follows the X.Y convention", "passed": true, "evidence": "All tasks follow X.Y format"}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "All tasks display status icons"}, {"text": "Each task has Action, Effort fields", "passed": true, "evidence": "Action and effort present but labels differ from skill output"}, {"text": "An Estimated Total Effort summary table is present with correct counts", "passed": true, "evidence": "Summary table with correct effort calculations"}, {"text": "A Plans/2026-03-26 Audit.md shell file is created", "passed": false, "evidence": "No Plans/ directory or Audit.md file created"}], "notes": ["Baseline created flatter file structure without directory organization", "Generated rich multi-file planning system (5 files total) vs skill's focused output", "Failed structural expectations around directory layout and audit file creation", "Took 2x longer than skill version (69.6s vs 35.5s) with fewer structural guardrails", "No delegation assignments present in baseline output"]}, {"eval_id": 2, "eval_name": "create-add-status", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.875, "passed": 7, "failed": 1, "total": 8, "time_seconds": 53.7, "tokens": 154011, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "A plans journal file is created with a ## 2026-03-27 date header", "passed": true, "evidence": "File `/outputs/Journals/2026-03 Plans.md` exists with proper date header"}, {"text": "The final plan contains exactly 4 tasks (3 original + 1 added)", "passed": true, "evidence": "Contains tasks 1.1, 1.2 (Cap Vista), 2.1, and 3.1"}, {"text": "The added Cap Vista task appears under the P1 priority group", "passed": true, "evidence": "Positioned within \ud83d\udd34 Priority 1 section"}, {"text": "The Cap Vista task is numbered sequentially after existing P1 tasks (e.g., 1.3)", "passed": false, "evidence": "Numbered as 1.2 (correct) but expectation example specified 1.3"}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "All four tasks display \ud83c\udd95 icons"}, {"text": "The Estimated Total Effort table reflects 4 tasks with updated totals (~65 mins)", "passed": true, "evidence": "Table shows 4 items totaling ~65 mins with correct breakdown"}, {"text": "A status summary table is displayed showing all 4 tasks grouped by priority", "passed": true, "evidence": "Status summary shows all 4 tasks grouped by priority"}, {"text": "A Plans/2026-03-27 Audit.md shell file exists", "passed": true, "evidence": "File exists with proper shell structure"}], "notes": ["Skill successfully added task with auto-numbering (1.2 is correct for second P1 task)", "Effort estimates sum correctly: P1(30+10=40) + P2(15) + P3(10) = 65 mins", "One expectation had incorrect example number (1.3 vs actual 1.2)", "Demonstrated correct sequential numbering within priority groups"]}, {"eval_id": 2, "eval_name": "create-add-status", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.625, "passed": 5, "failed": 3, "total": 8, "time_seconds": 22.2, "tokens": 137317, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "A plans journal file is created with a ## 2026-03-27 date header", "passed": false, "evidence": "Uses # Daily Plan \u2014 2026-03-27 (h1) instead of ## 2026-03-27 (h2)"}, {"text": "The final plan contains exactly 4 tasks (3 original + 1 added)", "passed": true, "evidence": "Contains exactly 4 tasks"}, {"text": "The added Cap Vista task appears under the P1 priority group", "passed": true, "evidence": "Positioned in Priority 1: Critical section"}, {"text": "The Cap Vista task is numbered sequentially after existing P1 tasks (e.g., 1.3)", "passed": false, "evidence": "Numbered as 1.2 (correct functionally) but expectation specifies 1.3"}, {"text": "All tasks have \ud83c\udd95 status icons", "passed": true, "evidence": "All four tasks display status"}, {"text": "The Estimated Total Effort table reflects 4 tasks with updated totals (~65 mins)", "passed": true, "evidence": "Footer shows Total Estimated Time: 65 minutes with correct arithmetic"}, {"text": "A status summary table is displayed showing all 4 tasks grouped by priority", "passed": true, "evidence": "Three markdown tables show all 4 tasks grouped by priority"}, {"text": "A Plans/2026-03-27 Audit.md shell file exists", "passed": false, "evidence": "No audit file created; only plans file in output"}], "notes": ["Baseline failed structural requirements (header format, audit file)", "Functionally produced correct task count (4) and effort calculation (65 mins)", "Header format strict requirement (h2) is implementation-detail overly specific", "No audit file generation in baseline approach", "Faster execution (22.2s) but less compliant with expected structure"]}, {"eval_id": 3, "eval_name": "create-delete-status", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 8, "failed": 0, "total": 8, "time_seconds": 59.8, "tokens": 153769, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "A plans journal file is created with a ## 2026-03-28 date header", "passed": true, "evidence": "File Journals/2026-03 Plans.md exists with proper date header"}, {"text": "The plan initially contains 3 tasks across P1 and P3", "passed": true, "evidence": "Initial plan shows 2 P1 items (~45 mins) and 1 P3 item (~5 mins)"}, {"text": "After deletion, the debug task (originally 1.2) is removed", "passed": true, "evidence": "Output shows only tasks 1.1 and 3.1; task 1.2 completely absent"}, {"text": "After deletion, the P1 group contains only 1 task", "passed": true, "evidence": "Priority 1 section shows only task 1.1"}, {"text": "Task renumbering is correct \u2014 no gaps in P1 numbering", "passed": true, "evidence": "P1 contains only task 1.1 with no renumbering needed"}, {"text": "The P3 task (schedule retrospective) remains unchanged", "passed": true, "evidence": "Task 3.1 identical to initial specification"}, {"text": "The Estimated Total Effort table is updated to reflect 2 tasks (~25 mins)", "passed": true, "evidence": "Table updated from 3 tasks (~50 mins) to 2 tasks (~25 mins)"}, {"text": "The final status display shows exactly 2 remaining tasks", "passed": true, "evidence": "Status table shows exactly 2 tasks with totals ~25 mins"}], "notes": ["Perfect score on all 8 expectations for skill version", "Demonstrated correct task deletion with auto-renumbering logic", "Effort table correctly updated after deletion (50 \u2192 25 mins)", "File structure maintained through create \u2192 delete \u2192 status workflow", "Proper state management across sequential operations"]}, {"eval_id": 3, "eval_name": "create-delete-status", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.875, "passed": 7, "failed": 1, "total": 8, "time_seconds": 23.7, "tokens": 137474, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "A plans journal file is created with a ## 2026-03-28 date header", "passed": true, "evidence": "File 2026-03-28-plans.md exists with proper header"}, {"text": "The plan initially contains 3 tasks across P1 and P3", "passed": false, "evidence": "No intermediate snapshot available; only final state after deletion is in outputs"}, {"text": "After deletion, the debug task (originally 1.2) is removed", "passed": true, "evidence": "Final plan shows no task 1.2; only 1.1 and 3.1 remain"}, {"text": "After deletion, the P1 group contains only 1 task", "passed": true, "evidence": "Priority 1 section shows only task 1.1"}, {"text": "Task renumbering is correct \u2014 no gaps in P1 numbering", "passed": true, "evidence": "Single P1 task with no gaps"}, {"text": "The P3 task (schedule retrospective) remains unchanged", "passed": true, "evidence": "Task 3.1 matches specification"}, {"text": "The Estimated Total Effort table is updated to reflect 2 tasks (~25 mins)", "passed": true, "evidence": "Total Effort shows ~25 mins (20+5 from remaining tasks)"}, {"text": "The final status display shows exactly 2 remaining tasks", "passed": true, "evidence": "Final plan contains exactly 2 tasks"}], "notes": ["Baseline passed 7/8 expectations with only verification gap on initial state", "Functionally correct deletion and effort calculation (50 \u2192 25 mins)", "No intermediate outputs to verify initial 3-task state existed before deletion", "Faster execution (23.7s) than skill version (59.8s)", "Missing intermediate state documentation is a workflow visibility issue, not a functional failure"]}], "run_summary": {"with_skill": {"pass_rate": {"mean": 0.958, "stddev": 0.041, "min": 0.875, "max": 1.0}, "time_seconds": {"mean": 49.7, "stddev": 12.1, "min": 35.5, "max": 59.8}, "tokens": {"mean": 152648, "stddev": 1886, "min": 150164, "max": 154011}}, "without_skill": {"pass_rate": {"mean": 0.723, "stddev": 0.125, "min": 0.625, "max": 0.875}, "time_seconds": {"mean": 38.5, "stddev": 23.4, "min": 22.2, "max": 69.6}, "tokens": {"mean": 139158, "stddev": 2404, "min": 137317, "max": 142682}}, "delta": {"pass_rate": "+0.235", "time_seconds": "+11.2", "tokens": "+13490"}}, "notes": ["Skill version achieves 95.8% average pass rate vs baseline 72.3% \u2014 23.5 percentage point advantage", "Structural compliance is the primary differentiator: skill creates Journals/ and Plans/ directories with audit files; baseline uses flat file structure", "All 3 skill runs had perfect or near-perfect compliance (1.0, 0.875, 1.0) vs baseline variance (0.667, 0.625, 0.875)", "Skill takes 29% more time on average (49.7s vs 38.5s) but delivers superior file organization and audit trails", "Token usage is nearly identical between configurations (~150K skill vs ~139K baseline), indicating similar computation complexity", "File organization and audit shell creation are not functional requirements but structural ones \u2014 skill enforces project standards consistently", "Both configurations correctly handle core task logic (numbering, prioritization, effort calculation, deletion)", "create-day-plan shows largest delta in pass rate (1.0 vs 0.667) due to strict audit file and directory structure expectations", "create-add-status and create-delete-status have smaller deltas (0.25 and 0.125) because functional task logic is comparable", "Evaluation expectations mix implementation details (directory structure) with functional outcomes (task counts, effort totals) \u2014 skill excels at structural compliance while baseline performs adequately on functional correctness"]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>
