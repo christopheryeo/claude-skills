@@ -31,9 +31,11 @@ If intent is ambiguous but calendar-related, default to **search**.
 
 Use these tools for all calendar retrieval:
 
-1. **list_gcal_calendars** — list accessible calendars.
-2. **list_gcal_events** — retrieve events in a specified time range.
-3. **fetch_gcal_event** — fetch full details for specific events when needed.
+1. **gcal_list_calendars** — list accessible calendars (native Google Calendar connector).
+2. **gcal_list_events** — retrieve events in a specified time range (native Google Calendar connector).
+3. **gcal_get_event** — fetch full details for specific events when needed (native Google Calendar connector).
+
+> **Connector policy:** Always use the native Google Calendar connector (`gcal_*` tools) unless it is unavailable, in which case fall back to the Zapier connector.
 
 ## Shared: Output Contract
 
@@ -81,7 +83,7 @@ Exclude cancelled events. Sort chronologically by start time. Limit to 50 result
    - timeframe (`date` or `time_range`)
    - title keywords (`subject`)
    - attendee filters (`attendees`, `emails`)
-2. Call `list_gcal_calendars`, then fetch events for relevant calendars/time range using `list_gcal_events`.
+2. Call `gcal_list_calendars`, then fetch events for relevant calendars/time range using `gcal_list_events`.
 3. Filter results with AND logic across provided criteria.
 4. Enrich each event with:
    - `duration_minutes`
@@ -110,7 +112,7 @@ Exclude cancelled events. Sort chronologically by start time. Limit to 50 result
 
 ## Reference Script
 
-Use `scripts/search_calendar_helper.py` for reference parsing and enrichment logic when needed.
+Use `scripts/search_calendar_helper.py` for reference parsing and enrichment logic when needed. Note: the helper script is a reference only — always use the native `gcal_*` tools at runtime.
 
 ---
 

@@ -16,11 +16,12 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 # This script serves as a reference for how to search calendars
-# Claude will use the built-in calendar tools (via Zapier) to:
-# 1. Get all accessible calendars
-# 2. Retrieve events for specified date ranges
-# 3. Filter by subject, attendees, emails
-# 4. Format and return results
+# Claude will use the native Google Calendar connector (gcal_* tools) to:
+# 1. Get all accessible calendars (gcal_list_calendars)
+# 2. Retrieve events for specified date ranges (gcal_list_events)
+# 3. Fetch event details when needed (gcal_get_event)
+# 4. Filter by subject, attendees, emails
+# 5. Format and return results
 
 def parse_time_reference(query):
     """
