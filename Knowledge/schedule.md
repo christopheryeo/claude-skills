@@ -8,7 +8,7 @@
 ## 1. task-execution
 
 - **Description:** (Claude Skills) Task Execution
-- **Schedule:** Every hour from 1am–4am and 12pm–2pm SGT (`0 1-4,12-14 * * *`)
+- **Schedule:** 1am, 3am, 12pm, 2pm SGT (`0 1,3,12,14 * * *`)
 - **Status:** ✅ Enabled
 - **Task file:** `/Users/chrisyeo/Documents/Claude/Scheduled/task-execution/SKILL.md`
 
