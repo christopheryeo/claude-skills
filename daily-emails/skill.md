@@ -125,7 +125,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Default:** Last 48 hours. Accepts custom timeframes.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. Do NOT use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools).
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
 
 ### Steps
 
@@ -146,6 +146,8 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 **Purpose:** Surface starred/priority emails with action notes and follow-up prompts.
 
 **Default:** Last 48 hours. Accepts custom timeframes, keyword, sender, and label filters.
+
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
 
 ### Steps
 
@@ -177,6 +179,8 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Default windows:** Sent = last 48 hours, Starred = last 7 days. User can override either or both.
 
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+
 ### Steps
 
 1. Confirm timeframes (separate windows for sent and starred)
@@ -198,6 +202,8 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 **Requires:** Topic keyword(s) from user. Optional: timeframe, participant filters, exclusions.
 
 **Default:** Last 48 hours. Accepts custom timeframes.
+
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
 
 ### Steps
 
@@ -240,6 +246,8 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Requires:** A Monitor Stakeholders Command section in the team member's `claude.md` with inline stakeholder groups and email addresses.
 
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+
 ### Steps
 
 1. Read the Monitor Stakeholders Command section in the current team member's `claude.md` — extract groups, contacts (Name, Role, Email), and monitoring notes
@@ -265,7 +273,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Purpose:** Compose a reply-all email and save to Gmail drafts for user review. Nothing is sent.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations — including searching, reading threads, and creating drafts. Do NOT use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools).
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations — including searching, reading threads, and creating drafts. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
 
 ### Steps
 
@@ -312,6 +320,8 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 **Purpose:** Safely respond to an email thread by first verifying no duplicate draft exists and the thread hasn't already been replied to, then delegating to the **draft** sub-command to compose the reply.
 
 **Requires:** A target thread — identified by person name, subject, or topic from the user. Optional: explicit reply content.
+
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
 
 ### Steps
 
@@ -374,6 +384,8 @@ No new draft created. Review or edit the existing draft in Gmail.
 **Purpose:** Reply to a meeting request email with a proposed meeting time. If the sender has already suggested a specific time, validate it against your calendar and availability rules. If it works, accept it. If not — or if no time was proposed — find the next available slot and counter-propose. Always saves to draft. Never sends.
 
 **Requires:** A target thread — identified by person name, subject, or topic from the user.
+
+**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
 
 ### Steps
 
