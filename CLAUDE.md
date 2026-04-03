@@ -19,4 +19,6 @@ v1.36.1 (December 2025). 30+ active skills covering daily operations, email, cal
 | Christopher Yeo | CEO / Project Owner | chris@sentient.io |
 
 ## Learned Preferences
-<!-- Append new learnings here as the project evolves -->
+
+### Skill Architecture — Native Connector First + Delegation Hierarchy
+Fundamental skills (`daily-emails`, `daily-calendars`, `daily-files`) own connector policy and output formatting. Higher-order skills must always delegate to them — never call connectors directly. See full policy: [`Knowledge/skill-architecture-policy.md`](Knowledge/skill-architecture-policy.md).

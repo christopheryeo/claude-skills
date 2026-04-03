@@ -31,23 +31,46 @@ If the intent is ambiguous, ask which operation is intended. If the user says "w
 
 ---
 
-## Shared: Google Integration Tools
+## Shared: Integration Policy
 
-This skill uses the same tool integrations as the other daily skills:
+### Gmail — delegate to daily-emails
 
-### Gmail
-- **gmail_search_messages** — search with Gmail query syntax
-- **gmail_read_thread** — full thread context
-- **gmail_read_message** — lightweight single-message details
+All email operations (search, read, draft) MUST be performed by invoking the **daily-emails** skill sub-commands. Do NOT call Gmail tools directly.
 
-### Google Calendar
-- **list_gcal_calendars** / **list_gcal_events** / **fetch_gcal_event** — calendar retrieval
+| Need | Delegate to |
+|---|---|
+| Unread/recent email triage | daily-emails **recent** |
+| Sent + starred recap | daily-emails **actioned** |
+| Search by topic/keyword | daily-emails **topic** |
+| Draft a reply | daily-emails **draft** |
 
-### Google Drive
-- **google_drive_search** (builtin connector) — folder/file lookup
-- **google_drive_find_a_file** (Zapier) — list files in a folder with metadata
-- **google_drive_create_folder** (Zapier) — create folders for workspace setup
-- **google_drive_create_file_from_text** (Zapier) — create files in Drive
+daily-emails owns the connector policy (native Gmail first, Zapier fallback) and output formatting. This skill consumes the results.
+
+### Google Calendar — delegate to daily-calendars
+
+All calendar operations (event lookup, availability) MUST be performed by invoking the **daily-calendars** skill sub-commands. Do NOT call `gcal_*` or `google_calendar_*` tools directly.
+
+| Need | Delegate to |
+|---|---|
+| Today's events / event search | daily-calendars **search** |
+| Check availability | daily-calendars **available** |
+
+daily-calendars owns the connector policy (native `gcal_*` first, Zapier fallback) and output formatting. This skill consumes the results.
+
+### Google Drive — delegate to daily-files
+
+All Drive file browsing, listing, search, and folder preparation operations MUST be performed by invoking the **daily-files** skill sub-commands. Do NOT call Drive tools directly for these operations.
+
+| Need | Delegate to |
+|---|---|
+| List files inside a folder | daily-files **list** |
+| Recently modified files | daily-files **recent** |
+| Search files by topic/keyword | daily-files **topic** |
+| Create/verify work-day folder structure | daily-files **work-day** |
+
+daily-files owns the connector policy (native `google_drive_search` first, Zapier fallback) and output formatting. This skill consumes the results.
+
+> **Exception:** Write operations (creating a recap file, uploading documents to Drive) use Zapier Drive tools directly, as daily-files is read-only for browse/search operations.
 
 ### Timezone
 - Default: **Singapore / GMT+8 (SGT)**
@@ -66,7 +89,7 @@ SNMG00 Management/
         └── YYYY-MM-DD/
 ```
 
-Before writing to or reading from the day-folder, verify it exists using the same folder lookup logic as the `daily-files` WORK-DAY sub-command: search for SNMG00 Management → SNMG18 Working Docs → month folder → day folder. Create missing month or day folders as needed. Cache folder IDs within the session to avoid repeated lookups.
+Before writing to or reading from the day-folder, verify it exists by delegating to the **daily-files work-day** sub-command. daily-files handles the full verification and creation of the month and day folder hierarchy. Cache the returned folder IDs within the session to avoid repeated lookups.
 
 ---
 
@@ -98,19 +121,19 @@ Each Plans/ folder contains daily plan files named `YYYY-MM-DD-plans.md` and aud
 2. **Ensure workspace is ready.** Verify and create the SNMG18 Working Docs day-folder structure (month folder `YYYY-MM Work` and day folder `YYYY-MM-DD`). Cache folder IDs for later use.
 
 3. **Pull unread email intelligence (last 48 hours).**
-   - Query Gmail for all unread messages received in the last 48 hours.
-   - For each message: capture sender, subject, received date/time, a 30-word summary, explicit expectations, deadlines, and a clickable Gmail URL.
+   - Delegate to **daily-emails RECENT** with a 48-hour window.
+   - Consume the executive table output — extract sender, subject, date/time, summary, and Gmail links.
    - If no unread emails: state "No unread emails in the last 48 hours."
 
 4. **Audit today's calendar.**
-   - Query Google Calendar for the current day (Asia/Singapore timezone).
-   - For each event: start/end time (24-hour format), title, location, attendees, and a clickable calendar URL.
+   - Delegate to **daily-calendars SEARCH** for today's events (Asia/Singapore timezone).
+   - Consume the results — extract start/end time (24-hour format), title, location, attendees, and calendar links.
    - Flag conflicts or back-to-back meetings.
    - If empty: state "No calendar events scheduled for today."
 
 5. **Review Drive file priorities (last 24 hours).**
-   - Scan Google Drive for items modified in the last 24 hours, prioritizing the SNMG18 Meeting Minutes folder.
-   - For each file: name, last modified timestamp, a 30-word summary, and a clickable link.
+   - Delegate to **daily-files RECENT** with a 24-hour window.
+   - Consume the executive table output — extract file name, last modified timestamp, a 30-word summary, and clickable Drive links.
    - If no recent files: state "No recent file updates."
 
 6. **Synthesize the What-I-Need-To-Do brief.**
@@ -171,20 +194,19 @@ Example: "Set up my workday, skip news" → runs everything except the news snap
 2. **Query all four sources for today's activity:**
 
    **Calendar:**
-   - Retrieve all events for today from Google Calendar.
-   - For each: title, time, attendees, location, calendar link.
+   - Delegate to **daily-calendars SEARCH** for today's events.
+   - Consume the results: title, time, attendees, location, calendar link.
    - Exclude declined events and all-day "FYI" events (unless they have action items).
 
    **Gmail:**
-   - Search for sent emails today: `in:sent newer_than:1d`
-   - Search for starred emails today: `is:starred newer_than:1d`
-   - For each: subject, recipients/sender, time, 30-word summary, Gmail link.
-   - Apply token efficiency rules: max 10 per category, selective thread reading.
+   - Delegate to **daily-emails ACTIONED** (sent + starred recap for today).
+   - Consume the executive table output: subject, recipients/sender, time, summary, Gmail link.
+   - daily-emails handles token efficiency and connector policy internally.
 
    **Drive:**
-   - Search for files modified today: `modifiedTime > '{today_start_iso}'`
-   - For each: filename, type, last modified time, 25-word summary, Drive link.
-   - Exclude trashed files. Cap at 20 files.
+   - Delegate to **daily-files RECENT** scoped to today (since midnight SGT).
+   - Consume the executive table output: filename, type, last modified time, 25-word summary, Drive link.
+   - daily-files excludes trashed files and caps at 20 files automatically.
 
    **AI Workforce Plans (all team members):**
    - For each team member in the AI Workforce table, locate their Plans/ folder.
@@ -288,18 +310,18 @@ This gives you a consolidated view of what the entire AI workforce accomplished 
 ### Steps
 
 1. **Find the meeting in Calendar.**
-   - Search Google Calendar for events matching the provided title (fuzzy match — partial titles, abbreviations, and common variations should match).
-   - Default to today's events. If no match found today, expand to the last 7 days.
+   - Delegate to **daily-calendars SEARCH** with the meeting title as a keyword filter.
+   - Default to today's events. If no match found today, expand the search to the last 7 days.
    - If multiple matches: list them and ask the user to pick one.
    - If no match at all: inform the user and ask for a different title or date.
-   - Capture: event date, time, title, attendees, calendar link.
+   - Consume the results: event date, time, title, attendees, calendar link.
 
 2. **Determine the work-day folder** for the meeting's date.
    - Use the event date (not today's date, since the meeting may have been on a different day) to construct the day-folder path: `SNMG18 Working Docs / YYYY-MM Work / YYYY-MM-DD /`
    - Verify the folder exists. If it doesn't, note that no minutes have been filed and proceed to step 4 (email search).
 
 3. **Search the day-folder for meeting minutes.**
-   - List all files in the day-folder.
+   - Delegate to **daily-files LIST** for the day-folder to retrieve all files with metadata and links.
    - Look for files whose name contains the meeting title or recognisable keywords from it. Also match common patterns:
      - `[Meeting Title] Minutes`
      - `[Meeting Title] Notes`
@@ -311,10 +333,8 @@ This gives you a consolidated view of what the entire AI workforce accomplished 
    - **If no minutes file is found:** Proceed to step 4.
 
 4. **Fall back to Gmail for meeting transcript or notes.**
-   - Search Gmail for messages related to the meeting:
-     - Query: `subject:"{meeting title}" newer_than:7d` (broaden if the meeting was older)
-     - Also try: `"{meeting title}" minutes OR notes OR transcript OR summary newer_than:7d`
-   - Look for:
+   - Delegate to **daily-emails TOPIC** with the meeting title as the keyword, scoped to the last 7 days (broaden if the meeting was older).
+   - From the results, look for:
      - Emails with "minutes", "notes", "transcript", "summary", or "MOM" in the subject or body
      - Emails with attachments (which may contain the minutes as an attached document)
      - Automated meeting transcript emails (from Google Meet, Otter.ai, Fireflies.ai, etc.)
@@ -382,11 +402,13 @@ Sequential numbering ✅, working links from API data ✅, timezone stated ✅, 
 
 This skill **replaces** `set-up-workday` — the START sub-command provides the same morning enablement workflow.
 
+This skill **delegates to** (does not replace):
+- **daily-emails** — All Gmail operations (email triage, sent/starred recap, topic search) are delegated to daily-emails sub-commands. daily-emails owns the connector policy and output formatting.
+- **daily-calendars** — All calendar operations (event search, availability) are delegated to daily-calendars sub-commands. daily-calendars owns the connector policy and output formatting.
+- **daily-files** — All Drive browsing, listing, recent-file retrieval, and day-folder preparation are delegated to daily-files sub-commands. daily-files owns the Drive connector policy and output formatting. Write operations (creating recap files, uploading documents) use Zapier Drive tools directly.
+
 This skill **complements** (does not replace):
 - **daily-plans** — Plans track what you *intend* to do; RECAP tracks what *actually happened* and pulls in task completion data from all AI workforce members' Plans folders.
-- **daily-files** — The WORK-DAY sub-command in daily-files creates Drive folder structure. This skill reuses that folder logic but adds activity tracking and minutes retrieval on top.
-- **daily-emails** — This skill queries Gmail for RECAP and MINUTES but doesn't replace daily-emails' full sub-command suite (drafting, responding, proposing).
-- **daily-calendars** — This skill reads calendar data but doesn't replace search, availability checking, or meeting validation.
 - **daily-journals** — Journals are free-form reflections; RECAP is structured activity tracking. Both can coexist.
 
 ---

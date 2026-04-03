@@ -29,13 +29,18 @@ If intent is ambiguous but calendar-related, default to **search**.
 
 ## Shared: Google Calendar Tools
 
-Use these tools for all calendar retrieval:
+### Connector Policy
 
-1. **gcal_list_calendars** — list accessible calendars (native Google Calendar connector).
-2. **gcal_list_events** — retrieve events in a specified time range (native Google Calendar connector).
-3. **gcal_get_event** — fetch full details for specific events when needed (native Google Calendar connector).
+**Always use the native Google Calendar connector first.** Only fall back to the Zapier connector if a native tool call fails or the tool is unavailable.
 
-> **Connector policy:** Always use the native Google Calendar connector (`gcal_*` tools) unless it is unavailable, in which case fall back to the Zapier connector.
+| Operation | Native (primary) | Zapier (fallback) |
+|---|---|---|
+| List calendars | `gcal_list_calendars` | `google_calendar_find_calendars` |
+| List events in range | `gcal_list_events` | `google_calendar_find_events` |
+| Get event details | `gcal_get_event` | `google_calendar_retrieve_event_by_id` |
+| Check busy periods | `gcal_find_my_free_time` | `google_calendar_find_busy_periods_in_calendar` |
+
+> **Rule:** Call the native `gcal_*` tool. If it returns an error or is not available, retry the same operation using the corresponding Zapier tool. Never call both in the same request.
 
 ## Shared: Output Contract
 
@@ -83,7 +88,7 @@ Exclude cancelled events. Sort chronologically by start time. Limit to 50 result
    - timeframe (`date` or `time_range`)
    - title keywords (`subject`)
    - attendee filters (`attendees`, `emails`)
-2. Call `gcal_list_calendars`, then fetch events for relevant calendars/time range using `gcal_list_events`.
+2. Call `gcal_list_calendars` (fallback: `google_calendar_find_calendars`), then fetch events using `gcal_list_events` (fallback: `google_calendar_find_events`).
 3. Filter results with AND logic across provided criteria.
 4. Enrich each event with:
    - `duration_minutes`
@@ -134,7 +139,7 @@ The following rules define your availability:
 2. **Validate the date**: Check if the requested date is a weekday. If weekend, respond that meetings are weekday-only and suggest nearest weekday.
 3. **Validate the time**: Check if the requested time falls within 10am–6pm. If outside, suggest meeting before 6pm.
 4. **Check for lunch conflict**: If the time overlaps 12pm–2pm, suggest before or after lunch.
-5. **Query your Google Calendar**: Retrieve all meetings on that date to identify busy blocks.
+5. **Query your Google Calendar**: Use `gcal_list_events` (fallback: `google_calendar_find_events`) to retrieve all meetings on that date and identify busy blocks.
 6. **Apply the 30-min gap rule**: Ensure no meeting starts within 30 minutes of a previous meeting ending.
 7. **Provide detailed response**: Report yes/no and suggest the nearest available slot if requested time is unavailable.
 

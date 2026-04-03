@@ -35,12 +35,19 @@ If the intent is ambiguous, ask which operation is intended. If the user says so
 
 ## Shared: Gmail Tools
 
-All sub-commands use these Gmail integration tools:
+### Connector Policy
 
-1. **search_gmail_messages** — Search with Gmail query syntax
-2. **read_gmail_thread** — Full thread context (use sparingly for token efficiency)
-3. **read_gmail_message** — Lightweight single-message details
-4. **gmail_create_draft_reply** — Draft sub-command only
+**Always use the native Gmail connector first.** Only fall back to the Zapier connector if a native tool call fails or the tool is unavailable.
+
+| Operation | Native (primary) | Zapier (fallback) |
+|---|---|---|
+| Search messages | `gmail_search_messages` | `gmail_find_email` |
+| Read full thread | `gmail_read_thread` | `gmail_find_email` |
+| Read single message | `gmail_read_message` | `gmail_find_email` |
+| Create draft reply | `gmail_create_draft` | `gmail_create_draft_reply` |
+| List drafts | `gmail_list_drafts` | `gmail_find_email` with `in:drafts` |
+
+> **Rule:** Call the native tool. If it returns an error or is not available, retry using the corresponding Zapier tool. Never call both in the same request.
 
 ## Shared: Query Construction
 
@@ -125,7 +132,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Default:** Last 48 hours. Accepts custom timeframes.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 
@@ -147,7 +154,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Default:** Last 48 hours. Accepts custom timeframes, keyword, sender, and label filters.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 
@@ -179,7 +186,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Default windows:** Sent = last 48 hours, Starred = last 7 days. User can override either or both.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 
@@ -203,7 +210,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Default:** Last 48 hours. Accepts custom timeframes.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 
@@ -246,7 +253,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Requires:** A Monitor Stakeholders Command section in the team member's `claude.md` with inline stakeholder groups and email addresses.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 
@@ -273,7 +280,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Purpose:** Compose a reply-all email and save to Gmail drafts for user review. Nothing is sent.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations — including searching, reading threads, and creating drafts. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 
@@ -321,7 +328,7 @@ Before finalizing any output: sequential numbering ✅, summaries ≤35 words �
 
 **Requires:** A target thread — identified by person name, subject, or topic from the user. Optional: explicit reply content.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 
@@ -385,7 +392,7 @@ No new draft created. Review or edit the existing draft in Gmail.
 
 **Requires:** A target thread — identified by person name, subject, or topic from the user.
 
-**⚠️ Connector Rule:** This sub-command MUST use the **native Gmail connector** (`mcp__4fe6485f-1ff9-4c85-bd8b-7b3bee3d59d2__gmail_*` tools) for all Gmail operations. You may use the Zapier Gmail connector (`mcp__e7bb8097-17d6-4c8e-8fab-6de917931d79__gmail_*` tools) only if the native Gmail connector cannot be accessed.
+> **Connector:** Use native Gmail tools first; fall back to Zapier only if unavailable — see Shared Connector Policy above.
 
 ### Steps
 

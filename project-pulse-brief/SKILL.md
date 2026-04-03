@@ -16,9 +16,20 @@ updates into an executive-ready pulse brief. The skill focuses on repeatable
 steps, reusable checklists, and a template you can copy into any document or
 collaboration space. No scripts, bots, or external integrations are required.
 
+## Integration Policy
+
+When automating email or calendar lookups as part of this workflow, always delegate to the unified skills — do NOT call Gmail or Google Calendar tools directly.
+
+| Need | Delegate to |
+|---|---|
+| Project-related email threads | **daily-emails** `topic` sub-command |
+| Upcoming project meetings | **daily-calendars** `search` sub-command |
+
+These skills own the connector policy (native first, Zapier fallback) and output formatting.
+
 ## Quick Start
 1. Collect weekly status inputs from project leads by reviewing your shared
-   project email thread and the relevant Google Drive folders.
+   project email thread (use **daily-emails `topic`** with the project name) and the relevant Google Drive folders.
 2. Open `assets/templates/pulse_brief_template.md` and duplicate it in your
    preferred editor or knowledge base.
 3. Summarize the latest highlights, watchlist items, risks, and next steps
@@ -80,10 +91,10 @@ collaboration space. No scripts, bots, or external integrations are required.
   the rest into linked reference docs.
 
 ## Related Skills
-- **set-up-workday**: Pair with Project Pulse Brief for a wider view of
+- **daily-work**: Pair with Project Pulse Brief for a wider view of
   operational signals plus delivery progress.
-- **recent-files**: Helps locate supporting artifacts referenced in the pulse
-  brief.
+- **daily-files**: Use the `topic` or `recent` sub-commands to locate supporting
+  artifacts referenced in the pulse brief.
 
 ## Version History
 - **1.1.2** (2024-03-13): Simplified the workflow to rely solely on email and

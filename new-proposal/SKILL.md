@@ -28,8 +28,8 @@ move quickly from discovery to a shareable document while keeping messaging alig
 3. **Detail the solution**: Use content from `product-white-paper/` to explain architecture, differentiators, and implementation
    plan.
 4. **Showcase proof**: Pull relevant success metrics from `smartchat-service-costs/` or other collateral to reinforce value.
-5. **Outline next steps**: Define timeline, owners, and required follow-up actions. Link to the **work-day** skill if the deliverable
-   should live in the shared Workday folder.
+5. **Outline next steps**: Define timeline, owners, and required follow-up actions. Use **daily-files work-day** to prepare the shared Workday folder if the deliverable
+   should be saved there.
 
 ## Success Criteria
 - Proposal mirrors Sentient's structure (executive summary → solution overview → roadmap → next steps).
@@ -46,7 +46,7 @@ move quickly from discovery to a shareable document while keeping messaging alig
 - **customer-brief** – Use to gather and refresh account discovery notes before drafting.
 - **product-white-paper** – Provides canonical product positioning and technical capabilities.
 - **sentient-brand-guidelines** – Supplies tone, terminology, and styling cues for all outbound materials.
-- **work-day** – Automates saving final drafts to the shared Workday folder once ready for review.
+- **daily-files** – Use the `work-day` sub-command to prepare and verify the shared Workday folder, then save final drafts there once ready for review.
 
 ## Extending Later
 If you decide to reintroduce automation:

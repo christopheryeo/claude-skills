@@ -24,14 +24,27 @@ Deliver an audit-friendly briefing that blends current relationship signals, ope
 - Default research window: last 14 days (call out exceptions). Social scanning must stay public.
 - Keep every section tight—use bullets, sentence fragments ≤30 words, and remove repeated phrasing to minimize token usage.
 
+## Integration Policy
+
+All email and calendar operations MUST be delegated to the appropriate unified skills. Do NOT call Gmail or Google Calendar tools directly.
+
+| Need | Delegate to |
+|---|---|
+| Recent or topic-based email search | **daily-emails** `topic` sub-command (use account name as keyword) |
+| Starred / priority emails for the account | **daily-emails** `starred` sub-command |
+| Upcoming calendar meetings | **daily-calendars** `search` sub-command |
+| Check meeting availability | **daily-calendars** `available` sub-command |
+
+These skills own the connector policy (native first, Zapier fallback) and output formatting. This skill consumes their results.
+
 ## Fast Prep Checklist
 1. Confirm account name/ID and primary timezone.
 2. Verify access to tagged email folders, relevant calendars, shared drives, and trackers.
 3. Align search plan (keywords, filters, priority sources) and sentiment rubric; start the audit log.
 
 ## Workflow
-1. **Internal Communications** – Pull last 14 days of key emails/messages. Capture date (account TZ), channel, participants, ≤40 word summary, sentiment + confidence, and required action. State fallback if empty.
-2. **Upcoming Touchpoints** – Query calendar for next meetings. Normalize times, list organizer, attendees, prep tasks, attachments, and flag critical sessions.
+1. **Internal Communications** – Delegate to **daily-emails `topic`** using the account name as keyword (last 14 days). Consume the executive table output: date (account TZ), channel, participants, ≤40 word summary, sentiment + confidence, and required action. State fallback if empty.
+2. **Upcoming Touchpoints** – Delegate to **daily-calendars `search`** for meetings involving the account team or customer stakeholders (next 14 days). Consume the results: normalize times to account timezone, list organizer, attendees, prep tasks, attachments, and flag critical sessions.
 3. **Deliverables & Files** – Invoke `list-files` with the customer scope (folder/search query, limit ≤7, short summaries). Embed the returned `# 📁 DRIVE FILE LISTING` section as-is and note overdue statuses in follow-up bullets.
 4. **Tasks/Trackers** – Import open items with owner, due date, status, blockers. If unavailable, log the gap and request updates.
 5. **External Intel** – Run targeted web/news searches per plan. Capture up to five items with source, publish date, headline, and 1–2 sentence impact. Include search keywords, filters, and timestamp in audit log.
