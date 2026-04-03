@@ -93,7 +93,7 @@ Use this format whenever listing issues:
 |---|---|---|---|---|---|---|
 | [SMTC-42](https://sentient-smartchat.atlassian.net/browse/SMTC-42) | 🐛 Bug | Fix login timeout | 🔵 In Progress | 🔴 High | Chris | 2026-04-10 |
 
-**Type icons:** 🗂 Epic · 📖 Story · ✅ Task · 🐛 Bug · 🔹 Subtask
+**Type icons:** Use emoji only in the Type column (no text label). Add to the legend line above every table. `🗂` Epic · `📖` Story · `✅` Task · `🐛` Bug · `🔹` Subtask
 
 **Status colours:**
 - ⚪ To Do
@@ -102,7 +102,7 @@ Use this format whenever listing issues:
 - 🔴 Blocked
 - 🟡 In Review
 
-**Priority icons:** 🔴 Highest/High · 🟡 Medium · 🟢 Low/Lowest
+**Priority icons:** Use the **emoji icon only** — no text label — so the cell is always a single character that cannot wrap: `🔴` Highest/High · `🟡` Medium · `🟢` Low/Lowest. Add a one-line legend above the table: `🔴 High · 🟡 Medium · 🟢 Low`.
 
 Always hyperlink issue keys to `https://sentient-smartchat.atlassian.net/browse/[KEY]`.
 
@@ -213,19 +213,23 @@ Description:
    project = SMTC AND issuetype = Epic AND statusCategory != Done ORDER BY priority ASC
    ```
 
-2. **For each Epic, fetch its child issues in two attempts:**
+2. **For each Epic, fetch ALL its child issues — paginate until complete:**
 
    **Attempt A** — Stories only:
    ```
    project = SMTC AND issuetype = Story AND parent = [EPIC-KEY] ORDER BY status ASC, priority ASC
    ```
+   If `isLast: false`, keep calling with increasing `startAt` (use the default page size) until `isLast: true`. Collect all results before rendering.
 
    **If Attempt A returns 0 results**, some epics in this project use Tasks (not Stories) as direct children. Run **Attempt B** — Stories and Tasks:
    ```
    project = SMTC AND issuetype in (Story, Task) AND parent = [EPIC-KEY] ORDER BY status ASC, priority ASC
    ```
+   Paginate Attempt B the same way until all results are collected.
 
    Use whichever attempt returns results. Note in the epic header which type was found, e.g. *(Tasks)* if only Tasks were returned. This is a known data pattern in the SMTC project — e.g. the Carbon Amber epic uses Tasks as its primary work items.
+
+   **Never show a pagination notice** — always display the complete list.
 
 3. **Also fetch orphaned Stories** (Stories with no parent Epic):
    ```
