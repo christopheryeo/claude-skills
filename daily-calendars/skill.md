@@ -132,6 +132,20 @@ The following rules define your availability:
 1. **Working Hours**: You are only available **10:00 AM to 6:00 PM** on **weekdays (Monday–Friday)**
 2. **Lunch Break**: You are **not available 12:00 PM to 2:00 PM** for meetings
 3. **Meeting Gaps**: There must be a **minimum 30-minute gap** between the end of one meeting and the start of another
+4. **One Physical Meeting Per Day**: You cannot schedule **two physical (in-person) meetings on the same day**. If a physical meeting already exists on that date, any additional physical meeting request must be declined and an alternative day suggested.
+
+### Physical Meeting Definition
+
+An event is classified as **physical (in-person)** only when **all** of the following are true:
+
+- **Has a real-world location**: The `location` field is populated with a street address, building name, office, venue, room, or city (e.g. "Sentient HQ", "1 Raffles Place", "Marina Bay Sands").
+- **No online conferencing**: The event has **no** Google Meet, Zoom, Microsoft Teams, Webex, or other video-conference link in either `conferenceData` or the description.
+- **No virtual indicators**: The `location` field is not one of the following (case-insensitive): `online`, `virtual`, `remote`, `zoom`, `google meet`, `meet`, `teams`, `webex`, `phone`, `call`, `dial-in`, `tbd`, `tba`, a URL, or empty.
+- **No virtual keywords in title/description**: The title and description do not explicitly describe the meeting as `call`, `phone call`, `video call`, `virtual`, `online`, `remote`, or `catch-up call` without a corresponding physical address.
+
+If any of the above fails, treat the event as **virtual** (or ambiguous — see below) and do **not** count it toward the one-physical-meeting-per-day rule.
+
+**Ambiguous cases**: If location exists but is unclear (e.g. just a person's name, or a generic word like "Office" with no building), ask the user to confirm whether the event is physical before applying the rule.
 
 ### Steps
 
@@ -141,7 +155,8 @@ The following rules define your availability:
 4. **Check for lunch conflict**: If the time overlaps 12pm–2pm, suggest before or after lunch.
 5. **Query your Google Calendar**: Use `gcal_list_events` (fallback: `google_calendar_find_events`) to retrieve all meetings on that date and identify busy blocks.
 6. **Apply the 30-min gap rule**: Ensure no meeting starts within 30 minutes of a previous meeting ending.
-7. **Provide detailed response**: Report yes/no and suggest the nearest available slot if requested time is unavailable.
+7. **Apply the one-physical-meeting-per-day rule**: If the requested meeting is physical (see *Physical Meeting Definition* above), inspect the day's existing events and classify each using the same definition. If any existing event on that date is physical, decline and suggest the nearest weekday with no physical meeting already booked. If classification is ambiguous, ask the user to confirm before declining.
+8. **Provide detailed response**: Report yes/no and suggest the nearest available slot if requested time is unavailable.
 
 ### Usage Examples
 
@@ -191,7 +206,7 @@ Recommendation: [Duration available, suitability note]
 ```
 NO — [date and time] is not available.
 
-Reason: [e.g., "During lunch break" / "Conflicting meeting" / "Outside working hours" / "Insufficient gap after previous meeting"]
+Reason: [e.g., "During lunch break" / "Conflicting meeting" / "Outside working hours" / "Insufficient gap after previous meeting" / "Already a physical meeting on this day"]
 
 Conflicting Event: [Meeting title and time, if applicable]
 
