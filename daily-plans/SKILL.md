@@ -6,7 +6,17 @@ description: >
 
 # Daily Plans
 
-A unified daily task planning system with seven operations: **create**, **new**, **execute**, **log**, **status**, **delete**, and **carry-forward**. Plans are stored as date-stamped entries inside a **journal file** (`Journals/YYYY-MM Plans.md`), using the same structure defined by the `daily-journals` skill. Audit files remain in a separate `Plans/` folder.
+A unified daily task planning system with seven operations: **create**, **new**, **execute**, **log**, **status**, **delete**, and **carry-forward**. Plans are stored as date-stamped entries inside a **journal file** (`Journals/YYYY-MM Plans.md`), using the same structure defined by the `daily-journals` skill. Completion evidence (output links and verification checklists) is recorded inline within each task block.
+
+---
+
+## Token Optimisation Rules
+
+These rules reduce file size and token consumption. Follow them strictly when writing or updating plan entries.
+
+1. **No per-day Status Legend.** The Status Legend table is defined once in this skill and optionally once at the top of each monthly Plans journal file. Never repeat it inside individual daily entries.
+2. **No empty-day boilerplate.** If a day has zero tasks (no carry-forward items, no scheduled work), write only a collapsed one-liner: `## YYYY-MM-DD — No tasks`. Do not generate Morning Routine, Status of Previous Plans, Today's Tasks, or Estimated Total Effort sections for empty days.
+3. **Inline effort for single-task days.** If a day has exactly 1 task, replace the full Estimated Total Effort table with a single line: `**Effort:** ~N mins (1 task, PX)`.
 
 ---
 
@@ -21,7 +31,7 @@ The following daily-journals sub-commands are used:
 | **CREATE** | — | daily-journals **CREATE-JOURNAL** | Ensure `Journals/YYYY-MM Plans.md` exists (purpose: "Plans") |
 | **CREATE** | — | daily-journals **CREATE-ENTRY** | Insert the full plan content under a new `## YYYY-MM-DD` date header |
 | **NEW** | — | daily-journals **CREATE-ENTRY** | Append a new task block into today's existing `## YYYY-MM-DD` entry |
-| **LOG** | daily-plans **NEW** | daily-journals **CREATE-ENTRY** (via NEW) | Add an already-completed (✅) task to today's plan, then write an audit entry |
+| **LOG** | daily-plans **NEW** | daily-journals **CREATE-ENTRY** (via NEW) | Add an already-completed (✅) task to today's plan with inline Output and Verification fields |
 
 All other sub-commands (EXECUTE, STATUS, DELETE, CARRY-FORWARD) read and write today's plan by locating the `## YYYY-MM-DD` entry for the relevant date inside the current month's Plans journal.
 
@@ -33,7 +43,6 @@ This skill is **folder-agnostic** — it works from whatever folder the user has
 
 1. **Determine the mounted root.** The user's selected workspace is the mount point (e.g., `/sessions/.../mnt/Sentient`, `/sessions/.../mnt/Mary (Marketing)`, etc.).
 2. **Journals/ folder** — used for plan content. Follow the daily-journals skill's folder resolution: look for `Journals/` at the mounted root; create it if missing.
-3. **Plans/ folder** — used only for audit files. Look for `Plans/` at the mounted root; create it if missing.
 
 Never hardcode a specific parent folder.
 
@@ -54,7 +63,6 @@ If the intent is ambiguous, ask which operation is intended — but usually cont
 ## File Locations and Naming
 
 - **Plans journal:** `Journals/YYYY-MM Plans.md` — plan content lives as an entry under the `## YYYY-MM-DD` date header for the relevant day.
-- **Audit file:** `Plans/YYYY-MM-DD Audit.md` — one audit file per day, stored in the Plans/ folder.
 
 Use today's date unless the user specifies otherwise. When reading "today's plan", open `Journals/YYYY-MM Plans.md` and find the `## YYYY-MM-DD` section matching today's date.
 
@@ -95,7 +103,7 @@ When a task belongs to a specific domain, note the delegate in the Delegate fiel
 
 ## Operation: CREATE
 
-**Purpose:** Build a new daily plan as a journal entry inside `Journals/YYYY-MM Plans.md`, plus a shell audit file in `Plans/`.
+**Purpose:** Build a new daily plan as a journal entry inside `Journals/YYYY-MM Plans.md`.
 
 ### Steps
 
@@ -111,17 +119,6 @@ When a task belongs to a specific domain, note the delegate in the Delegate fiel
 
 ```markdown
 ### Daily Plan — DD Month YYYY
-
-**Status Legend**
-| Icon | Status | Meaning |
-|------|--------|---------|
-| 🆕 | New | Not yet started |
-| 🔄 | In Progress | Work underway |
-| ✅ | Done | Completed and verified |
-| ❌ | Blocked | Cannot proceed |
-| ⏭️ | Deferred | Pushed to future date |
-
----
 
 #### Status of Previous Plans
 
@@ -154,17 +151,13 @@ When a task belongs to a specific domain, note the delegate in the Delegate fiel
 | **Total** | **N** | **~X mins** |
 ```
 
+> **No Status Legend in daily entries.** The legend is defined once in this skill file and optionally once at the top of the monthly journal. Do not include it in each day's plan.
+
+> **Single-task days:** If the plan has only 1 task, replace the Estimated Total Effort table with: `**Effort:** ~N mins (1 task, PX)`.
+
 > **Heading levels:** Because the plan sits inside a journal entry (under a `## YYYY-MM-DD` header), all internal headings are shifted down by two levels compared to the old standalone format: `#` → `###`, `##` → `####`, `###` → `#####`, `####` → `######`.
 
-6. **Create the audit shell** in `Plans/YYYY-MM-DD Audit.md`:
-
-```markdown
-# Daily Plan Audit — DD Month YYYY
-
----
-```
-
-7. **Present the plan summary** — a compact table showing task numbers, titles, priorities, and effort estimates. Ask for approval before considering the plan final.
+6. **Present the plan summary** — a compact table showing task numbers, titles, priorities, and effort estimates. Ask for approval before considering the plan final.
 
 > **Scope boundary:** CREATE is only for initialising a brand-new plan. It does not add tasks to an existing plan. Use the **NEW** sub-command for that.
 
@@ -198,7 +191,7 @@ When a task belongs to a specific domain, note the delegate in the Delegate fiel
 
 > **Placement within the entry:** Unlike a standard journal entry where CREATE-ENTRY appends below existing content under the date header, the task block must be inserted into the correct **priority group** within today's plan entry. Locate the matching `##### 🔴/🟡/🟢/🟠 Priority N` heading inside the date section and append the task block after the last existing task in that group. If the priority group does not yet exist, create the heading and task block before the `#### Estimated Total Effort` section.
 
-5. **Update the Estimated Total Effort table** within today's entry — increment the item count and time for the affected priority level and the totals row.
+5. **Update the Estimated Total Effort table** within today's entry — increment the item count and time for the affected priority level and the totals row. If the day previously had 0 tasks (collapsed one-liner `## YYYY-MM-DD — No tasks`), expand it into the full CREATE template first.
 
 6. **Present a confirmation** — show the newly added task and the updated effort summary.
 
@@ -235,19 +228,20 @@ This skill executes **a single task per call** and then stops. It never loops th
 
    Then check whether all tasks in that priority group are now ✅ — if so, append `✅ Done` to the priority group heading (`##### 🔴/🟡/🟢/🟠 Priority N`).
 
-6. **Write the audit entry** in `Plans/YYYY-MM-DD Audit.md`:
+6. **Append completion evidence to the task block.** Re-open `Journals/YYYY-MM Plans.md`, locate today's `## YYYY-MM-DD` entry, find the specific `###### N.N` heading for the task just executed, and append **Output** and **Verification** fields below the existing Action/Delegate/Effort lines:
 
 ```markdown
-## [Task Number] [Task Name]
-**Status:** ✅ Done
-**Action Taken:** One sentence describing what was executed.
-**Output:** Link to file, summary of result, or confirmation of action taken.
-**Verification:**
-- [x] Specific thing that was verified
-- [x] Another verification item
+###### 1.1 ✅ [Task title]
+- **Action:** What was done
+- **Delegate:** Name
+- **Effort:** ~N mins
+- **Output:** Link to deliverable, summary of result, or confirmation
+- **Verification:**
+  - [x] Specific thing verified
+  - [x] Another verification item
 ```
 
-Each task gets its own `##` heading — never group multiple tasks. The Output field must include a concrete deliverable. Verification items should be specific and checked.
+The Output field must include a concrete deliverable. Verification items should be specific and checked.
 
 7. **Report and stop.** Tell the user:
    - What task was executed (number and title)
@@ -260,7 +254,7 @@ Each task gets its own `##` heading — never group multiple tasks. The Output f
 
 ## Operation: LOG
 
-**Purpose:** Record a just-completed task in today's plan entry and audit file retroactively — for tasks completed conversationally outside the formal plan execution flow. LOG delegates to the **NEW** sub-command to create the task entry, but with ✅ Done status instead of 🆕 New.
+**Purpose:** Record a just-completed task in today's plan entry retroactively — for tasks completed conversationally outside the formal plan execution flow. LOG delegates to the **NEW** sub-command to create the task entry, but with ✅ Done status instead of 🆕 New, and includes inline Output and Verification fields.
 
 ### Steps
 
@@ -284,19 +278,20 @@ Each task gets its own `##` heading — never group multiple tasks. The Output f
 - **Effort:** ~N mins
 ```
 
-4. **Write the audit entry** in `Plans/YYYY-MM-DD Audit.md` (create the audit file if needed):
+4. **Append completion evidence to the task block.** Since LOG writes the task as ✅ via NEW, the Output and Verification fields are included in the initial task block:
 
 ```markdown
-## [N.N] [Task Name]
-**Status:** ✅ Done
-**Action Taken:** One sentence describing what was executed.
-**Output:** Link to deliverable, summary of result, or confirmation.
-**Verification:**
-- [x] Specific thing that was verified
-- [x] Another verification item
+###### N.N ✅ [Task title]
+- **Action:** What was done
+- **Delegate:** Name or N/A
+- **Effort:** ~N mins
+- **Output:** Link to deliverable, summary of result, or confirmation
+- **Verification:**
+  - [x] Specific thing verified
+  - [x] Another verification item
 ```
 
-5. **Confirm** that the task has been logged in both the Plans journal entry and the audit file.
+5. **Confirm** that the task has been logged in the Plans journal with verification.
 
 ---
 
@@ -321,7 +316,7 @@ If a filter is detected, note it at the top of the response (e.g., *Showing: �
 
 ### Steps
 
-1. **Read today's plan entry.** Open `Journals/YYYY-MM Plans.md` and locate the `## YYYY-MM-DD` section for today. If no entry exists, report that and offer to create one.
+1. **Read today's plan entry.** Open `Journals/YYYY-MM Plans.md` and locate the `## YYYY-MM-DD` section for today. If no entry exists, report that and offer to create one. If the entry is a collapsed one-liner (`## YYYY-MM-DD — No tasks`), report that no tasks are planned.
 
 2. **Apply the filter (if any).** If the user specified a status filter, restrict the displayed tasks to only those matching that status. If no filter was given, include all tasks regardless of status.
 
@@ -364,7 +359,7 @@ If no tasks match the active filter, report: *"No tasks found with status [filte
 
 6. **Handle empty priority groups.** If the deletion leaves a priority group with zero tasks, remove the entire priority heading.
 
-7. **Update the Estimated Total Effort table** — adjust item count and time for the affected priority level and the totals row.
+7. **Update the Estimated Total Effort table** — adjust item count and time for the affected priority level and the totals row. If the plan now has 0 tasks, collapse the entire day to `## YYYY-MM-DD — No tasks`. If exactly 1 task remains, replace the effort table with the inline format.
 
 8. **Present the updated plan** — a compact summary table of remaining tasks for verification.
 
@@ -393,12 +388,13 @@ Cross-priority numbering stays independent — deleting a P1 task does not affec
 
 ### Steps
 
-1. **Find yesterday's plan entry.** Calculate yesterday's date and open `Journals/YYYY-MM Plans.md`. Locate the `## YYYY-MM-DD` entry matching yesterday's date. If no entry exists for yesterday, inform the user that there is no previous day's plan to carry forward and stop.
+1. **Find yesterday's plan entry.** Calculate yesterday's date and open `Journals/YYYY-MM Plans.md`. Locate the `## YYYY-MM-DD` entry matching yesterday's date. If no entry exists for yesterday (including collapsed `— No tasks` entries), inform the user that there is no previous day's plan to carry forward and stop.
 
 2. **Extract incomplete tasks.** From yesterday's entry only, collect all tasks marked ❌ (Blocked) or ⏭️ (Deferred). Ignore ✅ (Done). If no incomplete tasks are found, inform the user and stop.
 
 3. **Check if today's plan entry exists:**
    - If yes, add carried-forward items to the "Status of Previous Plans" table within today's entry
+   - If it's a collapsed one-liner (`— No tasks`), expand it into the full CREATE template first
    - If no, create today's plan entry using the CREATE operation, with those items in the status section
 
 4. **Present what was carried forward** — a table with original status and any notes about why they were blocked/deferred.
@@ -417,5 +413,6 @@ Cross-priority numbering stays independent — deleting a P1 task does not affec
 - **User says "skip" during execution:** Mark the task as ⏭️ Deferred with a note "Skipped by user" and report back.
 - **User says "block" or identifies a blocker:** Mark the task as ❌ Blocked, note the blocker, and report back.
 - **Task takes longer than expected:** Complete it and report the actual outcome. Don't update effort estimates retroactively.
-- **Deleting a completed task:** Allow it but warn that the audit entry will remain (audit entries are never deleted).
+- **Deleting a completed task:** Allow it but confirm first, as the verification record will also be removed.
 - **Editing another day's plan:** If the user asks to modify a past day's plan, locate the correct `## YYYY-MM-DD` entry in the Plans journal. This is supported but uncommon — confirm the date with the user before editing.
+- **Collapsed one-liner encountered during NEW/CARRY-FORWARD:** If today's entry is `## YYYY-MM-DD — No tasks`, expand it into the full CREATE template before inserting tasks.

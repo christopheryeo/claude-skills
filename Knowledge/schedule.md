@@ -1,6 +1,6 @@
 # Scheduled Tasks — Alex (Dev) / Claude Skills
 
-**Last updated:** 2026-03-23
+**Last updated:** 2026-04-15
 **Purpose:** This file documents scheduled tasks for the Claude Skills workspace under Alex (Dev).
 
 ---
@@ -8,7 +8,7 @@
 ## 1. task-execution
 
 - **Description:** (Claude Skills) Task Execution
-- **Schedule:** 1am, 3am, 12pm, 2pm SGT (`0 1,3,12,14 * * *`)
+- **Schedule:** 3am SGT, weekdays only (`0 3 * * 1-5`)
 - **Status:** ✅ Enabled
 - **Task file:** `/Users/chrisyeo/Documents/Claude/Scheduled/task-execution/SKILL.md`
 

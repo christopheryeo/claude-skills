@@ -56,44 +56,36 @@ Depending on the skill, the following external integrations are utilized via Cla
 - Gmail API
 - News/Web Retrieval APIs
 
-## Daily Plans & Auditing
+## Daily Plans & Inline Verification
 
-When the user asks "what's the plan for today?" or similar, read the latest file in the `plans/` directory (by date in filename, e.g., `2026-02-25-plans.md`) and present a **summary table grouped by priority**. Each priority group should be a table with columns: `#`, `Task`, `Status`, `Effort`. Use status icons: 🆕 New, 🔄 In Progress, ✅ Done. Include totals at the bottom.
+When the user asks "what's the plan for today?" or similar, read the latest plan entry in the Plans journal (`Journals/YYYY-MM Plans.md`) and present a **summary table grouped by priority**. Each priority group should be a table with columns: `#`, `Task`, `Status`, `Effort`. Use status icons: 🆕 New, 🔄 In Progress, ✅ Done. Include totals at the bottom.
 
-### Development Auditing
+### Completion Evidence
 
-When an item in the plans file is executed during a development session, its results **must be audited** at the end of execution. The findings and verification checks must be written to the appropriate accompanying audit file (e.g., `plans/2026-02-25 Audit.md`) to capture a permanent trail of development progress. This ensures transparency and prevents plan status icons from diverging from the actual codebase state. Always update the audit file with specific pass/fail outcomes against the task's objectives.
-
-### Audit File Formatting (`plans/YYYY-MM-DD Audit.md`)
-
-Each completed task must be recorded as an individual block in the following exact format — **do not use summary bullet lists**:
+When a task is completed, append **Output** and **Verification** fields directly to the task block within the Plans journal. There is no separate audit file — all verification is recorded inline:
 
 ```markdown
-## [Task Number] [Task name]
-**Status:** ✅ Done
-**Files:** `path/to/file1.md`, `path/to/file2.md`
-**Objective:** One sentence describing the goal of the task.
-**Verification Checklist:**
-- [x] Specific thing that was verified or done
-- [x] Another specific verification item
+###### N.N ✅ [Task title]
+- **Action:** What was done
+- **Delegate:** Name
+- **Effort:** ~N mins
+- **Output:** Link to deliverable, summary of result, or confirmation
+- **Verification:**
+  - [x] Specific thing verified
+  - [x] Another verification item
 ```
 
 Rules:
-- Every task gets its **own `## N.N` heading** — never group multiple tasks under one heading
-- `Status` is always `✅ Done` once executed
-- `Files` lists the exact files modified (use backtick-quoted relative paths)
-- `Objective` is a single clear sentence of what the task accomplished
-- `Verification Checklist` items start with `- [x]` (checked) and describe specific, concrete outcomes — not vague summaries
-- Tasks in the same priority group share a single `## Priority N: <Name>` parent header with no sub-introduction or summary section; individual `## N.N` blocks follow directly
+- Every task's verification is recorded **within its own task block** — never in a separate file
+- `Output` must include a concrete deliverable (link, summary, or confirmation)
+- `Verification` items start with `- [x]` (checked) and describe specific, concrete outcomes — not vague summaries
 
-### Plans File Formatting (`plans/YYYY-MM-DD-plans.md`)
+### Plans Journal Formatting
 
 When a task is completed, both the **task-level icon** and the **priority section heading** must be updated:
-1. **Task icon**: Change `🆕` → `✅` for each completed item (e.g., `#### 2.1 ✅ Update recent-emails constraints`)
+1. **Task icon**: Change `🆕` → `✅` for each completed item (e.g., `###### 2.1 ✅ Update recent-emails constraints`)
 2. **Priority heading**: Append `✅ Done` to the heading once all items in a priority group are complete
 3. **Status tracking table** (where present): Update `❌` rows to `✅ Done` for items completed during the session
-
-Both the audit file and the plans file must be updated **together** at the end of each task.
 
 ## Core Commands
 
