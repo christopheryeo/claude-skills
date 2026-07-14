@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Emails"
+  short_description: "Review Gmail and prepare safe drafts"
+  default_prompt: "Use $daily-emails to review recent Gmail activity or prepare a safe draft reply."

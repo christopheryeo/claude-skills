@@ -10,9 +10,9 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ## Cross-Platform Skills Worklist
 
-We are currently working on the first skill, `daily-emails`, to support reliable use across Claude and ChatGPT Work.
+The first cross-platform skill, `daily-emails`, is complete. Its Claude package structure and skill metadata validate successfully, and its native Gmail search and thread-reading operations have passed a read-only ChatGPT Work connector smoke test.
 
-1. **In progress:** `daily-emails`
+1. **Completed:** `daily-emails`
 2. **Pending:** `daily-calendars`
 3. **Pending:** `daily-files`
 4. **Pending:** `daily-JIRA` (standardise as `daily-jira`)

@@ -1,0 +1,99 @@
+{
+  "skill_name": "daily-emails",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Show me my recent emails from the last 48 hours, excluding newsletters.",
+      "expected_output": "A deduplicated, newest-first executive table covering Inbox, Sent, Drafts, and Starred, with real Gmail links and a clear note if results are truncated.",
+      "assertions": [
+        "The recent sub-command is selected",
+        "The Gmail query excludes promotions, newsletters, noreply senders, and unsubscribe subjects",
+        "No more than 10 results are requested per category and no more than 40 total",
+        "The output states the Singapore timezone and does not fabricate message data"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Find emails about the Acme renewal from the last 30 days and show me what needs a decision.",
+      "expected_output": "A topic digest prioritising subject matches and recent threads, with correspondents, coverage period, decision points, links, and suggested next steps.",
+      "assertions": [
+        "The topic sub-command is selected",
+        "The search includes the topic and requested timeframe",
+        "Threads are deduplicated and decision points are identified",
+        "The result follows the topic digest format"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Format the email records already in this conversation as the standard executive email table.",
+      "expected_output": "The supplied records are rendered using the standard email table without accessing Gmail.",
+      "assertions": [
+        "The format sub-command is selected",
+        "No Gmail connector is called when all required data is already present",
+        "The table includes numbering, folder or label, participants, subject, time, summary, status, and link"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Monitor my stakeholder emails, but assume no stakeholder list exists in the workspace instructions.",
+      "expected_output": "A concise clarification offering to add a stakeholder list or show recent emails instead, without inventing contacts.",
+      "assertions": [
+        "No stakeholder identities or addresses are fabricated",
+        "The user is offered the recent-email fallback",
+        "No connector fallback is attempted"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Draft a reply-all to the selected thread saying I approve the revised terms. Do not send it.",
+      "expected_output": "A threaded HTML Gmail draft in Christopher's voice, with recipients shown before creation and confirmation that nothing was sent.",
+      "assertions": [
+        "The full thread is read before drafting",
+        "To and Cc recipients exclude Christopher, duplicates, and automated addresses",
+        "Recipients are shown before the draft is created",
+        "A draft is created but no send action is performed"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Respond to the selected thread. The thread contains a reply from chris@sentient.io newer than the latest inbound message.",
+      "expected_output": "A hard-block response showing that the thread was already answered, with the existing reply time, summary, and link. No draft is created.",
+      "assertions": [
+        "The already-replied check runs before drafting",
+        "The response clearly states that no draft was created",
+        "No draft or send action is performed"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Respond to the selected thread. Assume a matching Gmail draft already exists for the same thread.",
+      "expected_output": "A hard-block response linking to the existing draft and refusing to create a duplicate.",
+      "assertions": [
+        "Existing drafts are checked before creation",
+        "The existing draft is summarised and linked",
+        "No duplicate draft is created"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Reply to this meeting request with my next available time, but assume no Calendar capability is available.",
+      "expected_output": "A clear explanation that availability cannot be verified, followed by a stop before drafting.",
+      "assertions": [
+        "The skill does not invent an available time",
+        "The missing Calendar capability is reported",
+        "No draft or send action is performed"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Reply to a sender who asks to meet at the Sentient office next Tuesday at 3 PM. Assume the time is available.",
+      "expected_output": "A draft that explains Sentient has no physical office and asks whether the sender prefers Google Meet or an in-person location of their choosing.",
+      "assertions": [
+        "The proposed time is validated before drafting",
+        "The draft does not imply that a Sentient office exists",
+        "The sender is offered a virtual meeting or asked to suggest an in-person location",
+        "The result remains a draft and is never sent"
+      ]
+    }
+  ]
+}
