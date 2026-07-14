@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Helper script for daily-calendars skill (search sub-command)
-Claude can execute this to search your Google Calendar based on the skill instructions
+Optional local helper for the daily-calendars skill.
+
+This host-neutral reference supports deterministic time-range parsing and event enrichment.
+Calendar retrieval must still use the connected native Calendar capability.
 
 OPTIMIZED FOR TIME-BASED BRIEFINGS:
 - Returns explicit start/end times in Asia/Singapore timezone
@@ -16,10 +18,10 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 # This script serves as a reference for how to search calendars
-# Claude will use the native Google Calendar connector (gcal_* tools) to:
-# 1. Get all accessible calendars (gcal_list_calendars)
-# 2. Retrieve events for specified date ranges (gcal_list_events)
-# 3. Fetch event details when needed (gcal_get_event)
+# The host will use its native Google Calendar capability to:
+# 1. Get accessible calendars when needed
+# 2. Retrieve events for specified date ranges
+# 3. Fetch event details when needed
 # 4. Filter by subject, attendees, emails
 # 5. Format and return results
 
@@ -30,50 +32,42 @@ def parse_time_reference(query):
     """
     query_lower = query.lower()
     today = datetime.now(ZoneInfo('Asia/Singapore'))
+    today_start = today.replace(hour=0, minute=0, second=0, microsecond=0)
     
     # Today
     if 'today' in query_lower:
-        return (today.replace(hour=0, minute=0, second=0, microsecond=0),
-                today.replace(hour=23, minute=59, second=59, microsecond=999999),
-                "today")
+        return (today_start, today_start + timedelta(days=1), "today")
     
     # Tomorrow
     if 'tomorrow' in query_lower:
-        tomorrow = today + timedelta(days=1)
-        return (tomorrow.replace(hour=0, minute=0, second=0, microsecond=0),
-                tomorrow.replace(hour=23, minute=59, second=59, microsecond=999999),
-                "tomorrow")
+        tomorrow = today_start + timedelta(days=1)
+        return (tomorrow, tomorrow + timedelta(days=1), "tomorrow")
     
     # Yesterday
     if 'yesterday' in query_lower:
-        yesterday = today - timedelta(days=1)
-        return (yesterday.replace(hour=0, minute=0, second=0, microsecond=0),
-                yesterday.replace(hour=23, minute=59, second=59, microsecond=999999),
-                "yesterday")
+        yesterday = today_start - timedelta(days=1)
+        return (yesterday, yesterday + timedelta(days=1), "yesterday")
     
     # This week
     if 'this week' in query_lower:
-        monday = today - timedelta(days=today.weekday())
-        sunday = monday + timedelta(days=6, hours=23, minutes=59, seconds=59)
-        return (monday.replace(hour=0, minute=0, second=0, microsecond=0), sunday, "this week")
+        monday = today_start - timedelta(days=today.weekday())
+        return (monday, monday + timedelta(days=5), "this week")
     
     # Next week
     if 'next week' in query_lower:
-        monday = today - timedelta(days=today.weekday()) + timedelta(weeks=1)
-        sunday = monday + timedelta(days=6, hours=23, minutes=59, seconds=59)
-        return (monday.replace(hour=0, minute=0, second=0, microsecond=0), sunday, "next week")
+        monday = today_start - timedelta(days=today.weekday()) + timedelta(weeks=1)
+        return (monday, monday + timedelta(days=5), "next week")
     
     # Last week
     if 'last week' in query_lower:
-        monday = today - timedelta(days=today.weekday()) - timedelta(weeks=1)
-        sunday = monday + timedelta(days=6, hours=23, minutes=59, seconds=59)
-        return (monday.replace(hour=0, minute=0, second=0, microsecond=0), sunday, "last week")
+        monday = today_start - timedelta(days=today.weekday()) - timedelta(weeks=1)
+        return (monday, monday + timedelta(days=5), "last week")
     
     # Default: next 30 days
     return (today, today + timedelta(days=30), "next 30 days")
 
 
-def fuzzy_match(text, pattern, threshold=70):
+def fuzzy_match(text, pattern):
     """
     Simple fuzzy matching for attendee/subject matching
     Returns True if pattern matches text with sufficient similarity
@@ -239,14 +233,8 @@ def extract_criteria(query):
     emails = re.findall(email_pattern, query)
     criteria['emails'] = emails
     
-    # Remove emails from query for further processing
-    query_clean = re.sub(email_pattern, '', query)
-    
-    # Common names (for demonstration - could be expanded)
-    common_names = ['eddie', 'wilson', 'john', 'mani', 'ang', 'hor']
-    for name in common_names:
-        if name.lower() in query_clean.lower():
-            criteria['attendees'].append(name)
+    # Names and title terms require request context and should be resolved by the host.
+    # Do not use a hard-coded contact list here.
     
     return criteria
 
@@ -334,7 +322,7 @@ def format_event(event):
 
 def main():
     """
-    Main entry point - can be called by Claude
+    Main entry point for local reference use.
     """
     if len(sys.argv) < 2:
         definition = get_typical_meeting_definition()
@@ -355,9 +343,9 @@ def main():
     print(f"\nSearching for: {query}")
     print(f"Time range: {time_range[2]}")
     print(f"Criteria: Attendees={criteria['attendees']}, Emails={criteria['emails']}")
-    print("\nTo complete the search, Claude will:")
-    print("1. Get all accessible calendars using list_gcal_calendars")
-    print("2. Query events using list_gcal_events with date range:", time_range[0], "to", time_range[1])
+    print("\nTo complete the search, the host will:")
+    print("1. Use the host's native Calendar capability to select relevant calendars")
+    print("2. Query events in this date range:", time_range[0], "to", time_range[1])
     print("3. For each event, enrich with:")
     print("   - Explicit start/end times in Asia/Singapore timezone (ISO 8601)")
     print("   - Duration in minutes")

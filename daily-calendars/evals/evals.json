@@ -1,0 +1,129 @@
+{
+  "skill_name": "daily-calendars",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What do I have on my calendar today?",
+      "expected_output": "A chronological Asia/Singapore agenda using native Calendar data, excluding cancelled events and clear working-location markers, with real event links when available.",
+      "assertions": [
+        "The search sub-command is selected",
+        "The query covers local midnight through the next local midnight",
+        "Working-location markers are excluded without hiding real meetings",
+        "No Calendar data is invented"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Find meetings with Mani in the next 30 days.",
+      "expected_output": "A deduplicated chronological list filtered by attendee evidence, with pagination or date-range chunking if the response is too large.",
+      "assertions": [
+        "Attendee matching is conservative and email evidence is preferred",
+        "Large results use pagination, narrower queries, or weekly/daily chunks",
+        "At most 50 unique events are shown unless the user asks for more",
+        "Truncation is disclosed"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Find standup meetings in the next 30 days.",
+      "expected_output": "A title-filtered event list that uses server-side text search when supported and deduplicates recurring instances correctly.",
+      "assertions": [
+        "Server-side title or text filtering is preferred",
+        "Recurring instances are deduplicated by event ID plus start time",
+        "Results are sorted chronologically"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Show my meetings next Tuesday and include whether I accepted them.",
+      "expected_output": "A date-scoped agenda containing a top-level My RSVP field for each event.",
+      "assertions": [
+        "The relative date is resolved from the host's current date",
+        "my_response_status is derived from Calendar data",
+        "Declined events may be displayed but are not treated as busy"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Show me all my meetings this week.",
+      "expected_output": "A Monday-to-Friday chronological agenda with coverage and truncation disclosed.",
+      "assertions": [
+        "A work-week request uses Monday through Friday",
+        "All-day working-location markers are filtered",
+        "Partial or truncated coverage is stated"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Am I available this Saturday at 10 AM?",
+      "expected_output": "A NO result explaining the weekday rule without calling Calendar because the static rule decides the answer.",
+      "assertions": [
+        "The available sub-command is selected",
+        "Weekend availability is rejected",
+        "Calendar is not called unnecessarily"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Can I take a one-hour meeting tomorrow at 1 PM?",
+      "expected_output": "A NO result explaining that the request overlaps the 12 PM to 2 PM lunch window.",
+      "assertions": [
+        "The full requested duration is evaluated",
+        "Any lunch overlap makes the slot unavailable",
+        "Calendar is not called when lunch alone decides the answer"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Check whether tomorrow at 3 PM is free for one hour. Assume a confirmed event ends at 2:45 PM.",
+      "expected_output": "A NO result because the requested start leaves only a 15-minute gap after the prior event.",
+      "assertions": [
+        "A 30-minute buffer is enforced before the requested meeting",
+        "The conflicting event and timing are reported",
+        "No event is created or changed"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Can I have an in-person meeting at Marina Bay tomorrow at 3 PM? Assume another confirmed physical meeting already exists that day.",
+      "expected_output": "A NO result applying the one-physical-meeting-per-day rule.",
+      "assertions": [
+        "The requested meeting is classified as physical from credible venue evidence",
+        "Existing events are classified using all physical-meeting conditions",
+        "The second physical meeting is declined"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Can I meet in person tomorrow at 3 PM? The only existing event location is 'Office' and it has no other location details.",
+      "expected_output": "A clarification asking whether the ambiguous existing event is physical before applying the one-physical-meeting rule.",
+      "assertions": [
+        "A generic location is treated as ambiguous",
+        "The skill does not automatically count the event as physical",
+        "The user is asked to confirm only because classification changes the result"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Does this meeting fit my typical profile: 60 minutes, online, with a Google Meet link?",
+      "expected_output": "Only the word yes, without accessing Calendar.",
+      "assertions": [
+        "The meeting sub-command is selected",
+        "All three profile conditions are evaluated",
+        "The output is only yes",
+        "No Calendar connector is used"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Am I free tomorrow at 3 PM? Assume no Calendar capability is available.",
+      "expected_output": "A clear statement that availability cannot be verified, followed by a stop with no guess or event change.",
+      "assertions": [
+        "The missing Calendar capability is reported",
+        "Availability is not inferred from other sources",
+        "No non-native connector is used without explicit approval",
+        "No event is created or changed"
+      ]
+    }
+  ]
+}

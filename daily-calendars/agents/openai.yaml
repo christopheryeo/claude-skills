@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Calendars"
+  short_description: "Search calendars and verify meeting availability"
+  default_prompt: "Use $daily-calendars to check my calendar and apply my scheduling rules."
