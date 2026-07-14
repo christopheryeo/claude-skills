@@ -37,9 +37,9 @@ If the intent is ambiguous, ask which operation is intended. If the user says so
 
 ### Connector Policy
 
-**Always use the native Gmail connector first.** Only fall back to the Zapier connector if a native tool call fails or the tool is unavailable.
+**Native Gmail only. Zapier fallback is prohibited without Christopher's explicit approval — never silently fall back.**
 
-| Operation | Native (primary) | Zapier (fallback) |
+| Operation | Native (required) | Zapier (approval-gated, do not auto-use) |
 |---|---|---|
 | Search messages | `gmail_search_messages` | `gmail_find_email` |
 | Read full thread | `gmail_read_thread` | `gmail_find_email` |
@@ -47,7 +47,13 @@ If the intent is ambiguous, ask which operation is intended. If the user says so
 | Create draft reply | `gmail_create_draft` | `gmail_create_draft_reply` |
 | List drafts | `gmail_list_drafts` | `gmail_find_email` with `in:drafts` |
 
-> **Rule:** Call the native tool. If it returns an error or is not available, retry using the corresponding Zapier tool. Never call both in the same request.
+> **Rule:** Call the native tool. If it returns an error or is unavailable:
+> 1. **STOP.** Do not auto-retry via Zapier.
+> 2. **Interactive sessions:** Report the failure to Christopher with the native tool name, the error, and the Zapier tool that would otherwise be used. Wait for explicit approval before invoking Zapier.
+> 3. **Scheduled/unattended runs:** Skip the operation and surface the failure in the end-of-run report. Never auto-fallback.
+> 4. Never call both tools in the same request.
+>
+> This matches `CEO (Sentient)/CLAUDE.md` → *Tooling — Native Connectors Always*. The CLAUDE.md rule is authoritative; any "fall back to Zapier only if unavailable" notes elsewhere in this skill are overridden.
 
 ## Shared: Query Construction
 

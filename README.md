@@ -8,6 +8,37 @@ A collection of custom Claude skills that extend Claude's capabilities with spec
 
 ---
 
+## Cross-Platform Skills Worklist
+
+We are currently working on the first skill, `daily-emails`, to support reliable use across Claude and ChatGPT Work.
+
+1. **In progress:** `daily-emails`
+2. **Pending:** `daily-calendars`
+3. **Pending:** `daily-files`
+4. **Pending:** `daily-JIRA` (standardise as `daily-jira`)
+5. **Pending:** `list-files`
+6. **Pending:** `daily-work`
+7. **Pending:** `prospect-brief`
+8. **Pending:** `customer-brief`
+9. **Pending:** `project-pulse-brief`
+10. **Pending:** `daily-knowledge`
+11. **Pending:** `new-quotation`
+12. **Pending:** `new-proposal`
+13. **Pending:** `new-presentation`
+14. **Pending:** `presentation-outline`
+15. **Pending:** `new-product`
+16. **Pending:** `daily-plans`
+17. **Pending:** `daily-journals`
+18. **Pending:** `news-snapshot`
+19. **Pending:** `news-articles-rename`
+20. **Pending:** `sentient-brand-guidelines`
+21. **Pending:** `change-headings`
+22. **Pending:** `reverse-date`
+23. **Pending:** `reverse-month`
+24. **Pending:** `smartchat-service-costs` (implement or remove)
+
+---
+
 ## Version History
 
 ### v1.37.1 (March 5, 2026)
