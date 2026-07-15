@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Files"
+  short_description: "Browse Drive files and prepare work folders"
+  default_prompt: "Use $daily-files to review Google Drive activity or prepare my work-day folders."
